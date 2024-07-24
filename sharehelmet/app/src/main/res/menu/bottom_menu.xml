@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/house"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/nav_search"
+        android:icon="@drawable/house"
+        android:title="Payment" />
+
+    <item
+        android:id="@+id/nav_notifications"
+        android:icon="@drawable/house"
+        android:title="QR" />
+
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/house"
+        android:title="QnA" />
+
+    <item
+        android:id="@+id/nav_settings"
+        android:icon="@drawable/house"
+        android:title="Profile" />
+</menu>
