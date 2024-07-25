@@ -154,4 +154,34 @@
             android:layout_marginTop="8dp"/>
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/promotion_section"
+        android:padding="16dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/test_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Test"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_alignParentStart="true"/>
+
+        <TextView
+            android:id="@+id/tests"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="testest"
+            android:textColor="?attr/colorAccent"
+            android:drawableStart="@drawable/house"
+            android:drawablePadding="8dp"
+            android:layout_below="@id/test_title"
+            android:layout_marginTop="8dp"/>
+    </RelativeLayout>
+
 </RelativeLayout>
