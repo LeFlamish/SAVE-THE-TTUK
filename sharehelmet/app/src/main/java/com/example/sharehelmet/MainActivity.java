@@ -5,7 +5,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private QnAFrag4 qnAFrag4;
     private ProfileFrag5 settingsFragment;
     private BottomNavigationView bottomNavigationView;
+    private BottomSheetBehavior<View> bottomSheetBehavior;
     private boolean isUserInteraction;
 
     @Override
@@ -22,12 +25,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initializeFragments();
+        setupBottomNavigationView();
+
+        // Set default selection
+        bottomNavigationView.setSelectedItemId(R.id.nav_home);
+
+        // BottomSheetBehavior 설정
+//        View bottomSheet = findViewById(R.id.persistent_bottom_sheet);
+//        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+//        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+    }
+
+    private void initializeFragments() {
         homeFrag1 = new HomeFrag1();
         paymentFrag2 = new PaymentFrag2();
         QRFrag3 = new QRFrag3();
         qnAFrag4 = new QnAFrag4();
         settingsFragment = new ProfileFrag5();
+    }
 
+    private void setupBottomNavigationView() {
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
             @Override
@@ -50,9 +68,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-        // Set default selection
-        bottomNavigationView.setSelectedItemId(R.id.nav_home);
     }
 
     private void setFrag(int n) {
@@ -60,18 +75,23 @@ public class MainActivity extends AppCompatActivity {
         switch (n) {
             case 0:
                 selectedFragment = homeFrag1;
+//                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 break;
             case 1:
                 selectedFragment = paymentFrag2;
+//                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 break;
             case 2:
                 selectedFragment = QRFrag3;
+//                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 break;
             case 3:
                 selectedFragment = qnAFrag4;
+//                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 break;
             case 4:
                 selectedFragment = settingsFragment;
+//                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 break;
         }
 
@@ -79,5 +99,4 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
         }
     }
-
 }
