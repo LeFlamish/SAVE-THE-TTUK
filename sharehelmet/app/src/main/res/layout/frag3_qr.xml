@@ -3,13 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Your UI components for Profile Fragment -->
-
-    <TextView
+    <!-- QR 코드 스캔을 위한 뷰 -->
+    <com.journeyapps.barcodescanner.DecoratedBarcodeView
+        android:id="@+id/barcode_scanner"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="3"
-        android:textSize="30dp"
-        android:gravity="center"/>
+        android:visibility="visible"/>
+
+    <!-- QR 코드 결과를 표시할 텍스트뷰 -->
+    <TextView
+        android:id="@+id/result_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        android:text="QR Code result will be displayed here"
+        android:visibility="gone"/>
+
 
 </RelativeLayout>
