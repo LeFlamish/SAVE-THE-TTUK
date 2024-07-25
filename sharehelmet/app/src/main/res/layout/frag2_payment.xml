@@ -1,15 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="16dp">
 
-    <!-- Your UI components for Profile Fragment -->
+    <!-- Available Beam Credits -->
+    <RelativeLayout
+        android:id="@+id/beam_credits_container"
+        android:layout_width="395dp"
+        android:layout_height="135dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/gray_round_border_20"
+        android:padding="16dp">
 
-    <TextView
+        <TextView
+            android:id="@+id/beam_credits_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="AVAILABLE BEAM CREDITS"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/beam_credits_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/beam_credits_title"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="8dp"
+            android:text="₩0"
+            android:textColor="@android:color/white"
+            android:textSize="24sp" />
+
+        <ImageView
+            android:id="@+id/payment_icons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/house" />
+    </RelativeLayout>
+
+    <!-- Payment Method Section -->
+    <RelativeLayout
+        android:id="@+id/payment_method_section"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="2"
-        android:textSize="30dp"
-        android:gravity="center"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/beam_credits_container"
+        android:padding="16dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/payment_method_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Payment method"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_alignParentStart="true"/>
+
+        <RelativeLayout
+            android:id="@+id/payment_method_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/payment_method_title"
+            android:layout_marginTop="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="8dp">
+
+            <ImageView
+                android:id="@+id/payment_method_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/house"
+                android:layout_alignParentStart="true"/>
+
+            <TextView
+                android:id="@+id/payment_method_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kakao Pay"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:layout_toEndOf="@id/payment_method_icon"
+                android:layout_marginStart="8dp"/>
+
+            <TextView
+                android:id="@+id/payment_method_default"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Default"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="14sp"
+                android:background="@drawable/gray_round_border_20"
+                android:paddingHorizontal="4dp"
+                android:paddingVertical="2dp"
+                android:layout_toEndOf="@id/payment_method_name"
+                android:layout_marginStart="8dp"/>
+
+            <ImageView
+                android:id="@+id/payment_method_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/house"
+                android:layout_alignParentEnd="true"/>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/update_payment_method"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Update payment method"
+            android:textColor="?attr/colorAccent"
+            android:drawableStart="@drawable/house"
+            android:drawablePadding="8dp"
+            android:layout_below="@id/payment_method_container"
+            android:layout_marginTop="16dp"/>
+    </RelativeLayout>
+
+    <!-- Promotion Section -->
+    <RelativeLayout
+        android:id="@+id/promotion_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/payment_method_section"
+        android:padding="16dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/promotion_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Promotion"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_alignParentStart="true"/>
+
+        <TextView
+            android:id="@+id/add_credit_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add credit code / gift card"
+            android:textColor="?attr/colorAccent"
+            android:drawableStart="@drawable/house"
+            android:drawablePadding="8dp"
+            android:layout_below="@id/promotion_title"
+            android:layout_marginTop="8dp"/>
+    </RelativeLayout>
 
 </RelativeLayout>
