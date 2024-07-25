@@ -7,6 +7,8 @@
     <color name="gray">#49454F</color>
     <color name="gray_90">#9049454F</color>
     <color name="gray_30">#3049454F</color>
+    <color name="yellow">#FEDC00</color>
+
     <color name="step0">#FFFFFFFF</color>
     <color name="step1">#FFBECDFF</color>
     <color name="step2">#FFB4C3FF</color>
