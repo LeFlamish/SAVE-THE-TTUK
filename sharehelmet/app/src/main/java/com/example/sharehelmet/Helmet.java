@@ -1,12 +1,49 @@
 package com.example.sharehelmet;
 
 public class Helmet {
-    private String id;
-    private boolean borrow;
+    private String helmetId;
+    private int batteryState;
+    private boolean isBorrow;
+    private String storageId;
+    private String userId;
 
-    public boolean isBorrow() {return borrow;}
-    public void setBorrow(boolean borrow){ this.borrow = borrow; }
+    public String getHelmetId() {
+        return helmetId;
+    }
 
-    public String getId() {return id;}
-    public void setId(String id) {this.id = id;}
+    public void setHelmetId(String helmetId) {
+        this.helmetId = helmetId;
+    }
+
+    public int getBatteryState() {
+        return batteryState;
+    }
+
+    public void setBatteryState(int batteryState) {
+        this.batteryState = batteryState;
+    }
+
+    public boolean isBorrow() {
+        return isBorrow;
+    }
+
+    public void setBorrow(boolean borrow) {
+        isBorrow = borrow;
+    }
+
+    public String getStorageId() {
+        return storageId;
+    }
+
+    public void setStorageId(String storageId) {
+        this.storageId = storageId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 }
