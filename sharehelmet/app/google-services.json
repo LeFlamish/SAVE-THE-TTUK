@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "896584150446",
+    "project_id": "save-the-ttuk-cfdaf",
+    "storage_bucket": "save-the-ttuk-cfdaf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:896584150446:android:8ce7be97b548f85adf6c3f",
+        "android_client_info": {
+          "package_name": "com.example.sharehelmet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCe6_WOqbDLUM9bCGK1bUp6Qe7bF3c4jFg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

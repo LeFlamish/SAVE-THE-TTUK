@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //TODO : 로그인 기능 구현하기
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-
+                startActivity(intent);
             }
         });
         signupBtn.setOnClickListener(new View.OnClickListener(){
