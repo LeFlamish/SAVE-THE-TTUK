@@ -22,20 +22,19 @@
             android:id="@+id/logoImage"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            app:srcCompat="@drawable/logo_TTUK" />
+            app:srcCompat="@drawable/logo_ttuk" />
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:gravity="center"
             android:shadowColor="#507587B2"
             android:shadowRadius="20"
             android:text="SAVE-THE-TTUK"
-            android:textColor="#F4F6FA"
+            android:textColor="#111111"
             android:textSize="35dp"
-            android:textStyle="normal"
+            android:textStyle="bold"
             android:layout_marginBottom="50dp"/>
     </LinearLayout>
 
