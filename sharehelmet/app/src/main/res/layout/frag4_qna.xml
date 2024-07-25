@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
@@ -50,7 +51,7 @@
             android:text="Chat on Kakao"
             android:textColor="@android:color/black"
             android:textSize="16sp"
-            android:drawableLeft="@drawable/kakao_icon"
+            android:drawableLeft="@drawable/add_24"
             android:drawablePadding="8dp"
             android:padding="12dp"
             android:layout_below="@id/help_subtext"/>
@@ -61,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/help_section"
-        android:background="@drawable/bg_white_rounded"
+        android:background="@drawable/white_round_border_20"
         android:padding="16dp">
 
         <TextView
@@ -92,7 +93,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_terms" />
+                    android:src="@drawable/add_24" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -115,7 +116,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_privacy" />
+                    android:src="@drawable/add_24" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -138,7 +139,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_insurance" />
+                    android:src="@drawable/add_24" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -150,19 +151,5 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@color/white"
-        android:padding="8dp">
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            app:menu="@menu/bottom_nav_menu" />
-    </RelativeLayout>
+    
 </RelativeLayout>
