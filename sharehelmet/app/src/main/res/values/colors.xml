@@ -2,4 +2,39 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="white_90">#90FFFFFF</color>
+    <color name="white_30">#30FFFFFF</color>
+    <color name="gray">#49454F</color>
+    <color name="gray_90">#9049454F</color>
+    <color name="gray_30">#3049454F</color>
+    <color name="step0">#FFFFFFFF</color>
+    <color name="step1">#FFBECDFF</color>
+    <color name="step2">#FFB4C3FF</color>
+    <color name="step3">#FFAAB9FF</color>
+    <color name="step4">#FFA0AFFF</color>
+    <color name="step5">#96A5FF</color>
+    <color name="step6">#9DB6D1</color>
+    <color name="step7">#AABDD1</color>
+    <color name="step8">#98B4D3</color>
+
+
+    <color name="colorCadetGray">#91A3B0</color>
+    <color name="colorSlateGray">#708090</color>
+    <color name="colorCharcoal">#36454F</color>
+
+    <color name="AntiFlashwhite">#70F4F6FA</color>
+    <color name="colorAliceBlue">#DDEDF4</color>
+    <color name="pastelBlue">#C5E5EF</color>
+    <color name="colorPowderBlue">#9EB6D1</color>
+    <color name="colorPrimaryDark">#425276</color>
+    <color name="toast">#90425276</color>
+    <color name="colorYlnMnBlue">#425276</color>
+    <color name="colorYlnMnBlue_30">#30425276</color>
+    <color name="colorPrussianBlue">#003153</color>
+    <color name="colorOxfordBlue">#002147</color>
+
+    <color name="colorCoolPink_50">#50E9CAEB</color>
+    <color name="colorCoolPink">#F2E9CAEB</color>
+    <color name="colorThistle">#CCBADD</color>
+    <color name="colorWisteria">#AFA9CF</color>
 </resources>
