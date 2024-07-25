@@ -42,7 +42,11 @@
             android:name=".TotalPaymentActivity"
             android:exported="true"
             android:screenOrientation="portrait">
+        </activity>
 
+        <activity android:name=".ProfileUpdateActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
         </activity>
 
         <activity
