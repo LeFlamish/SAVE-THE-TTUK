@@ -162,8 +162,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
                     places.sort((p1, p2) -> Double.compare(p1.distance, p2.distance));
 
                     // 재고가 있는 장소 중 가장 가까운 장소를 찾기
-                    Place nearestPlaceWithStock = null;
-                    for (Place place : places) {
+                    Place nearestPlaceWithStock = null;for (Place place : places) {
                         if (place.stock > 0) {
                             nearestPlaceWithStock = place;
                             break;
@@ -265,3 +264,4 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         }
     }
 }
+
