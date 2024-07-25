@@ -7,16 +7,6 @@
     <color name="gray">#49454F</color>
     <color name="gray_90">#9049454F</color>
     <color name="gray_30">#3049454F</color>
-    <color name="step0">#FFFFFFFF</color>
-    <color name="step1">#FFBECDFF</color>
-    <color name="step2">#FFB4C3FF</color>
-    <color name="step3">#FFAAB9FF</color>
-    <color name="step4">#FFA0AFFF</color>
-    <color name="step5">#96A5FF</color>
-    <color name="step6">#9DB6D1</color>
-    <color name="step7">#AABDD1</color>
-    <color name="step8">#98B4D3</color>
-
 
     <color name="colorCadetGray">#91A3B0</color>
     <color name="colorSlateGray">#708090</color>
