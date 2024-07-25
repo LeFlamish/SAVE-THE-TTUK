@@ -118,7 +118,7 @@
             android:layout_height="wrap_content"
             android:text="Update payment method"
             android:textColor="?attr/colorAccent"
-            android:drawableStart="@drawable/house"
+            android:drawableStart="@drawable/add_24"
             android:drawablePadding="8dp"
             android:layout_below="@id/payment_method_container"
             android:layout_marginTop="16dp"/>
