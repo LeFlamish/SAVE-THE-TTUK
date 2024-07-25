@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,12 +23,18 @@ public class PaymentFrag2 extends Fragment implements View.OnClickListener {
         RelativeLayout testView = view.findViewById(R.id.test);
         testView.setOnClickListener(this);
 
+        ImageView paymentIcons = view.findViewById(R.id.payment_icons);
+        paymentIcons.setOnClickListener(this);
+
         return view;
     }
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(getActivity(), TotalPaymentActivity.class);
-        startActivity(intent);
+        int id = v.getId();
+        if (id == R.id.test || id == R.id.payment_icons) {
+            Intent intent = new Intent(getActivity(), TotalPaymentActivity.class);
+            startActivity(intent);
+        }
     }
 }

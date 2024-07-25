@@ -42,7 +42,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:src="@drawable/house" />
+
+            android:src="@drawable/add_24" />
     </RelativeLayout>
 
     <!-- Payment Method Section -->
