@@ -53,6 +53,7 @@
             android:textSize="16sp"
             android:drawableLeft="@drawable/add_24"
             android:drawablePadding="8dp"
+            android:elevation="8dp"
             android:padding="12dp"
             android:layout_below="@id/help_subtext"/>
     </RelativeLayout>
