@@ -1,16 +1,11 @@
-package com.example.sharehelmet;
+package com.example.sharehelmet.login;
 
 import android.os.Bundle;
-import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
+import com.example.sharehelmet.R;
 
 public class RegisterActivity extends AppCompatActivity {
 
