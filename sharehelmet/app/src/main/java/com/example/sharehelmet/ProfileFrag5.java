@@ -9,17 +9,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sharehelmet.login.LoginActivity;
+import com.example.sharehelmet.model.User;
 
 public class ProfileFrag5 extends Fragment {
+    private User user;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag5_profile, container, false);
+        if(getArguments() != null){
+            user = (User) getArguments().getSerializable("user");
+        }
+
 
         RelativeLayout profileSection = view.findViewById(R.id.profile_section);
+        TextView email = view.findViewById(R.id.email);
+        //showCustomToast(user.getEmail());
+        email.setText(user.getEmail());
         profileSection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,5 +58,21 @@ public class ProfileFrag5 extends Fragment {
         });
 
         return view;
+    }
+
+    private void showCustomToast(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast, null);
+
+        TextView text = layout.findViewById(R.id.toast_text);
+        text.setText(message);
+
+        //ImageView image = layout.findViewById(R.id.toast_images);
+        //image.setImageResource(R.drawable.logo01); // 원하는 아이콘 리소스 설정
+
+        Toast toast = new Toast(getContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
     }
 }

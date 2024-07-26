@@ -133,6 +133,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 4:
                 selectedFragment = settingsFragment;
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("user",user);
+                selectedFragment.setArguments(bundle);
 //                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 break;
         }
