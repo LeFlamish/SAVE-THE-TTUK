@@ -3,9 +3,9 @@
     <style name="Base.Theme.Sharehelmet" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your theme here. -->
 
-        <item name="colorPrimary">@color/step1</item><!-- 주로 앱바 툴바 -->
-        <item name="colorPrimaryDark">@color/step3</item><!-- 상단 상태 바-->
-        <item name="colorAccent">@color/step5</item><!-- 버튼 체크 박스 등 -->
+        <item name="colorPrimary">@color/pastelBlue</item><!-- 주로 앱바 툴바 -->
+        <item name="colorPrimaryDark">@color/pastelBlue</item><!-- 상단 상태 바-->
+        <item name="colorAccent">@color/pastelBlue</item><!-- 버튼 체크 박스 등 -->
         <!-- Add other theme customizations here. -->
 <!--        <item name="bottomNavigationStyle">@style/Widget.BottomNavigationView.Custom</item>-->
     </style>

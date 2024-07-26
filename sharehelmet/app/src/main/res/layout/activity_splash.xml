@@ -22,7 +22,7 @@
             android:id="@+id/logoImage"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            app:srcCompat="@drawable/logo_ttuk" />
+            app:srcCompat="@drawable/ttukbaegi" />
 
         <TextView
             android:id="@+id/title"
