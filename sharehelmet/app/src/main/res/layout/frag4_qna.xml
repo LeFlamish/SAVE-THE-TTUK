@@ -23,6 +23,7 @@
         android:layout_below="@id/title"
         android:layout_marginBottom="16dp"
         android:background="@drawable/white_round_border_20"
+        android:backgroundTint="#F8F8FA"
         android:padding="8dp">
 
         <TextView
@@ -63,7 +64,7 @@
             android:textSize="16sp"
             android:drawableLeft="@drawable/add_24"
             android:drawablePadding="8dp"
-            android:elevation="8dp"
+            android:elevation="16dp"
             android:padding="12dp"
             android:layout_below="@id/help_subtext"/>
     </RelativeLayout>
@@ -74,6 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/help_section"
         android:background="@drawable/white_round_border_20"
+        android:backgroundTint="#F8F8FA"
         android:padding="16dp">
 
         <TextView
