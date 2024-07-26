@@ -36,9 +36,9 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth:23.0.0")
-    implementation("com.google.firebase:firebase-database:20.3.0")
+    implementation("com.google.firebase:firebase-database:21.0.0")
 
-    implementation("com.google.zxing:core:3.4.1")
+    implementation("com.google.zxing:core:3.5.3")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 
     implementation(libs.appcompat)
@@ -55,6 +55,6 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.3.0")
 
     //부트페이
-    implementation("io.github.bootpay:android:+") //최신 버전 추천
-    implementation("io.github.bootpay:android-bio:+") //생체인증 결제 사용시 추가
+    implementation("io.github.bootpay:android:4.4.3") //최신 버전 추천
+    implementation("io.github.bootpay:android-bio:4.4.21") //생체인증 결제 사용시 추가
 }
