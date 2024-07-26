@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import com.example.sharehelmet.model.Helmet;
 import com.example.sharehelmet.model.Storage;
 import com.example.sharehelmet.model.User;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -45,6 +46,7 @@ import java.util.Locale;
 
 public class QRFrag3 extends Fragment {
     private User user;
+    String firebaseId;
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
     private DecoratedBarcodeView barcodeView;
     private DatabaseReference db;
@@ -63,12 +65,29 @@ public class QRFrag3 extends Fragment {
     private boolean isover=false;
     private boolean c1=false;
     HashMap<String, String> Record = new HashMap<>();
+
+    private void loadDataFromDatabase(){
+        db = FirebaseDatabase.getInstance().getReference();
+        db.child("users").child(firebaseId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                user = snapshot.getValue(User.class);
+                //showCustomToast(user.getNickname());
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag3_qr, container, false);
         if (getArguments() != null) {
-            user = (User) getArguments().getSerializable("user");
+            firebaseId = String.valueOf(getArguments());
         }
+        loadDataFromDatabase();
+
+
         Record=user.getRecord();
         barcodeView = view.findViewById(R.id.barcode_scanner);
         using_layout = view.findViewById(R.id.using);
@@ -82,7 +101,7 @@ public class QRFrag3 extends Fragment {
         t23 = view.findViewById(R.id.overcharge);
         returnButton = view.findViewById(R.id.return_button); // 반납 버튼 초기화
         overButton = view.findViewById(R.id.returntostart);
-        db = FirebaseDatabase.getInstance().getReference();
+
 
         barcodeView.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory(Collections.singletonList(BarcodeFormat.QR_CODE)));
         barcodeView.decodeContinuous(new BarcodeCallback() {
@@ -167,6 +186,7 @@ public class QRFrag3 extends Fragment {
             Toast.makeText(getContext(), "Invalid QR code.", Toast.LENGTH_SHORT).show();
         }
     }
+
     private void returnHelmet(String storageId) {
         String locationID = storageId.substring(0, 3);
         int helmetIndex = Integer.parseInt(storageId.substring(4, 7)) - 1;
@@ -251,6 +271,7 @@ public class QRFrag3 extends Fragment {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                 String formattedEndTime = rentalEndTime.format(formatter);
                 Record.put(t13.getText().toString(),formattedEndTime);
+                user.setRecord(Record);
 
                 helmet.setBorrow(false);
                 helmet.setStorageId(storageId);
@@ -278,8 +299,8 @@ public class QRFrag3 extends Fragment {
                 }
             }
         });
+        db.child("users").child(firebaseId).setValue(user);
     }
-
 
     private void findHelmetData(String storageId) {
         String locationID = storageId.substring(0, 3);

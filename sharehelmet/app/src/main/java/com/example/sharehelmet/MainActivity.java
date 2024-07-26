@@ -67,12 +67,11 @@ public class MainActivity extends AppCompatActivity {
         mail = intent.getStringExtra("usermail");
 
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
-        mDatabaseRef.child("users").child(firebaseId).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseRef.child("users").child(firebaseId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 user = snapshot.getValue(User.class);
                 showCustomToast(user.getNickname());
-
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
@@ -137,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         Bundle bundle = new Bundle();
-        bundle.putSerializable("user",user);
+        bundle.putString("firebaseId",firebaseId);
         selectedFragment.setArguments(bundle);
         if (selectedFragment != null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();

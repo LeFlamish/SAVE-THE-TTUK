@@ -14,17 +14,26 @@ import android.widget.Toast;
 
 import com.example.sharehelmet.login.LoginActivity;
 import com.example.sharehelmet.model.User;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class ProfileFrag5 extends Fragment {
     private User user;
+    String firebaseId;
+    DatabaseReference mDatabaseRef;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag5_profile, container, false);
         if(getArguments() != null){
-            user = (User) getArguments().getSerializable("user");
+            firebaseId = String.valueOf(getArguments());
         }
+
+        loadDataFromDatabase();
 
 
         RelativeLayout profileSection = view.findViewById(R.id.profile_section);
@@ -58,6 +67,18 @@ public class ProfileFrag5 extends Fragment {
         });
 
         return view;
+    }
+    private void loadDataFromDatabase(){
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference();
+        mDatabaseRef.child("users").child(firebaseId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                user = snapshot.getValue(User.class);
+                //showCustomToast(user.getNickname());
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
     }
 
     private void showCustomToast(String message) {
