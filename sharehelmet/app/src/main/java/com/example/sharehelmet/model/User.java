@@ -6,11 +6,12 @@ import java.util.HashMap;
 public class User implements Serializable {
     private String nickname;
     private String Email;
-    HashMap<String, String> Record = new HashMap<>();
-    public User(){}
+    HashMap<String, String> Record;
+    public User(){this.Record = new HashMap<>();}
     public User(String nickname, String Email){
         this.nickname = nickname;
         this.Email = Email;
+        this.Record = new HashMap<>();
         //this.PW = PW;
     }
 
