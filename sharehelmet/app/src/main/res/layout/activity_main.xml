@@ -25,6 +25,9 @@
         android:layout_alignParentBottom="true"
         android:elevation="16dp"
         android:background="@color/white"
+        app:labelVisibilityMode="labeled"
+        app:itemActiveIndicatorStyle="@null"
+        app:itemBackground="@color/white"
         app:itemTextColor="@drawable/bottom_navigation_color"
         app:itemIconTint="@drawable/bottom_navigation_color"
         app:menu="@menu/bottom_menu" />
