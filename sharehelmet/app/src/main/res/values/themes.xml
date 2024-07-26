@@ -2,8 +2,30 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Sharehelmet" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+         <item name="colorPrimary">@color/white</item>
     </style>
 
     <style name="Theme.Sharehelmet" parent="Base.Theme.Sharehelmet" />
+
+
+    <style name="Widget.BottomNavigationView.Custom" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemIconSize">24dp</item> <!-- 아이콘 크기 조절 -->
+<!--        <item name="itemTextAppearanceActive">@style/BottomNavigationView.ActiveText</item>-->
+<!--        <item name="itemTextAppearanceInactive">@style/BottomNavigationView.InactiveText</item>-->
+<!--        <item name="itemIconTint">@color/bottom_nav_icon_color</item>-->
+<!--        <item name="itemRippleColor">@color/bottom_nav_ripple_color</item>-->
+<!--        <item name="backgroundTint">@color/bottom_nav_background</item> &lt;!&ndash; 배경색을 흰색으로 설정 &ndash;&gt;-->
+    </style>
+
+    <style name="BottomNavigationView.ActiveText" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/bottom_nav_active_color</item>
+    </style>
+
+    <style name="BottomNavigationView.InactiveText" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/bottom_nav_inactive_color</item>
+    </style>
+
+
 </resources>

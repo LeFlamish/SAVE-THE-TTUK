@@ -39,4 +39,12 @@
     <color name="colorCoolPink">#F2E9CAEB</color>
     <color name="colorThistle">#CCBADD</color>
     <color name="colorWisteria">#AFA9CF</color>
+
+    <color name="bottom_nav_background">#FFFFFF</color> <!-- 배경색을 흰색으로 설정 -->
+    <color name="bottom_nav_icon_color">?attr/colorOnPrimary</color> <!-- 아이콘 색상 -->
+    <color name="bottom_nav_ripple_color">?attr/colorPrimary</color> <!-- Ripple 색상 -->
+    <color name="bottom_nav_active_color">?attr/colorPrimary</color> <!-- 활성화된 텍스트 색상 -->
+    <color name="bottom_nav_inactive_color">?attr/colorOnSurface</color> <!-- 비활성화된 텍스트 색상 -->
+
+
 </resources>
