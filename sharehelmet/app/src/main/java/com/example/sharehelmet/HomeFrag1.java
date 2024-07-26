@@ -1,6 +1,8 @@
 package com.example.sharehelmet;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -46,7 +48,16 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.frag1_home, container, false);
+        View view = inflater.inflate(R.layout.frag1_home, container, false);
+
+        Button helpButton = view.findViewById(R.id.help);
+        helpButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), PopupActivity.class);
+            startActivity(intent);
+        });
+
+        return view;
+
     }
 
     @Override

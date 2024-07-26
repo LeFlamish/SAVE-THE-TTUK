@@ -42,4 +42,12 @@
 <!--        <item name="android:textSize">12sp</item>-->
 <!--        <item name="android:textColor">@color/bottom_nav_inactive_color</item>-->
 <!--    </style>-->
+
+
+    <!-- Popup theme -->
+    <style name="PopupTheme" parent="Theme.Material3.DayNight.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 </resources>
