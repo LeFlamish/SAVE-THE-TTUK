@@ -83,7 +83,7 @@ public class QRFrag3 extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag3_qr, container, false);
         if (getArguments() != null) {
-            firebaseId = String.valueOf(getArguments());
+            firebaseId = getArguments().getString("firebaseId");
         }
         loadDataFromDatabase();
 

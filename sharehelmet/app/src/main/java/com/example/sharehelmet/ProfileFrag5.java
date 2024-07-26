@@ -30,7 +30,7 @@ public class ProfileFrag5 extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag5_profile, container, false);
         if(getArguments() != null){
-            firebaseId = String.valueOf(getArguments());
+            firebaseId = getArguments().getString("firebaseId");
         }
 
         loadDataFromDatabase();
