@@ -140,77 +140,7 @@ public class QRFrag3 extends Fragment {
         return view;
     }
 
-    private void saveHelmetData(String id, String storageID) {
-        Helmet helmet = new Helmet();
-        helmet.setHelmetId(id);
-        helmet.setBatteryState(100);
-        helmet.setBorrow(false);
-        helmet.setStorageId(storageID);
-        helmet.setUserId("-");
 
-        db.child("helmets").child(id).setValue(helmet)
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(getContext(), "Helmet added successfully", Toast.LENGTH_SHORT).show();
-                    updatePlaceData(storageID, id);
-                })
-                .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to add helmet", Toast.LENGTH_SHORT).show());
-    }
-
-    private void updatePlaceData(String storageID, String helmetId) {
-        // Get locationID (first 3 characters of storageID)
-        String locationID = storageID.substring(0, 3);
-        // Get index for storedHelmetID array (last 3 characters of storageID, converted to int)
-        int helmetIndex = Integer.parseInt(storageID.substring(4, 7)) - 1;
-
-        db.child("places").orderByChild("locationID").equalTo(locationID).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot placeSnapshot : dataSnapshot.getChildren()) {
-                        String placeKey = placeSnapshot.getKey();
-
-                        // Use a transaction to safely update stock and storedHelmetID array
-                        db.child("places").child(placeKey).runTransaction(new Transaction.Handler() {
-                            @Override
-                            public Transaction.Result doTransaction(MutableData mutableData) {
-                                Storage storage = mutableData.getValue(Storage.class);
-                                if (storage == null) {
-                                    return Transaction.success(mutableData);
-                                }
-
-                                // Update stock
-                                int newStock = storage.getStock() + 1;
-                                storage.setStock(newStock);
-
-                                // Update storedHelmetID array
-                                ArrayList<String> storedHelmetID = storage.getStoredHelmetID();
-                                if (storedHelmetID != null && helmetIndex >= 0 && helmetIndex < storedHelmetID.size()) {
-                                    storedHelmetID.set(helmetIndex, helmetId);
-                                }
-
-                                mutableData.setValue(storage);
-                                return Transaction.success(mutableData);
-                            }
-
-                            @Override
-                            public void onComplete(DatabaseError databaseError, boolean committed, DataSnapshot dataSnapshot) {
-                                if (databaseError != null) {
-                                    Toast.makeText(getContext(), "Failed to update place data", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(getContext(), "Place data updated successfully", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Failed to update place data", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     private void startScanning() {
         barcodeView.resume();
@@ -504,6 +434,67 @@ public class QRFrag3 extends Fragment {
     public void onResume() {
         super.onResume();
         barcodeView.resume();
+    }
+    private void saveHelmetData(String id, String storageID) {
+        Helmet helmet = new Helmet();
+        helmet.setHelmetId(id);
+        helmet.setBatteryState(100);
+        helmet.setBorrow(false);
+        helmet.setStorageId(storageID);
+        helmet.setUserId("-");
+
+        db.child("helmets").child(id).setValue(helmet)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(getContext(), "Helmet added successfully", Toast.LENGTH_SHORT).show();
+                    updatePlaceData(storageID, id);
+                })
+                .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to add helmet", Toast.LENGTH_SHORT).show());
+    }
+
+    private void updatePlaceData(String storageID, String helmetId) {
+        String locationID = storageID.substring(0, 3);
+        int helmetIndex = Integer.parseInt(storageID.substring(4, 7)) - 1;
+
+        db.child("places").orderByChild("locationID").equalTo(locationID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot placeSnapshot : dataSnapshot.getChildren()) {
+                        String placeKey = placeSnapshot.getKey();
+                        db.child("places").child(placeKey).runTransaction(new Transaction.Handler() {
+                            @Override
+                            public Transaction.Result doTransaction(MutableData mutableData) {
+                                Storage storage = mutableData.getValue(Storage.class);
+                                if (storage == null) {
+                                    return Transaction.success(mutableData);
+                                }
+                                int newStock = storage.getStock() + 1;
+                                storage.setStock(newStock);
+                                ArrayList<String> storedHelmetID = storage.getStoredHelmetID();
+                                if (storedHelmetID != null && helmetIndex >= 0 && helmetIndex < storedHelmetID.size()) {
+                                    storedHelmetID.set(helmetIndex, helmetId);
+                                }
+                                mutableData.setValue(storage);
+                                return Transaction.success(mutableData);
+                            }
+                            @Override
+                            public void onComplete(DatabaseError databaseError, boolean committed, DataSnapshot dataSnapshot) {
+                                if (databaseError != null) {
+                                    Toast.makeText(getContext(), "Failed to update place data", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getContext(), "Place data updated successfully", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getContext(), "Failed to update place data", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
 
