@@ -1,8 +1,9 @@
 package com.example.sharehelmet.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class User {
+public class User implements Serializable {
     private String nickname;
     private String Email;
     HashMap<String, String> Record = new HashMap<>();
