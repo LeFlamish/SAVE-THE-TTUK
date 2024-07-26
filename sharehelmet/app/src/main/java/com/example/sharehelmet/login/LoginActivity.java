@@ -36,7 +36,20 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
+        autoLogin();
         setViews();
+    }
+
+    private void autoLogin(){
+        firebaseuser = mFirebaseAuth.getCurrentUser();
+        if(firebaseuser != null){
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.putExtra("userid",firebaseuser.getUid());
+            intent.putExtra("usermail",firebaseuser.getEmail());
+            startActivity(intent);
+            //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            finish();
+        }
     }
 
 
