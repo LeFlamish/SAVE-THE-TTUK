@@ -1,0 +1,61 @@
+diff a/sharehelmet/app/src/main/java/com/example/sharehelmet/HomeFrag1.java b/sharehelmet/app/src/main/java/com/example/sharehelmet/HomeFrag1.java	(rejected hunks)
+@@ -65,7 +65,7 @@
+ 
+         btnModeToggle.setOnClickListener(v -> {
+             if (naverMap != null) {
+-                toggleLocationTrackingMode();
++                setTrackingMode();
+             }
+         });
+ 
+@@ -83,27 +83,8 @@
+         savePlace("010", "일청담",35.8886304944912,128.61211539394523,20);*/
+     }
+ 
+-    private void savePlace(String id, String name, double latitude, double longitude,int room_num) {
+-        Storage storage=new Storage();
+-        storage.setLocationID(id);
+-        storage.setLatitude(latitude);
+-        storage.setLongitude(longitude);
+-        storage.setStock(0);
+-        ArrayList<String> storedHelmetID=new ArrayList<>();
+-        for(int i=0;i<room_num;i++){
+-            storedHelmetID.add("-");
+-        }
+-        storage.setStoredHelmetID(storedHelmetID);
+-        db.child("places").child(name).setValue(storage)
+-                .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "Place added successfully", Toast.LENGTH_SHORT).show())
+-                .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to add place", Toast.LENGTH_SHORT).show());
+-    }
+-    private void toggleLocationTrackingMode() {
+-        locationTrackingMode = (locationTrackingMode + 1) % 2;
+-        setTrackingMode();
+-    }
+-
+     private void setTrackingMode() {
++        locationTrackingMode = (locationTrackingMode + 1) % 2;
+         if (locationTrackingMode == 0) {
+             naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
+         } else {
+@@ -263,6 +244,21 @@
+             this.stock = stock;
+         }
+     }
++    private void savePlace(String id, String name, double latitude, double longitude,int room_num) {
++        Storage storage=new Storage();
++        storage.setLocationID(id);
++        storage.setLatitude(latitude);
++        storage.setLongitude(longitude);
++        storage.setStock(0);
++        ArrayList<String> storedHelmetID=new ArrayList<>();
++        for(int i=0;i<room_num;i++){
++            storedHelmetID.add("-");
++        }
++        storage.setStoredHelmetID(storedHelmetID);
++        db.child("places").child(name).setValue(storage)
++                .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "Place added successfully", Toast.LENGTH_SHORT).show())
++                .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to add place", Toast.LENGTH_SHORT).show());
++    }
+ }
+ 
+ 
