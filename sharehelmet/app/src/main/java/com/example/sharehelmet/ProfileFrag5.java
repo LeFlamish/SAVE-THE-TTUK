@@ -41,6 +41,7 @@ public class ProfileFrag5 extends Fragment {
         RelativeLayout signOutSection = view.findViewById(R.id.sign_out_section);
         signOutSection.setOnClickListener( v -> {//람다 표현식 사용
             Intent intent = new Intent(getActivity(), LoginActivity.class);
+            intent.putExtra("isLogout",1);
             startActivity(intent);
             getActivity().finish();
         });
