@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,29 +67,42 @@ public class QRFrag3 extends Fragment {
     private boolean c1=false;
     HashMap<String, String> Record = new HashMap<>();
 
-    private void loadDataFromDatabase(){
+    private void loadDataFromDatabase(View rootView) {
         db = FirebaseDatabase.getInstance().getReference();
-        db.child("users").child(firebaseId).addValueEventListener(new ValueEventListener() {
+        db.child("users").child(firebaseId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 user = snapshot.getValue(User.class);
-                //showCustomToast(user.getNickname());
+                if (user != null) {
+                    Record = user.getRecord();
+                } else {
+                    Log.e("QRFrag3", "User not found");
+                }
             }
+
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("QRFrag3", "Failed to read user data", error.toException());
+            }
         });
     }
-
+    private boolean isValidFirebaseId(String firebaseId) {
+        return !(firebaseId.contains(".") || firebaseId.contains("#") ||
+                firebaseId.contains("$") || firebaseId.contains("[") || firebaseId.contains("]"));
+    }
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag3_qr, container, false);
         if (getArguments() != null) {
             firebaseId = getArguments().getString("firebaseId");
+            if (firebaseId != null && isValidFirebaseId(firebaseId)) {
+                loadDataFromDatabase(view);
+            } else {
+                Log.e("QRFrag3", "Invalid Firebase ID");
+            }
         }
-        loadDataFromDatabase();
 
-
-        Record=user.getRecord();
+        
         barcodeView = view.findViewById(R.id.barcode_scanner);
         using_layout = view.findViewById(R.id.using);
         over_layout = view.findViewById(R.id.over);
