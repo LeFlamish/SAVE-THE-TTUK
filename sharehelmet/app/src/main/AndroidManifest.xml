@@ -23,11 +23,13 @@
 
         <activity
             android:name=".login.RegisterActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" >
         </activity>
         <activity
             android:name=".login.LoginActivity"
             android:exported="true"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait">
         </activity>
         <activity

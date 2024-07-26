@@ -3,13 +3,16 @@ package com.example.sharehelmet.model;
 public class User {
     private String nickname;
     private String Email;
-    //보안 ㅈ까
-    private String PW;
+
+    public User(){}
+    public User(String nickname, String Email){
+        this.nickname = nickname;
+        this.Email = Email;
+        //this.PW = PW;
+    }
 
     public String getNickname() {return nickname;}
     public void setNickname(String nickname) {this.nickname = nickname;}
-    public String getID() {return Email;}
-    public void setID(String Email) {this.Email = Email;}
-    public String getPW() {return PW;}
-    public void setPW(String PW) {this.PW = PW;}
+    public String getEmail() {return Email;}
+    public void setEmail(String Email) {this.Email = Email;}
 }
