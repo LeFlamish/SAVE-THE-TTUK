@@ -53,4 +53,8 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
     implementation("com.naver.maps:map-sdk:3.18.0")
     implementation("com.google.android.gms:play-services-location:21.3.0")
+
+    //부트페이
+    implementation("io.github.bootpay:android:+") //최신 버전 추천
+    implementation("io.github.bootpay:android-bio:+") //생체인증 결제 사용시 추가
 }
