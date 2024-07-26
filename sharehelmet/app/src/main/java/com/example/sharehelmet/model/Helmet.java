@@ -1,4 +1,4 @@
-package com.example.sharehelmet;
+package com.example.sharehelmet.model;
 
 public class Helmet {
     private String helmetId;
