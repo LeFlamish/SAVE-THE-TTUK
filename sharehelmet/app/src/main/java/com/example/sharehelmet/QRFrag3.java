@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.sharehelmet.model.Helmet;
 import com.example.sharehelmet.model.Storage;
+import com.example.sharehelmet.model.User;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -38,11 +39,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 public class QRFrag3 extends Fragment {
-
+    private User user;
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
     private DecoratedBarcodeView barcodeView;
     private DatabaseReference db;
@@ -60,10 +62,14 @@ public class QRFrag3 extends Fragment {
     private Button overButton;// 반납 버튼
     private boolean isover=false;
     private boolean c1=false;
+    HashMap<String, String> Record = new HashMap<>();
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag3_qr, container, false);
-
+        if (getArguments() != null) {
+            user = (User) getArguments().getSerializable("user");
+        }
+        Record=user.getRecord();
         barcodeView = view.findViewById(R.id.barcode_scanner);
         using_layout = view.findViewById(R.id.using);
         over_layout = view.findViewById(R.id.over);
@@ -241,6 +247,10 @@ public class QRFrag3 extends Fragment {
                 if (helmet == null) {
                     return Transaction.success(mutableData);
                 }
+                LocalDateTime rentalEndTime = LocalDateTime.now(); // 대여 시작 시간 저장
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                String formattedEndTime = rentalEndTime.format(formatter);
+                Record.put(t13.getText().toString(),formattedEndTime);
 
                 helmet.setBorrow(false);
                 helmet.setStorageId(storageId);
