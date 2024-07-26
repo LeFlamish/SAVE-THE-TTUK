@@ -18,9 +18,11 @@
         android:layout_height="wrap_content"
 
         android:layout_alignParentBottom="true"
+        android:elevation="16dp"
+        android:background="@color/white"
 
         app:menu="@menu/bottom_menu" />
-<!--    android:background="@color/bottom_nav_background"-->
 <!--    style="@style/Widget.BottomNavigationView.Custom"-->
+<!--    android:background="@color/bottom_nav_background"-->
 
 </RelativeLayout>
