@@ -29,7 +29,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -116,8 +115,7 @@ public class RegisterActivity extends AppCompatActivity {
                             //TODO : 유저 클래스 수정 시 생성자 수정만 하면 됨
                             FirebaseUser user = mFirebaseAuth.getCurrentUser();
                             saveAdditionalUserInfo(user);
-                            HashMap<String, String> hashmap=new HashMap<>();
-                            USER = new User(name, mail,hashmap);
+                            USER = new User(name, mail);
 
                             nickname.add(name);
                             email.add(mail);
@@ -176,8 +174,8 @@ public class RegisterActivity extends AppCompatActivity {
         // Firebase Realtime Database 참조
         DatabaseReference mDatabaseRef = FirebaseDatabase.getInstance().getReference();
         String userId = user.getUid();
-        HashMap<String, String> hashmap=new HashMap<>();
-        User userInfo = new User(name, mail,hashmap);
+
+        User userInfo = new User(name, mail);
 
         mDatabaseRef.child("users").child(userId).setValue(userInfo);
     }
