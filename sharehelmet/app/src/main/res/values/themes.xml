@@ -1,11 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.Sharehelmet" parent="Theme.Material3.Light.NoActionBar">
+    <style name="Base.Theme.Sharehelmet" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
 
-        <item name="colorPrimary">@color/step1</item><!-- 주로 앱바 툴바 -->
-        <item name="colorPrimaryDark">@color/step3</item><!-- 상단 상태 바-->
-        <item name="colorAccent">@color/step5</item><!-- 버튼 체크 박스 등 -->
+<!--        <item name="colorPrimary">@color/step1</item>&lt;!&ndash; 주로 앱바 툴바 &ndash;&gt;-->
+<!--        <item name="colorPrimaryDark">@color/step3</item>&lt;!&ndash; 상단 상태 바&ndash;&gt;-->
+<!--        <item name="colorAccent">@color/step5</item>&lt;!&ndash; 버튼 체크 박스 등 &ndash;&gt;-->
         <!-- Add other theme customizations here. -->
 <!--        <item name="bottomNavigationStyle">@style/Widget.BottomNavigationView.Custom</item>-->
     </style>
@@ -15,11 +15,11 @@
     <!-- Custom BottomNavigationView style -->
     <style name="Widget.BottomNavigationView.Custom" parent="Widget.MaterialComponents.BottomNavigationView">
         <item name="itemIconSize">24dp</item> <!-- 아이콘 크기 조절 -->
-<!--        <item name="itemTextAppearanceActive">@style/BottomNavigationView.ActiveText</item>-->
-<!--        <item name="itemTextAppearanceInactive">@style/BottomNavigationView.InactiveText</item>-->
-<!--        <item name="itemIconTint">@color/bottom_nav_icon_color</item>-->
-<!--        <item name="itemRippleColor">@color/bottom_nav_ripple_color</item>-->
-<!--        <item name="backgroundTint">@color/bottom_nav_background</item> &lt;!&ndash; 배경색 설정 &ndash;&gt;-->
+        <item name="itemTextAppearanceActive">@style/BottomNavigationView.ActiveText</item>
+        <item name="itemTextAppearanceInactive">@style/BottomNavigationView.InactiveText</item>
+        <item name="itemIconTint">@color/bottom_nav_icon_color</item>
+        <item name="itemRippleColor">@color/bottom_nav_ripple_color</item>
+        <item name="backgroundTint">@color/bottom_nav_background</item> <!-- 배경색 설정 -->
     </style>
 
     <style name="BottomNavigationView.ActiveText" parent="TextAppearance.AppCompat.Medium">
