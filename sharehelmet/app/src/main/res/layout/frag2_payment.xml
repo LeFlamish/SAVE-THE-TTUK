@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:text="AVAILABLE BEAM CREDITS"
+            android:text="AVAILABLE TTUK CREDITS"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
