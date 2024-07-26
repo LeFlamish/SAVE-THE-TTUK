@@ -21,10 +21,10 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-                //intent.putExtra("isLogout",0);
+                intent.putExtra("isLogout",0);
                 startActivity(intent);
                 finish();
             }
-        }, 500);
+        }, 1000);
     }
 }

@@ -36,12 +36,20 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
+
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference();
+
         autoLogin();
         setViews();
     }
 
     private void autoLogin(){
         firebaseuser = mFirebaseAuth.getCurrentUser();
+        Intent login = getIntent();
+        int isLogout = login.getIntExtra("isLogout",-1);
+        if(isLogout == 1 || isLogout == -1) firebaseuser = null;
+
         if(firebaseuser != null){
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             intent.putExtra("userid",firebaseuser.getUid());
@@ -95,8 +103,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loadDataFromDatabase(){
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference();
 
         mFirebaseAuth.signInWithEmailAndPassword(mail, pw).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
