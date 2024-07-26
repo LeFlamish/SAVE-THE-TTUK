@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.example.sharehelmet.login.LoginActivity;
+
 public class ProfileFrag5 extends Fragment {
 
     @Nullable
@@ -33,6 +35,14 @@ public class ProfileFrag5 extends Fragment {
                 Intent intent = new Intent(getActivity(), RidingGuideActivity.class);
                 startActivity(intent);
             }
+        });
+
+
+        RelativeLayout signOutSection = view.findViewById(R.id.sign_out_section);
+        signOutSection.setOnClickListener( v -> {//람다 표현식 사용
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+            getActivity().finish();
         });
 
         return view;
