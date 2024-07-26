@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,50 +12,66 @@
         android:layout_height="match_parent"
         android:visibility="visible"/>
 
-    <TextView
-        android:id="@+id/result_text_view"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/using"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/barcode_scanner"
-        android:layout_marginTop="16dp"
-        android:text="Scan result will be shown here"
-        android:visibility="gone"
-        android:textSize="16sp"
-        android:textColor="@android:color/black" />
-
-    <TextView
-        android:id="@+id/rental_duration_text_view"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/barcode_scanner"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/using"
+            android:id="@+id/helmetId"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/helmetId"
+            android:id="@+id/battery"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/battery"
+            android:id="@+id/start_time"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/start_time"
+            android:id="@+id/using_time"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="반납"
+            app:layout_constraintTop_toBottomOf="@id/using_time"
+            android:id="@+id/return_button"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/over"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/result_text_view"
-        android:layout_marginTop="8dp"
-        android:text="Rental duration will be shown here"
-        android:textSize="16sp"
-        android:textColor="@android:color/black" />
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/using"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/over"
+            android:id="@+id/overhelmetId"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/overhelmetId"
+            android:id="@+id/overtime"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/overtime"
+            android:id="@+id/overcharge"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="돌아가기"
+            app:layout_constraintTop_toBottomOf="@id/overcharge"
+            android:id="@+id/returntostart"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <EditText
-        android:id="@+id/return_station_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/rental_duration_text_view"
-        android:layout_marginTop="16dp"
-        android:hint="Enter return station ID"
-        android:inputType="text"
-        android:textSize="16sp"
-        android:padding="8dp"
-        android:background="@android:drawable/editbox_background" />
-
-    <Button
-        android:id="@+id/return_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/return_station_edit_text"
-        android:layout_marginTop="16dp"
-        android:text="Return Helmet"
-
-        android:textSize="16sp"
-        android:background="@android:color/holo_blue_light"
-        android:textColor="@android:color/white" />
-
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

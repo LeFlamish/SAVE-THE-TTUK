@@ -71,46 +71,32 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
         db = FirebaseDatabase.getInstance().getReference();
 
-        /*savePlace("00000000", "IT 1호관", 35.88748984889353, 128.61274302005768);
-        savePlace("00000001", "본관", 35.89044078812516, 128.61201882362366);
-        savePlace("00000010", "첨성관", 35.89136211922988, 128.61490488052368);
-        savePlace("00000011", "글로벌플라자", 35.89185754756124, 128.6112678050995);
-        savePlace("00000100", "경상대학",35.88934560701709,128.6159348487854);
-        savePlace("00000101", "대운동장",35.88812872135325,128.60642910003662);
-        savePlace("00000110", "정문",35.88522550431494,128.61462593078613);
-        savePlace("00000111", "북문",35.89235499478949,128.6094578539692);
-        savePlace("00001000", "도서관",35.89166632997614,128.61208319664001);
-        savePlace("00001001", "일청담",35.8886304944912,128.61211539394523);*/
+        /*savePlace("001", "IT 1호관", 35.88748984889353, 128.61274302005768,20);
+        savePlace("002", "본관", 35.89044078812516, 128.61201882362366,20);
+        savePlace("003", "첨성관", 35.89136211922988, 128.61490488052368,20);
+        savePlace("004", "글로벌플라자", 35.89185754756124, 128.6112678050995,20);
+        savePlace("005", "경상대학",35.88934560701709,128.6159348487854,20);
+        savePlace("006", "대운동장",35.88812872135325,128.60642910003662,20);
+        savePlace("007", "정문",35.88522550431494,128.61462593078613,20);
+        savePlace("008", "북문",35.89235499478949,128.6094578539692,20);
+        savePlace("009", "도서관",35.89166632997614,128.61208319664001,20);
+        savePlace("010", "일청담",35.8886304944912,128.61211539394523,20);*/
     }
 
-    private void savePlace(String id, String name, double latitude, double longitude) {
-        Map<String, Map<String, Object>> subplaces = new HashMap<>();
-        subplaces.put("001", createSubplaceData(false, "0"));
-        subplaces.put("002", createSubplaceData(false, "0"));
-        subplaces.put("003", createSubplaceData(false, "0"));
-        subplaces.put("004", createSubplaceData(false, "0"));
-        subplaces.put("005", createSubplaceData(false, "0"));
-        subplaces.put("006", createSubplaceData(false, "0"));
-        subplaces.put("007", createSubplaceData(false, "0"));
-        subplaces.put("008", createSubplaceData(false, "0"));
-        subplaces.put("009", createSubplaceData(false, "0"));
-        subplaces.put("010", createSubplaceData(false, "0"));
-        Map<String, Object> place = new HashMap<>();
-        place.put("name", name);
-        place.put("latitude", latitude);
-        place.put("longitude", longitude);
-        place.put("stock",0);
-        place.put("subplaces", subplaces);
-
-        db.child("places").child(id).setValue(place)
+    private void savePlace(String id, String name, double latitude, double longitude,int room_num) {
+        Storage storage=new Storage();
+        storage.setLocationID(id);
+        storage.setLatitude(latitude);
+        storage.setLongitude(longitude);
+        storage.setStock(0);
+        ArrayList<String> storedHelmetID=new ArrayList<>();
+        for(int i=0;i<room_num;i++){
+            storedHelmetID.add("-");
+        }
+        storage.setStoredHelmetID(storedHelmetID);
+        db.child("places").child(name).setValue(storage)
                 .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "Place added successfully", Toast.LENGTH_SHORT).show())
                 .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to add place", Toast.LENGTH_SHORT).show());
-    }
-    private Map<String, Object> createSubplaceData(boolean hasHelmet, String helmetId) {
-        Map<String, Object> subplaceData = new HashMap<>();
-        subplaceData.put("hasHelmet", hasHelmet);
-        subplaceData.put("helmetId", helmetId);
-        return subplaceData;
     }
     private void toggleLocationTrackingMode() {
         locationTrackingMode = (locationTrackingMode + 1) % 2;
@@ -164,14 +150,13 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     double latitude = snapshot.child("latitude").getValue(Double.class);
                     double longitude = snapshot.child("longitude").getValue(Double.class);
-                    String name = snapshot.child("name").getValue(String.class);
                     int stock = snapshot.child("stock").getValue(Integer.class); // 재고 정보 가져오기
 
                     LatLng placeLatLng = new LatLng(latitude, longitude);
                     double distance = calculateDistance(currentLatLng, placeLatLng);
 
                     if (distance <= 1.5) { // 1.5km 이내의 장소만 표시
-                        places.add(new Place(name, placeLatLng, distance, stock));
+                        places.add(new Place(placeLatLng, distance, stock));
                     }
                 }
 
@@ -189,7 +174,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
                     for (Place place : places) {
                         Marker marker = new Marker();
                         marker.setPosition(place.latLng);
-                        marker.setCaptionText(place.name + "\n" + "(" + String.format("%.2f", place.distance) + "km)");
+                        marker.setCaptionText("(" + String.format("%.2f", place.distance) + "km)");
 
                         if (place == nearestPlaceWithStock) {
                             marker.setCaptionColor(Color.GREEN); // 재고가 있는 가장 가까운 장소는 초록색
@@ -202,7 +187,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
                         // 마커 클릭 리스너 설정
                         marker.setOnClickListener(overlay -> {
-                            Toast.makeText(getContext(), place.name + " 재고: " + place.stock, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), " 재고: " + place.stock, Toast.LENGTH_SHORT).show();
                             return true;
                         });
                     }
@@ -268,13 +253,11 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     }
 
     private static class Place {
-        String name;
         LatLng latLng;
         double distance;
         int stock;
 
-        Place(String name, LatLng latLng, double distance, int stock) {
-            this.name = name;
+        Place(LatLng latLng, double distance, int stock) {
             this.latLng = latLng;
             this.distance = distance;
             this.stock = stock;
