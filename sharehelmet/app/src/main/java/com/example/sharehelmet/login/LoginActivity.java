@@ -48,7 +48,12 @@ public class LoginActivity extends AppCompatActivity {
         firebaseuser = mFirebaseAuth.getCurrentUser();
         Intent login = getIntent();
         int isLogout = login.getIntExtra("isLogout",-1);
-        if(isLogout == 1 || isLogout == -1) firebaseuser = null;
+        if(isLogout == -1) firebaseuser = null;
+        else if(isLogout == 1){
+            FirebaseAuth.getInstance().signOut();
+            firebaseuser = null;
+        }
+
 
         if(firebaseuser != null){
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);

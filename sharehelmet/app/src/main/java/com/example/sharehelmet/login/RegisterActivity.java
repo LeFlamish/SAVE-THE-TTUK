@@ -92,7 +92,9 @@ public class RegisterActivity extends AppCompatActivity {
                     editPW.requestFocus();
                     return;
                 }
-
+/*
+//nickname, email 리스트가 파이어베이스에서 오류가 나서 nullpoint exception이 남.. 갈아엎어야 됨
+//TODO : 회원 삭제 메소드로 각 리스트 수정하기
                 for(String n : nickname){
                     if(n.equals(name)){
                         nameCheck.setVisibility(View.VISIBLE);
@@ -105,6 +107,8 @@ public class RegisterActivity extends AppCompatActivity {
                         return;
                     }
                 }
+
+ */
 
 
                 //파이어베이스유저 생성, 데이터 전송
