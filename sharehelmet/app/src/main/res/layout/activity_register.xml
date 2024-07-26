@@ -104,9 +104,9 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="5dp"
                 android:paddingStart="5dp"
-                android:text=""
+                android:text="이미 존재하는 닉네임입니다"
                 android:textColor="#f54242"
-                android:visibility="visible" />
+                android:visibility="invisible" />
         </LinearLayout>
 
         <LinearLayout
@@ -145,7 +145,7 @@
                 android:layout_marginTop="5dp"
                 android:fontFamily=""
                 android:paddingStart="5dp"
-                android:text="이메일 형식에 맞게 입력해주세요."
+                android:text="이미 존재하는 이메일입니다"
                 android:textColor="#f54242"
                 android:visibility="invisible" />
         </LinearLayout>

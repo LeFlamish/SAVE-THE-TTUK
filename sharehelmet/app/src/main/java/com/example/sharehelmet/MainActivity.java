@@ -1,17 +1,35 @@
 package com.example.sharehelmet;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+
+import com.example.sharehelmet.model.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import kr.co.bootpay.android.*;
 
 public class MainActivity extends AppCompatActivity {
 
+    private User user;
+    private String firebaseId, mail;
+    DatabaseReference mDatabaseRef;
     private HomeFrag1 homeFrag1;
     private PaymentFrag2 paymentFrag2;
     private QRFrag3 QRFrag3;
@@ -26,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initialzeUser();
         initializeFragments();
         setupBottomNavigationView();
 
@@ -36,6 +55,24 @@ public class MainActivity extends AppCompatActivity {
 //        View bottomSheet = findViewById(R.id.persistent_bottom_sheet);
 //        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 //        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+    }
+
+    private void initialzeUser(){
+        Intent intent = getIntent();
+        firebaseId = intent.getStringExtra("userid");
+        mail = intent.getStringExtra("usermail");
+
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference();
+        mDatabaseRef.child("users").child(firebaseId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                user = snapshot.getValue(User.class);
+                showCustomToast(user.getNickname());
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
     }
 
     private void initializeFragments() {
@@ -99,5 +136,21 @@ public class MainActivity extends AppCompatActivity {
         if (selectedFragment != null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
         }
+    }
+
+    private void showCustomToast(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast, null);
+
+        TextView text = layout.findViewById(R.id.toast_text);
+        text.setText(message);
+
+        //ImageView image = layout.findViewById(R.id.toast_images);
+        //image.setImageResource(R.drawable.logo01); // 원하는 아이콘 리소스 설정
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
     }
 }
