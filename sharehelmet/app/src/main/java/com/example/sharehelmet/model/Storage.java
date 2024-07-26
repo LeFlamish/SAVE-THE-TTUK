@@ -1,7 +1,6 @@
-package com.example.sharehelmet;
+package com.example.sharehelmet.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Storage {
     private String LocationID;

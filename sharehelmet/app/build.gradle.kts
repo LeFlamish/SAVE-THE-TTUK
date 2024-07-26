@@ -42,8 +42,10 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth:23.0.0")
     implementation("com.google.firebase:firebase-database:20.3.0")
+    implementation("com.google.firebase:firebase-database:21.0.0")
 
     implementation("com.google.zxing:core:3.4.1")
+    implementation("com.google.zxing:core:3.5.3")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 
     implementation(libs.appcompat)
@@ -62,6 +64,7 @@ dependencies {
     //부트페이
     implementation("io.github.bootpay:android:4.4.3") //최신 버전 추천
     implementation("io.github.bootpay:android-bio:4.4.21") //생체인증 결제 사용시 추가
+<<<<<<< HEAD
 
     //뷰페이저
     implementation("androidx.viewpager2:viewpager2:1.1.0")
@@ -79,4 +82,6 @@ dependencies {
 
     //카톡 서비스 위한 JVM 설정 관련.
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.22")
+=======
+>>>>>>> 0bdf8158c02e3d03ec5a041d98cd8263cfae86aa
 }

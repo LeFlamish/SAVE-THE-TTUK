@@ -23,10 +23,12 @@
 
         <activity
             android:name=".RegisterActivity"
+            android:name=".login.RegisterActivity"
             android:exported="false" >
         </activity>
         <activity
             android:name=".LoginActivity"
+            android:name=".login.LoginActivity"
             android:exported="true"
             android:screenOrientation="portrait">
         </activity>
