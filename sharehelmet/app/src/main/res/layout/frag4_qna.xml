@@ -23,7 +23,7 @@
         android:layout_below="@id/title"
         android:layout_marginBottom="16dp"
         android:background="@drawable/white_round_border_20"
-        android:padding="16dp">
+        android:padding="8dp">
 
         <TextView
             android:id="@+id/help_text"
@@ -32,22 +32,32 @@
             android:text="Still need help? Get in touch!"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"/>
 
         <TextView
             android:id="@+id/help_subtext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:text="Send us a message and we will find the best way to support you."
             android:textSize="14sp"
             android:layout_below="@id/help_text"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="8dp"/>
 
-        <Button
+        <android.widget.Button
             android:id="@+id/chat_kakao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/yellow_round_border_20"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edit_text_background"
+            android:backgroundTint="@color/yellow"
             android:text="Chat on Kakao"
             android:textColor="@android:color/black"
             android:textSize="16sp"

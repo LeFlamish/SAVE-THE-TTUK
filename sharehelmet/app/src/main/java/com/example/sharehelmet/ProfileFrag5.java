@@ -26,6 +26,15 @@ public class ProfileFrag5 extends Fragment {
             }
         });
 
+        RelativeLayout ridingGuideSection = view.findViewById(R.id.riding_guide_section);
+        ridingGuideSection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), RidingGuideActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
 }
