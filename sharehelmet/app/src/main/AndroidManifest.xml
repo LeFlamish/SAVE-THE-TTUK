@@ -51,6 +51,11 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <activity android:name=".RidingGuideActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
+        </activity>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
