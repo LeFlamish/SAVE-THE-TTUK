@@ -20,8 +20,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import kotlinx.coroutines.internal.ExceptionSuccessfullyProcessed;
+
 public class ProfileFrag5 extends Fragment {
     private User user;
+    TextView email;
     String firebaseId;
     DatabaseReference mDatabaseRef;
 
@@ -32,14 +35,11 @@ public class ProfileFrag5 extends Fragment {
         if(getArguments() != null){
             firebaseId = getArguments().getString("firebaseId");
         }
+        email = view.findViewById(R.id.email);
 
         loadDataFromDatabase();
 
-
         RelativeLayout profileSection = view.findViewById(R.id.profile_section);
-        TextView email = view.findViewById(R.id.email);
-        //showCustomToast(user.getEmail());
-        email.setText(user.getEmail());
         profileSection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,11 +74,15 @@ public class ProfileFrag5 extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 user = snapshot.getValue(User.class);
-                //showCustomToast(user.getNickname());
+                updateUI();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
+    }
+
+    private void updateUI(){
+        email.setText(user.getEmail());
     }
 
     private void showCustomToast(String message) {

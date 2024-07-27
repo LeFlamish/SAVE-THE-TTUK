@@ -1,4 +1,4 @@
-package com.example.sharehelmet;
+package com.example.sharehelmet.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +7,7 @@ import android.os.Handler;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.sharehelmet.login.LoginActivity;
+import com.example.sharehelmet.R;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -20,7 +20,7 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                Intent intent = new Intent(SplashActivity.this, StartActivity.class);
                 intent.putExtra("isLogout",0);
                 startActivity(intent);
                 finish();
