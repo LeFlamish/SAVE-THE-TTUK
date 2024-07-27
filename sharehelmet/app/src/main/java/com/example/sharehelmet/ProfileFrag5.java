@@ -21,8 +21,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import kotlinx.coroutines.internal.ExceptionSuccessfullyProcessed;
-
 public class ProfileFrag5 extends Fragment {
     private User user;
     TextView email;
@@ -33,7 +31,7 @@ public class ProfileFrag5 extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag5_profile, container, false);
-        if(getArguments() != null){
+        if (getArguments() != null) {
             firebaseId = getArguments().getString("firebaseId");
         }
         email = view.findViewById(R.id.email);
@@ -58,18 +56,27 @@ public class ProfileFrag5 extends Fragment {
             }
         });
 
+        RelativeLayout ridingHistorySection = view.findViewById(R.id.riding_history_section);
+        ridingHistorySection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), RidingHistoryActivity.class);
+                startActivity(intent);
+            }
+        });
 
         RelativeLayout signOutSection = view.findViewById(R.id.sign_out_section);
-        signOutSection.setOnClickListener( v -> {//람다 표현식 사용
+        signOutSection.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), StartActivity.class);
-            intent.putExtra("isLogout",1);
+            intent.putExtra("isLogout", 1);
             startActivity(intent);
             getActivity().finish();
         });
 
         return view;
     }
-    private void loadDataFromDatabase(){
+
+    private void loadDataFromDatabase() {
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
         mDatabaseRef.child("users").child(firebaseId).addValueEventListener(new ValueEventListener() {
             @Override
@@ -77,13 +84,18 @@ public class ProfileFrag5 extends Fragment {
                 user = snapshot.getValue(User.class);
                 updateUI();
             }
+
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
+            public void onCancelled(@NonNull DatabaseError error) {
+                showCustomToast("Failed to load data");
+            }
         });
     }
 
-    private void updateUI(){
-        email.setText(user.getEmail());
+    private void updateUI() {
+        if (user != null) {
+            email.setText(user.getEmail());
+        }
     }
 
     private void showCustomToast(String message) {
@@ -92,9 +104,6 @@ public class ProfileFrag5 extends Fragment {
 
         TextView text = layout.findViewById(R.id.toast_text);
         text.setText(message);
-
-        //ImageView image = layout.findViewById(R.id.toast_images);
-        //image.setImageResource(R.drawable.logo01); // 원하는 아이콘 리소스 설정
 
         Toast toast = new Toast(getContext());
         toast.setDuration(Toast.LENGTH_LONG);

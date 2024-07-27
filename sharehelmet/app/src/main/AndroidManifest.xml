@@ -61,6 +61,10 @@
             android:exported="true"
             android:screenOrientation="portrait"></activity>
         <activity
+            android:name=".RidingHistoryActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"></activity>
+        <activity
             android:name=".RidingGuideActivity"
             android:exported="true"
             android:screenOrientation="portrait"></activity>
