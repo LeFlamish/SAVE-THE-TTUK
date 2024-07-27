@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,8 +29,19 @@ public class LoginActivity extends AppCompatActivity {
     DatabaseReference mDatabaseRef;     //실시간 데이터 베이스
     FirebaseUser firebaseuser;
     EditText editMAIL, editPW;
-    Button loginBtn, signupBtn;
+    Button loginBtn;
     String mail,pw;
+    ImageView backBtn;
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        Intent intent = new Intent(LoginActivity.this, StartActivity.class);
+        intent.putExtra("isLogout",1);
+        //login->start 는 액티비티를 바꾸는 거, signin->start는 signin을 끄는 거. 둘이 애니메이션 다르게 설정해야 함
+        //overridePendingTransition(R.anim.fade_in, R.anim.horizontal_exit);
+        startActivity(intent);
+        finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,17 +83,10 @@ public class LoginActivity extends AppCompatActivity {
         editMAIL = findViewById(R.id.editMAIL);
         editPW = findViewById(R.id.editPW);
         loginBtn = findViewById(R.id.loginbtn);
-        signupBtn = findViewById(R.id.signupbtn);
+        backBtn = findViewById(R.id.back_to_start);
 
         loginClicked();
-
-        signupBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
-            }
-        });
+        backBtnClicked();
     }
 
     protected void loginClicked(){
@@ -104,6 +109,11 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 loadDataFromDatabase();
             }
+        });
+    }
+    private void backBtnClicked(){
+        backBtn.setOnClickListener(v->{
+            onBackPressed();
         });
     }
 

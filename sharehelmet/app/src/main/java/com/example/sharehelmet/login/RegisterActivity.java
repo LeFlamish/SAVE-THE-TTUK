@@ -41,7 +41,12 @@ public class RegisterActivity extends AppCompatActivity {
     TextView nameCheck, mailCheck, pwCheck;
     String name, mail, pw;
     Button signUp;
+    ImageView backBtn;
     User USER;//TODO : 유저 클래스 수정했으면 181줄로
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +67,11 @@ public class RegisterActivity extends AppCompatActivity {
         pwCheck   = findViewById(R.id.pwCheck);
 
         signUp = findViewById(R.id.signupbtn);
+        backBtn = findViewById(R.id.back_to_start);
 
         loadDataFromDatabase();
         signupClicked();
+        backBtnClicked();
     }
 
     protected void signupClicked(){
@@ -129,7 +136,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    protected void loadDataFromDatabase(){
+    private void loadDataFromDatabase(){
         mFirebaseAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
     }
@@ -141,6 +148,12 @@ public class RegisterActivity extends AppCompatActivity {
         User userInfo = new User(name, mail);
 
         mDatabaseRef.child("users").child(userId).setValue(userInfo);
+    }
+
+    private void backBtnClicked(){
+        backBtn.setOnClickListener(v->{
+            onBackPressed();
+        });
     }
 
 
