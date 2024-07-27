@@ -40,7 +40,6 @@ public class RegisterActivity extends AppCompatActivity {
     TextView nameCheck, mailCheck, pwCheck;
     String name, mail, pw;
     Button signUp;
-    List<String> nickname, email;
     User USER;//TODO : 유저 클래스 수정했으면 181줄로
 
     @Override
@@ -92,24 +91,6 @@ public class RegisterActivity extends AppCompatActivity {
                     editPW.requestFocus();
                     return;
                 }
-/*
-//nickname, email 리스트가 파이어베이스에서 오류가 나서 nullpoint exception이 남.. 갈아엎어야 됨
-//TODO : 회원 삭제 메소드로 각 리스트 수정하기
-                for(String n : nickname){
-                    if(n.equals(name)){
-                        nameCheck.setVisibility(View.VISIBLE);
-                        return;
-                    }
-                }
-                for(String m : email){
-                    if(m.equals(mail)){
-                        mailCheck.setVisibility(View.VISIBLE);
-                        return;
-                    }
-                }
-
- */
-
 
                 //파이어베이스유저 생성, 데이터 전송
                 mFirebaseAuth.createUserWithEmailAndPassword(mail,pw).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
@@ -120,12 +101,6 @@ public class RegisterActivity extends AppCompatActivity {
                             FirebaseUser user = mFirebaseAuth.getCurrentUser();
                             saveAdditionalUserInfo(user);
                             USER = new User(name, mail);
-
-                            nickname.add(name);
-                            email.add(mail);
-
-                            mDatabaseRef.child("nickname").setValue(nickname);
-                            mDatabaseRef.child("email").setValue(email);
 
                             showCustomToast("회원가입이 완료되었습니다");
                             finish();
@@ -142,7 +117,7 @@ public class RegisterActivity extends AppCompatActivity {
                             } catch (FirebaseAuthInvalidCredentialsException e) {
                                 errorMessage = "이메일 형식이 올바르지 않습니다";
                             } catch (Exception e) {
-                                errorMessage = "회원가입에 실패했습니다";
+                                errorMessage = "회원가입에 실패했습니다. 관리자에게 문의해주세요";
                             }
                             showCustomToast(errorMessage);
                         }
@@ -156,24 +131,8 @@ public class RegisterActivity extends AppCompatActivity {
     protected void loadDataFromDatabase(){
         mFirebaseAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
-
-        mDatabaseRef.child("nickname").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {nickname = (List<String>) snapshot.getValue();}
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
-        });
-
-        mDatabaseRef.child("email").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {email = (List<String>) snapshot.getValue();}
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
-        });
-
     }
+
     private void saveAdditionalUserInfo(FirebaseUser user) {
         // Firebase Realtime Database 참조
         DatabaseReference mDatabaseRef = FirebaseDatabase.getInstance().getReference();

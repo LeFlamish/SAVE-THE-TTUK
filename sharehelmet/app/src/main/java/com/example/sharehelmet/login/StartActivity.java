@@ -49,7 +49,7 @@ public class StartActivity extends AppCompatActivity {
         Intent login = getIntent();
         int isLogout = login.getIntExtra("isLogout",-1);
         if(isLogout == -1) firebaseuser = null;
-        else if(isLogout == 1 || isLogout == 0){
+        else if(isLogout == 1){
             FirebaseAuth.getInstance().signOut();
             firebaseuser = null;
         }
@@ -92,7 +92,6 @@ public class StartActivity extends AppCompatActivity {
             public void onClick(View v){
                 Intent intent = new Intent(StartActivity.this, RegisterActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 

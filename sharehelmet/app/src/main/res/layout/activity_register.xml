@@ -31,11 +31,11 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/font_thin"
+            android:fontFamily="@font/font_main"
             android:gravity="center"
             android:text="회원가입"
             android:textColor="@color/black"
-            android:textSize="20sp"
+            android:textSize="25sp"
             android:textStyle="normal"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -48,11 +48,11 @@
         android:id="@+id/container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_marginHorizontal="25dp"
+        android:layout_marginHorizontal="50dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/upperBar">
+        app:layout_constraintTop_toBottomOf="@id/upperBar"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:id="@+id/box2"
@@ -60,27 +60,23 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:drawableLeft="@drawable/person_24px"
-
-                android:text=" 닉네임"
-                android:textColor="@color/gray"
-                android:textSize="25sp" />
+                android:text="닉네임"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/font_main" />
 
             <EditText
                 android:id="@+id/editNAME"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-
-                android:hint="  닉네임을 입력하세요"
+                android:hint="닉네임을 입력하세요"
+                android:fontFamily="@font/font_main"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
                 android:textColorHint="@color/gray_30" />
@@ -89,7 +85,6 @@
                 android:id="@+id/nameCheck"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="5dp"
                 android:paddingStart="5dp"
                 android:text="이미 존재하는 닉네임입니다"
@@ -103,25 +98,21 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/box2">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:drawableLeft="@drawable/mail_24px"
-
-                android:text=" 이메일"
-                android:textColor="@color/gray"
-                android:textSize="25sp" />
+                android:text="이메일"
+                android:textColor="@color/black"
+                android:fontFamily="@font/font_main"
+                android:textSize="20sp" />
             <EditText
                 android:id="@+id/editMAIL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-
-                android:hint="  이메일을 입력하세요"
+                android:fontFamily="@font/font_main"
+                android:hint="이메일을 입력하세요"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
                 android:textColorHint="@color/gray_30" />
@@ -129,9 +120,8 @@
                 android:id="@+id/mailCheck"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="5dp"
-                android:fontFamily=""
+                android:fontFamily="@font/font_main"
                 android:paddingStart="5dp"
                 android:text="이미 존재하는 이메일입니다"
                 android:textColor="#f54242"
@@ -144,25 +134,21 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/box3">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:drawableLeft="@drawable/lock_24px"
-
-                android:text=" 비밀번호"
-                android:textColor="@color/gray"
-                android:textSize="25sp" />
+                android:text="비밀번호"
+                android:textColor="@color/black"
+                android:fontFamily="@font/font_main"
+                android:textSize="20sp" />
             <EditText
                 android:id="@+id/editPW"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-
-                android:hint="  비밀번호를 입력하세요"
+                android:fontFamily="@font/font_main"
+                android:hint="비밀번호를 입력하세요"
                 android:inputType="textPassword"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
@@ -171,26 +157,26 @@
                 android:id="@+id/pwCheck"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="5dp"
-                android:paddingStart="5dp"
                 android:text="비밀번호는 6자리 이상 입력해주세요."
                 android:textColor="#f54242"
+                android:fontFamily="@font/font_main"
                 android:visibility="invisible" />
         </LinearLayout>
 
         <android.widget.Button
             android:id="@+id/signupbtn"
-            android:layout_width="170dp"
-            android:layout_height="50dp"
-            android:layout_marginBottom="30dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginHorizontal="10dp"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/custom_ripple_effect"
-            android:backgroundTint="#000000"
-
+            android:backgroundTint="@color/red_orange"
+            android:fontFamily="@font/font_main"
             android:text="가입하기"
             android:textColor="@color/white"
-            android:textSize="25sp"
+            android:textSize="20sp"
             app:layout_constraintTop_toBottomOf="@id/box4"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"/>
