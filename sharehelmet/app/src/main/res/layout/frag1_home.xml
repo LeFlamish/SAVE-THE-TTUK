@@ -22,6 +22,20 @@
         android:background="@android:color/holo_blue_light"
         android:textColor="@android:color/white"/>-->
 
+
+    <android.widget.Button
+        android:id="@+id/help"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="사용 설명"
+        android:layout_marginBottom="70dp"
+        android:layout_marginLeft="16dp"
+        android:background="@android:color/holo_green_light"
+        android:textColor="@android:color/white"
+        app:layout_anchor="@+id/persistent_bottom_sheet"
+        app:layout_anchorGravity="top|start"
+        />
+
     <android.widget.Button
         android:id="@+id/btn_mode_toggle"
         android:layout_width="wrap_content"

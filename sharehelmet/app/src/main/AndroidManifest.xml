@@ -53,6 +53,11 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <activity android:name=".PopupActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
+        </activity>
+
         <activity android:name=".RidingGuideActivity"
             android:exported="true"
             android:screenOrientation="portrait">
