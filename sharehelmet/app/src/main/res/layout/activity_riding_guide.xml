@@ -40,7 +40,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="다음"
-        android:backgroundTint="@color/colorPowderBlue"
+        android:backgroundTint="@color/red_orange"
         android:textColor="@android:color/white"
         app:cornerRadius="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
