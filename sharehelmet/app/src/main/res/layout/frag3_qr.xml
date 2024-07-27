@@ -1,77 +1,266 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
     <!-- QR 코드 스캔을 위한 뷰 -->
     <com.journeyapps.barcodescanner.DecoratedBarcodeView
         android:id="@+id/barcode_scanner"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"/>
+        android:visibility="visible" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/using"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/barcode_scanner"
+        android:orientation="vertical"
         android:visibility="gone">
+
+        <!-- 이용 상태 정보 -->
         <TextView
+            android:id="@+id/usageStatusLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@id/using"
-            android:id="@+id/helmetId"/>
+            android:gravity="center"
+            android:padding="24dp"
+            android:text="이용 상태 정보"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <!-- 구분선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#FFCFCFCF"
+            android:layout_marginVertical="3dp" />
+
+        <!-- 헬멧 ID 항목 -->
         <TextView
+            android:id="@+id/helmetIdLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/helmetId"
-            android:id="@+id/battery"/>
+            android:padding="8dp"
+            android:paddingStart="20dp"
+            android:text="헬멧 ID"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
         <TextView
+            android:id="@+id/helmetId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/battery"
-            android:id="@+id/start_time"/>
+            android:padding="8dp"
+            android:paddingStart="20dp"
+            android:textSize="16sp" />
+
+        <!-- 구분선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#FFCFCFCF"
+            android:layout_marginVertical="3dp" />
+
+        <!-- 배터리 항목 -->
         <TextView
+            android:id="@+id/batteryLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/start_time"
-            android:id="@+id/using_time"/>
+            android:padding="8dp"
+            android:paddingStart="20dp"
+            android:text="배터리"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/battery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:paddingStart="20dp"
+            android:textSize="16sp" />
+
+        <!-- 구분선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#FFCFCFCF"
+            android:layout_marginVertical="3dp" />
+
+        <!-- 시작 시간 항목 -->
+        <TextView
+            android:id="@+id/startTimeLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:paddingStart="20dp"
+            android:text="시작 시간"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/start_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:paddingStart="20dp"
+            android:textSize="16sp" />
+
+        <!-- 구분선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#FFCFCFCF"
+            android:layout_marginVertical="3dp" />
+
+        <!-- 사용 시간 항목 -->
+        <TextView
+            android:id="@+id/usingTimeLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:paddingStart="20dp"
+            android:text="사용 시간"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/using_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:paddingStart="20dp"
+            android:textSize="16sp" />
+
+        <!-- 구분선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#FFCFCFCF"
+            android:layout_marginVertical="3dp" />
+
         <android.widget.Button
+            android:id="@+id/return_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="반납"
-            app:layout_constraintTop_toBottomOf="@id/using_time"
-            android:id="@+id/return_button"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    <androidx.constraintlayout.widget.ConstraintLayout
+            android:padding="8dp"
+            android:backgroundTint="@color/red_orange"
+            android:text="반납" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/over"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/using"
+        android:orientation="vertical"
         android:visibility="gone">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@id/over"
-            android:id="@+id/overhelmetId"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/overhelmetId"
-            android:id="@+id/overtime"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/overtime"
-            android:id="@+id/overcharge"/>
-        <android.widget.Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="돌아가기"
-            app:layout_constraintTop_toBottomOf="@id/overcharge"
-            android:id="@+id/returntostart"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- 이용 결과 -->
+        <TextView
+            android:id="@+id/overUsageStatusLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="이용 결과"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- 구분선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginVertical="3dp"
+            android:background="#FFCFCFCF" />
+
+        <!-- 헬멧 ID 항목 -->
+        <TextView
+            android:id="@+id/overhelmetIdLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:paddingStart="20dp"
+            android:text="헬멧 ID"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/overhelmetId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:paddingStart="20dp"
+            android:textSize="16sp" />
+
+        <!-- 구분선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginVertical="3dp"
+            android:background="#FFCFCFCF" />
+
+        <!-- 사용 시간 항목 -->
+        <TextView
+            android:id="@+id/overtimeLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:paddingStart="20dp"
+            android:text="사용 시간"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/overtime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:paddingStart="20dp"
+            android:textSize="16sp" />
+
+        <!-- 구분선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginVertical="3dp"
+            android:background="#FFCFCFCF" />
+
+        <!-- 추가 요금 항목 -->
+        <TextView
+            android:id="@+id/overchargeLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:paddingStart="20dp"
+            android:text="추가 요금"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/overcharge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:paddingStart="20dp"
+            android:textSize="16sp" />
+
+        <!-- 구분선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginVertical="3dp"
+            android:background="#FFCFCFCF" />
+
+        <android.widget.Button
+            android:id="@+id/returntostart"
+            android:backgroundTint="@color/red_orange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="돌아가기" />
+    </LinearLayout>
+
+</LinearLayout>

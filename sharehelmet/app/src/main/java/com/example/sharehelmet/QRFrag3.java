@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -52,8 +53,8 @@ public class QRFrag3 extends Fragment {
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
     private DecoratedBarcodeView barcodeView;
     private DatabaseReference db;
-    private ConstraintLayout using_layout;
-    private ConstraintLayout over_layout;
+    private LinearLayout using_layout;
+    private LinearLayout over_layout;
     private TextView t11;
     private TextView t12;
     private TextView t13;
