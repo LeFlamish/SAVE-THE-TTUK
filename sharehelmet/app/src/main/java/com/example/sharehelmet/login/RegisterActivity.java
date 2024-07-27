@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -178,7 +179,6 @@ public class RegisterActivity extends AppCompatActivity {
         // Firebase Realtime Database 참조
         DatabaseReference mDatabaseRef = FirebaseDatabase.getInstance().getReference();
         String userId = user.getUid();
-
         User userInfo = new User(name, mail);
 
         mDatabaseRef.child("users").child(userId).setValue(userInfo);

@@ -44,6 +44,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class QRFrag3 extends Fragment {
     private User user;
@@ -65,8 +66,7 @@ public class QRFrag3 extends Fragment {
     private Button overButton;// 반납 버튼
     private boolean isover=false;
     private boolean c1=false;
-    HashMap<String, String> Record = new HashMap<>();
-
+    Map<String, String> hashMap = new HashMap<>();
     private void loadDataFromDatabase(View rootView) {
         db = FirebaseDatabase.getInstance().getReference();
         db.child("users").child(firebaseId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -74,7 +74,7 @@ public class QRFrag3 extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 user = snapshot.getValue(User.class);
                 if (user != null) {
-                    Record = user.getRecord();
+                    hashMap=user.getRecord();
                 } else {
                     Log.e("QRFrag3", "User not found");
                 }
@@ -102,7 +102,7 @@ public class QRFrag3 extends Fragment {
             }
         }
 
-        
+
         barcodeView = view.findViewById(R.id.barcode_scanner);
         using_layout = view.findViewById(R.id.using);
         over_layout = view.findViewById(R.id.over);
@@ -284,9 +284,10 @@ public class QRFrag3 extends Fragment {
                 LocalDateTime rentalEndTime = LocalDateTime.now(); // 대여 시작 시간 저장
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                 String formattedEndTime = rentalEndTime.format(formatter);
-                Record.put(t13.getText().toString(),formattedEndTime);
-                user.setRecord(Record);
 
+                hashMap.put(t13.getText().toString(),formattedEndTime);
+                user.setRecord(hashMap);
+                db.child("users").child(firebaseId).setValue(user);
                 helmet.setBorrow(false);
                 helmet.setStorageId(storageId);
                 helmet.setUserId("-");
@@ -313,7 +314,7 @@ public class QRFrag3 extends Fragment {
                 }
             }
         });
-        db.child("users").child(firebaseId).setValue(user);
+
     }
 
     private void findHelmetData(String storageId) {
