@@ -65,9 +65,9 @@ public class QRFrag3 extends Fragment {
     private LocalDateTime rentalStartTime; // 전역 변수로 대여 시작 시간 저장
     private Button returnButton;
     private Button overButton;// 반납 버튼
-    private boolean isover=false;
-    private boolean c1=false;
+    private boolean isover = false;
     Map<String, String> hashMap = new HashMap<>();
+
     private void loadDataFromDatabase(View rootView) {
         db = FirebaseDatabase.getInstance().getReference();
         db.child("users").child(firebaseId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -75,7 +75,8 @@ public class QRFrag3 extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 user = snapshot.getValue(User.class);
                 if (user != null) {
-                    hashMap=user.getRecord();
+                    hashMap = user.getRecord();
+                    initializeUI(); // 데이터가 로드된 후 UI를 초기화
                 } else {
                     Log.e("QRFrag3", "User not found");
                 }
@@ -87,10 +88,12 @@ public class QRFrag3 extends Fragment {
             }
         });
     }
+
     private boolean isValidFirebaseId(String firebaseId) {
         return !(firebaseId.contains(".") || firebaseId.contains("#") ||
                 firebaseId.contains("$") || firebaseId.contains("[") || firebaseId.contains("]"));
     }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag3_qr, container, false);
@@ -102,7 +105,6 @@ public class QRFrag3 extends Fragment {
                 Log.e("QRFrag3", "Invalid Firebase ID");
             }
         }
-
 
         barcodeView = view.findViewById(R.id.barcode_scanner);
         using_layout = view.findViewById(R.id.using);
@@ -116,7 +118,6 @@ public class QRFrag3 extends Fragment {
         t23 = view.findViewById(R.id.overcharge);
         returnButton = view.findViewById(R.id.return_button); // 반납 버튼 초기화
         overButton = view.findViewById(R.id.returntostart);
-
 
         barcodeView.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory(Collections.singletonList(BarcodeFormat.QR_CODE)));
         barcodeView.decodeContinuous(new BarcodeCallback() {
@@ -141,43 +142,96 @@ public class QRFrag3 extends Fragment {
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isover=true;
-                c1=false;
-                handleReturn();
+                isover = true;
+                user.setNow_qr(2);
+                db.child("users").child(firebaseId).setValue(user);
+                barcodeView.setVisibility(View.VISIBLE);
+                using_layout.setVisibility(View.GONE);
+                over_layout.setVisibility(View.GONE);
+                startScanning();
             }
         });
         overButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isover=false;
+                isover = false;
+                user.setNow_qr(0);
+                db.child("users").child(firebaseId).setValue(user);
                 barcodeView.setVisibility(View.VISIBLE);
-                barcodeView.resume();
                 using_layout.setVisibility(View.GONE);
                 over_layout.setVisibility(View.GONE);
+                startScanning();
             }
         });
-        /*saveHelmetData("001","001-001");
-        saveHelmetData("002","001-002");
-        saveHelmetData("003","001-003");
-        saveHelmetData("004","001-004");
-        saveHelmetData("005","001-005");
-        saveHelmetData("006","001-006");
-        saveHelmetData("007","001-007");
-        saveHelmetData("008","001-008");
-        saveHelmetData("009","001-009");
-        saveHelmetData("010","001-010");
-        saveHelmetData("011","001-011");
-        saveHelmetData("012","001-012");
-        saveHelmetData("013","001-013");
-        saveHelmetData("014","001-014");
-        saveHelmetData("015","001-015");
-        saveHelmetData("016","001-016");
-        saveHelmetData("017","001-017");
-        saveHelmetData("018","001-018");
-        saveHelmetData("019","001-019");
-        saveHelmetData("020","001-020");*/
+
+        // 헬멧 데이터 저장
+        /*saveHelmetData("001", "001-001");
+        saveHelmetData("002", "001-002");
+        saveHelmetData("003", "001-003");
+        saveHelmetData("004", "001-004");
+        saveHelmetData("005", "001-005");
+        saveHelmetData("006", "001-006");
+        saveHelmetData("007", "001-007");
+        saveHelmetData("008", "001-008");
+        saveHelmetData("009", "001-009");
+        saveHelmetData("010", "001-010");
+        saveHelmetData("011", "001-011");
+        saveHelmetData("012", "001-012");
+        saveHelmetData("013", "001-013");
+        saveHelmetData("014", "001-014");
+        saveHelmetData("015", "001-015");
+        saveHelmetData("016", "001-016");
+        saveHelmetData("017", "001-017");
+        saveHelmetData("018", "001-018");
+        saveHelmetData("019", "001-019");
+        saveHelmetData("020", "001-020");*/
 
         return view;
+    }
+
+    private void initializeUI() {
+        if (user != null) {
+            if (user.getNow_qr() == 0) {
+                isover = false;
+                barcodeView.setVisibility(View.VISIBLE);
+                using_layout.setVisibility(View.GONE);
+                over_layout.setVisibility(View.GONE);
+                startScanning();
+            } else if (user.getNow_qr() == 1) {
+                barcodeView.setVisibility(View.GONE);
+                using_layout.setVisibility(View.VISIBLE);
+                over_layout.setVisibility(View.GONE);
+                barcodeView.pause();
+                t11.setText(user.getRental_info().get(0));
+                t12.setText(user.getRental_info().get(1));
+                t13.setText(user.getRental_info().get(2));
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateElapsedTime();
+                        handler.postDelayed(this, 1000); // 1초마다 업데이트
+                    }
+                }, 1000);
+            } else if (user.getNow_qr() == 2) {
+                isover = true;
+                t11.setText(user.getRental_info().get(0));
+                t12.setText(user.getRental_info().get(1));
+                t13.setText(user.getRental_info().get(2));
+                barcodeView.setVisibility(View.VISIBLE);
+                using_layout.setVisibility(View.GONE);
+                over_layout.setVisibility(View.GONE);
+                startScanning();
+            } else if (user.getNow_qr() == 3) {
+                barcodeView.setVisibility(View.GONE);
+                using_layout.setVisibility(View.GONE);
+                over_layout.setVisibility(View.VISIBLE);
+                barcodeView.pause();
+                t21.setText(user.getReturn_info().get(0));
+                t22.setText(user.getReturn_info().get(1));
+                t23.setText(user.getReturn_info().get(2));
+            }
+        }
     }
 
 
@@ -192,9 +246,13 @@ public class QRFrag3 extends Fragment {
         if (resultText != null && resultText.startsWith("SAVE-THE-TTUK ")) {
             String storageId = resultText.substring("SAVE-THE-TTUK ".length()).trim();
             if(isover){
+                user.setNow_qr(3);
+                db.child("users").child(firebaseId).setValue(user);
                 returnHelmet(storageId);
             }
             else {
+                user.setNow_qr(1);
+                db.child("users").child(firebaseId).setValue(user);
                 findHelmetData(storageId);
             }
         } else {
@@ -288,13 +346,20 @@ public class QRFrag3 extends Fragment {
 
                 hashMap.put(t13.getText().toString(),formattedEndTime);
                 user.setRecord(hashMap);
-                db.child("users").child(firebaseId).setValue(user);
+
                 helmet.setBorrow(false);
                 helmet.setStorageId(storageId);
                 helmet.setUserId("-");
                 t21.setText(helmetId);
                 t22.setText(t14.getText());
                 t23.setText("0000원");
+                ArrayList<String> return_info=new ArrayList<>();
+
+                return_info.add(t21.getText().toString());
+                return_info.add(t22.getText().toString());
+                return_info.add(t23.getText().toString());
+                user.setReturn_info(return_info);
+                db.child("users").child(firebaseId).setValue(user);
                 mutableData.setValue(helmet);
                 return Transaction.success(mutableData);
             }
@@ -311,7 +376,6 @@ public class QRFrag3 extends Fragment {
                     barcodeView.pause();
                     using_layout.setVisibility(View.GONE);
                     over_layout.setVisibility(View.VISIBLE);
-                    isover = false;
                 }
             }
         });
@@ -410,6 +474,13 @@ public class QRFrag3 extends Fragment {
                 t12.setText(helmet.getBatteryState()+"%");
                 t13.setText(formattedStartTime); // 대여 시작 시간 텍스트 뷰 업데이트
 
+                ArrayList<String> rental_info=new ArrayList<>();
+
+                rental_info.add(t11.getText().toString());
+                rental_info.add(t12.getText().toString());
+                rental_info.add(t13.getText().toString());
+                user.setRental_info(rental_info);
+                db.child("users").child(firebaseId).setValue(user);
                 mutableData.setValue(helmet);
                 return Transaction.success(mutableData);
             }
@@ -424,7 +495,6 @@ public class QRFrag3 extends Fragment {
                     barcodeView.setVisibility(View.GONE);
                     barcodeView.pause();
                     using_layout.setVisibility(View.VISIBLE);
-                    c1=true;
                     // 대여 시간 경과 업데이트
                     Handler handler = new Handler(Looper.getMainLooper());
                     handler.postDelayed(new Runnable() {
@@ -440,7 +510,7 @@ public class QRFrag3 extends Fragment {
     }
 
     private void updateElapsedTime() {
-        if (rentalStartTime != null&&c1==true) {
+        if (rentalStartTime != null) {
             LocalDateTime now = LocalDateTime.now();
             Duration duration = Duration.between(rentalStartTime, now);
             long hours = duration.toHours();
@@ -449,14 +519,6 @@ public class QRFrag3 extends Fragment {
             String elapsedTime = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
             t14.setText(elapsedTime); // 경과 시간 텍스트 뷰 업데이트
         }
-    }
-
-    private void handleReturn() {
-        // QR 코드 스캔 화면으로 돌아가기 위한 설정
-        using_layout.setVisibility(View.GONE);
-        barcodeView.setVisibility(View.VISIBLE);
-        barcodeView.resume();
-        startScanning(); // QR 코드 스캔 시작
     }
 
     @Override
@@ -542,4 +604,5 @@ public class QRFrag3 extends Fragment {
         });
     }
 }
+
 
