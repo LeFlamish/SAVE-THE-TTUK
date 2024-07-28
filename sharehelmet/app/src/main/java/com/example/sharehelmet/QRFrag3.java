@@ -198,7 +198,7 @@ public class QRFrag3 extends Fragment {
                 findHelmetData(storageId);
             }
         } else {
-            Toast.makeText(getContext(), "Invalid QR code.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "유효하지 않은 QR코드입니다", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -218,26 +218,26 @@ public class QRFrag3 extends Fragment {
                             if (storedHelmetID != null && helmetIndex >= 0 && helmetIndex < storedHelmetID.size()) {
                                 if ("-".equals(storedHelmetID.get(helmetIndex))) {
                                     String helmetId = t11.getText().toString().substring(3); // 헬멧 ID 추출
-                                    Toast.makeText(getContext(), "Returning Helmet ID: " + helmetId, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "No."+helmetId+" 헬멧 반납", Toast.LENGTH_SHORT).show();
                                     updateHelmetAndStockOnReturn(placeKey, helmetIndex, storage.getStock(), helmetId,storageId);
                                 } else {
-                                    Toast.makeText(getContext(), "Slot already occupied by another helmet.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "빈 보관함이 아닙니다.", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
-                                Toast.makeText(getContext(), "Invalid storage index.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "유효하지 않은 보관소 번호입니다", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Toast.makeText(getContext(), "No storage data found.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "보관함 데이터를 찾지 못했습니다.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 } else {
-                    Toast.makeText(getContext(), "No place found with the specified location ID.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "보관합이 존재하지 않습니다", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Failed to retrieve data from Firebase.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "정보를 불러오지 못했습니다", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -266,7 +266,7 @@ public class QRFrag3 extends Fragment {
             @Override
             public void onComplete(DatabaseError databaseError, boolean committed, DataSnapshot dataSnapshot) {
                 if (databaseError != null) {
-                    Toast.makeText(getContext(), "Failed to update place data", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "보관소 데이터 업데이트 실패", Toast.LENGTH_SHORT).show();
                 } else {
                     updateHelmetDataOnReturn(helmetId,storageId);
                 }
@@ -302,9 +302,9 @@ public class QRFrag3 extends Fragment {
             @Override
             public void onComplete(DatabaseError databaseError, boolean committed, DataSnapshot dataSnapshot) {
                 if (databaseError != null) {
-                    Toast.makeText(getContext(), "Failed to update helmet data", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "헬멧 데이터 업데이트 실패", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getContext(), "Helmet returned successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "헬멧이 성공적으로 반납되었습니다.", Toast.LENGTH_SHORT).show();
                     // 반납 완료 후 UI 업데이트
                     isover=false;
                     barcodeView.setVisibility(View.GONE);
@@ -334,26 +334,26 @@ public class QRFrag3 extends Fragment {
                             if (storedHelmetID != null && helmetIndex >= 0 && helmetIndex < storedHelmetID.size()) {
                                 String helmetId = storedHelmetID.get(helmetIndex);
                                 if (!"-".equals(helmetId)) {
-                                    Toast.makeText(getContext(), "Helmet ID: " + helmetId, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "No."+helmetId+" 헬멧 대여", Toast.LENGTH_SHORT).show();
                                     updateHelmetAndStock(placeKey, helmetIndex, storage.getStock(), helmetId);
                                 } else {
-                                    Toast.makeText(getContext(), "No helmet found at the specified index.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "보관함이 비어있습니다.", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
-                                Toast.makeText(getContext(), "No helmet found at the specified index.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "보관함이 비어있습니다.", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Toast.makeText(getContext(), "No storage data found.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "보관함 데이터를 찾지 못했습니다.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 } else {
-                    Toast.makeText(getContext(), "No place found with the specified location ID.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "보관합이 존재하지 않습니다", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Failed to retrieve data from Firebase.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "정보를 불러오지 못했습니다", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -382,7 +382,7 @@ public class QRFrag3 extends Fragment {
             @Override
             public void onComplete(DatabaseError databaseError, boolean committed, DataSnapshot dataSnapshot) {
                 if (databaseError != null) {
-                    Toast.makeText(getContext(), "Failed to update place data", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "보관소 데이터 업데이트 실패", Toast.LENGTH_SHORT).show();
                 } else {
                     updateHelmetData(helmetId);
                 }
@@ -417,9 +417,9 @@ public class QRFrag3 extends Fragment {
             @Override
             public void onComplete(DatabaseError databaseError, boolean committed, DataSnapshot dataSnapshot) {
                 if (databaseError != null) {
-                    Toast.makeText(getContext(), "Failed to update helmet data", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "헬멧 데이터 업데이트 실패", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getContext(), "Helmet data updated successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "헬멧이 성공적으로 대여되었습니다.", Toast.LENGTH_SHORT).show();
                     // 헬멧 데이터 업데이트 성공 후 레이아웃 전환
                     barcodeView.setVisibility(View.GONE);
                     barcodeView.pause();
@@ -466,7 +466,7 @@ public class QRFrag3 extends Fragment {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startScanning();
             } else {
-                Toast.makeText(getContext(), "Camera permission is required to scan QR codes.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "QR 스캔을 위해 카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -474,13 +474,11 @@ public class QRFrag3 extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        barcodeView.pause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        barcodeView.resume();
     }
     private void saveHelmetData(String id, String storageID) {
         Helmet helmet = new Helmet();
