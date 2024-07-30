@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -47,6 +48,8 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     private int locationTrackingMode = 1; // Start with Follow mode
     private DatabaseReference db;
     private List<Marker> markerList = new ArrayList<>();
+    private ListView listView;
+    private PlaceAdapter placeAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,7 +60,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
             Intent intent = new Intent(getActivity(), PopupActivity.class);
             startActivity(intent);
         });
-
+        listView = view.findViewById(R.id.place_list_view);
         return view;
 
     }
@@ -162,12 +165,12 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
                     double latitude = snapshot.child("latitude").getValue(Double.class);
                     double longitude = snapshot.child("longitude").getValue(Double.class);
                     int stock = snapshot.child("stock").getValue(Integer.class); // 재고 정보 가져오기
-
+                    String name=snapshot.getKey();
                     LatLng placeLatLng = new LatLng(latitude, longitude);
                     double distance = calculateDistance(currentLatLng, placeLatLng);
 
                     if (distance <= 1.5) { // 1.5km 이내의 장소만 표시
-                        places.add(new Place(placeLatLng, distance, stock));
+                        places.add(new Place(placeLatLng, distance, stock,name));
                     }
                 }
 
@@ -202,6 +205,9 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
                             return true;
                         });
                     }
+
+                    placeAdapter = new PlaceAdapter(getContext(), places);
+                    listView.setAdapter(placeAdapter);
                 }
             }
 
@@ -263,15 +269,16 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         mapView.onLowMemory();
     }
 
-    private static class Place {
+    public static class Place {
         LatLng latLng;
         double distance;
         int stock;
-
-        Place(LatLng latLng, double distance, int stock) {
+        String name;
+        Place(LatLng latLng, double distance, int stock,String name) {
             this.latLng = latLng;
             this.distance = distance;
             this.stock = stock;
+            this.name=name;
         }
     }
 }
