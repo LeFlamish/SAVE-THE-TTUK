@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -50,6 +51,11 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     private List<Marker> markerList = new ArrayList<>();
     private ListView listView;
     private PlaceAdapter placeAdapter;
+    private int sortCriteria = 0;// 정렬 기준 플래그: 0 - 거리 가까운 순, 1 - 재고 적은 순, 2 - 재고 많은 순
+    private int stockMin = Integer.MIN_VALUE, stockMax = Integer.MAX_VALUE;
+    private EditText stockMinEditText, stockMaxEditText;
+    private Button applyFilterButton;
+    private List<Place> places = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -95,6 +101,52 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         savePlace("008", "북문",35.89235499478949,128.6094578539692,20);
         savePlace("009", "도서관",35.89166632997614,128.61208319664001,20);
         savePlace("010", "일청담",35.8886304944912,128.61211539394523,20);*/
+
+        listView = view.findViewById(R.id.place_list_view);
+        stockMinEditText = view.findViewById(R.id.stock_min);
+        stockMaxEditText = view.findViewById(R.id.stock_max);
+        applyFilterButton = view.findViewById(R.id.apply_filter);
+
+        applyFilterButton.setOnClickListener(v -> {
+            String minText = stockMinEditText.getText().toString();
+            String maxText = stockMaxEditText.getText().toString();
+
+            if (!minText.isEmpty()) {
+                stockMin = Integer.parseInt(minText);
+            } else {
+                stockMin = Integer.MIN_VALUE;
+            }
+
+            if (!maxText.isEmpty()) {
+                stockMax = Integer.parseInt(maxText);
+            } else {
+                stockMax = Integer.MAX_VALUE;
+            }
+
+            sortAndDisplayPlaces();
+        });
+
+        Button sortButton = view.findViewById(R.id.btn_sort);
+        sortButton.setOnClickListener(v -> {
+            sortCriteria = (sortCriteria + 1) % 3; // 정렬 기준 변경: 0 -> 1 -> 2 -> 0
+            sortAndDisplayPlaces(); // 정렬 및 표시 갱신
+
+            // 버튼 텍스트 변경
+            switch (sortCriteria) {
+                case 0:
+                    sortButton.setText("거리 가까운 순");
+                    break;
+                case 1:
+                    sortButton.setText("재고 적은 순");
+                    break;
+                case 2:
+                    sortButton.setText("재고 많은 순");
+                    break;
+            }
+        });
+
+        // 처음에 거리 가까운 순으로 정렬 버튼 텍스트 설정
+        sortButton.setText("거리 가까운 순");
     }
 
     private void savePlace(String id, String name, double latitude, double longitude,int room_num) {
@@ -160,55 +212,21 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 clearMarkers();
 
-                List<Place> places = new ArrayList<>();
+                places.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     double latitude = snapshot.child("latitude").getValue(Double.class);
                     double longitude = snapshot.child("longitude").getValue(Double.class);
-                    int stock = snapshot.child("stock").getValue(Integer.class); // 재고 정보 가져오기
-                    String name=snapshot.getKey();
+                    int stock = snapshot.child("stock").getValue(Integer.class);
+                    String name = snapshot.getKey();
                     LatLng placeLatLng = new LatLng(latitude, longitude);
                     double distance = calculateDistance(currentLatLng, placeLatLng);
 
-                    if (distance <= 1.5) { // 1.5km 이내의 장소만 표시
-                        places.add(new Place(placeLatLng, distance, stock,name));
+                    if (distance <= 1.5) {
+                        places.add(new Place(placeLatLng, distance, stock, name));
                     }
                 }
 
-                if (!places.isEmpty()) {
-                    places.sort((p1, p2) -> Double.compare(p1.distance, p2.distance));
-
-                    // 재고가 있는 장소 중 가장 가까운 장소를 찾기
-                    Place nearestPlaceWithStock = null;for (Place place : places) {
-                        if (place.stock > 0) {
-                            nearestPlaceWithStock = place;
-                            break;
-                        }
-                    }
-
-                    for (Place place : places) {
-                        Marker marker = new Marker();
-                        marker.setPosition(place.latLng);
-                        marker.setCaptionText("(" + String.format("%.2f", place.distance) + "km)");
-
-                        if (place == nearestPlaceWithStock) {
-                            marker.setCaptionColor(Color.GREEN); // 재고가 있는 가장 가까운 장소는 초록색
-                        } else if (place.stock == 0) {
-                            marker.setIconTintColor(Color.RED); // 재고가 없는 장소는 빨간색
-                        }
-
-                        marker.setMap(naverMap);
-                        markerList.add(marker);
-
-                        // 마커 클릭 리스너 설정
-                        marker.setOnClickListener(overlay -> {
-                            Toast.makeText(getContext(), " 재고: " + place.stock, Toast.LENGTH_SHORT).show();
-                            return true;
-                        });
-                    }
-
-                    placeAdapter = new PlaceAdapter(getContext(), places);
-                    listView.setAdapter(placeAdapter);
-                }
+                sortAndDisplayPlaces();
             }
 
             @Override
@@ -217,6 +235,30 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
             }
         });
     }
+    private void sortAndDisplayPlaces() {
+        List<Place> filteredPlaces = new ArrayList<>();
+        for (Place place : places) {
+            if (place.stock >= stockMin && place.stock <= stockMax) {
+                filteredPlaces.add(place);
+            }
+        }
+
+        switch (sortCriteria) {
+            case 0: // 거리 가까운 순 정렬
+                filteredPlaces.sort((p1, p2) -> Double.compare(p1.distance, p2.distance));
+                break;
+            case 1: // 재고 적은 순 정렬
+                filteredPlaces.sort((p1, p2) -> Integer.compare(p1.stock, p2.stock));
+                break;
+            case 2: // 재고 많은 순 정렬
+                filteredPlaces.sort((p1, p2) -> Integer.compare(p2.stock, p1.stock));
+                break;
+        }
+
+        placeAdapter = new PlaceAdapter(getContext(), filteredPlaces);
+        listView.setAdapter(placeAdapter);
+    }
+
 
     private double calculateDistance(LatLng start, LatLng end) {
         float[] results = new float[1];
