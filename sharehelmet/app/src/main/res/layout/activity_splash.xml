@@ -29,12 +29,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:shadowColor="#507587B2"
-            android:shadowRadius="20"
             android:text="SAVE-THE-TTUK"
             android:textColor="#111111"
             android:textSize="35dp"
             android:textStyle="bold"
+            android:fontFamily="@font/font_title_bold"
             android:layout_marginBottom="50dp"/>
     </LinearLayout>
 
