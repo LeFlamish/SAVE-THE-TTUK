@@ -1,7 +1,9 @@
-package com.example.sharehelmet;
+package com.example.sharehelmet.frag5_profile;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.sharehelmet.R;
 
 public class ProfileUpdateActivity extends AppCompatActivity {
 
@@ -9,5 +11,7 @@ public class ProfileUpdateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_update);
+
+
     }
 }

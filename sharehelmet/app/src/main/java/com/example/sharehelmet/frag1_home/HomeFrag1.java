@@ -1,4 +1,4 @@
-package com.example.sharehelmet;
+package com.example.sharehelmet.frag1_home;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
@@ -18,6 +18,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.sharehelmet.PopupActivity;
+import com.example.sharehelmet.R;
 import com.example.sharehelmet.model.Storage;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

@@ -13,12 +13,10 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.example.sharehelmet.MainActivity;
+import com.example.sharehelmet.home.MainActivity;
 import com.example.sharehelmet.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class StartActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;         //파이어 베이스 인증

@@ -1,4 +1,4 @@
-package com.example.sharehelmet;
+package com.example.sharehelmet.frag3_QR;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -15,15 +15,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.sharehelmet.R;
 import com.example.sharehelmet.model.Helmet;
 import com.example.sharehelmet.model.Storage;
 import com.example.sharehelmet.model.User;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;

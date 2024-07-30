@@ -1,4 +1,4 @@
-package com.example.sharehelmet;
+package com.example.sharehelmet.home;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,11 +6,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.example.sharehelmet.frag1_home.HomeFrag1;
+import com.example.sharehelmet.frag2_payment.PaymentFrag2;
+import com.example.sharehelmet.frag5_profile.ProfileFrag5;
+import com.example.sharehelmet.frag3_QR.QRFrag3;
+import com.example.sharehelmet.frag4_QnA.QnAFrag4;
+import com.example.sharehelmet.R;
 import com.example.sharehelmet.model.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,8 +27,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import kr.co.bootpay.android.*;
-
 public class MainActivity extends AppCompatActivity {
 
     private User user;
@@ -32,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference mDatabaseRef;
     private HomeFrag1 homeFrag1;
     private PaymentFrag2 paymentFrag2;
-    private QRFrag3 QRFrag3;
+    private com.example.sharehelmet.frag3_QR.QRFrag3 QRFrag3;
     private QnAFrag4 qnAFrag4;
     private ProfileFrag5 settingsFragment;
     private BottomNavigationView bottomNavigationView;

@@ -1,4 +1,4 @@
-package com.example.sharehelmet;
+package com.example.sharehelmet.frag5_profile;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -7,15 +7,16 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-public class GuideFrag1 extends Fragment {
+import com.example.sharehelmet.R;
+
+public class GuideFrag3 extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_guide1, container, false);
-
+        View view = inflater.inflate(R.layout.fragment_guide3, container, false);
+//
         return view;
     }
 }

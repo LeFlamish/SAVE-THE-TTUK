@@ -13,7 +13,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.sharehelmet.MainActivity;
+import com.example.sharehelmet.home.MainActivity;
 import com.example.sharehelmet.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

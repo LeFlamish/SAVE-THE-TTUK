@@ -1,4 +1,4 @@
-package com.example.sharehelmet;
+package com.example.sharehelmet.frag4_QnA;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.example.sharehelmet.R;
 
 public class QnAFrag4 extends Fragment {
     @Nullable
