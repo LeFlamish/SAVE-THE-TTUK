@@ -28,6 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="사용 설명"
+        android:fontFamily="@font/font_main"
         android:layout_marginBottom="70dp"
         android:layout_marginLeft="16dp"
         android:background="@android:color/holo_green_light"
@@ -41,6 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="모드 변경"
+        android:fontFamily="@font/font_main"
         android:layout_marginBottom="70dp"
         android:layout_marginRight="16dp"
         android:background="@android:color/holo_green_light"
@@ -49,9 +51,6 @@
         app:layout_anchorGravity="top|end"
         />
     <!--    android:layout_gravity="bottom|end"-->
-
-
-
 
     <!-- Persistent Bottom Sheet -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -76,16 +75,29 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/font_main"
+            android:gravity="center"
+            android:text="가까운 대여소"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/view2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
         <ListView
             android:id="@+id/place_list_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/view2"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="16dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

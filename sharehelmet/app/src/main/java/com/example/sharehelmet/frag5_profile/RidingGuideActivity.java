@@ -49,6 +49,5 @@ public class RidingGuideActivity extends AppCompatActivity {
     public void onBackPressed(){
         super.onBackPressed();
         overridePendingTransition(R.anim.none,R.anim.horizontal_exit);
-        //TODO : write your animation
     }
 }

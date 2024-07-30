@@ -49,6 +49,7 @@ public class ProfileFrag5 extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ProfileUpdateActivity.class);
                 startActivity(intent);
+                requireActivity().overridePendingTransition(R.anim.horizontal_enter,R.anim.none);
             }
         });
 
@@ -68,6 +69,7 @@ public class ProfileFrag5 extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), RidingHistoryActivity.class);
                 startActivity(intent);
+                requireActivity().overridePendingTransition(R.anim.horizontal_enter,R.anim.none);
             }
         });
 
