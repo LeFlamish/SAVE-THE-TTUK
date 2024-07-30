@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:padding="16dp">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profile_section"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:paddingVertical="16dp"
+        android:paddingLeft="16dp"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
         android:layout_marginBottom="16dp">
+        <ImageView
+            android:id="@+id/profile_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ttukbaegi"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/title"
@@ -22,7 +31,10 @@
             android:text="My profile"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:layout_alignParentStart="true"/>
+            android:fontFamily="@font/font_main"
+            android:layout_marginStart="12dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/profile_image"/>
 
         <TextView
             android:id="@+id/email"
@@ -30,9 +42,18 @@
             android:layout_height="wrap_content"
             android:text="wlsgudwns112@gmail.com"
             android:textSize="16sp"
-            android:layout_below="@id/title"
-            android:layout_alignParentStart="true"/>
-    </RelativeLayout>
+            android:fontFamily="@font/font_main"
+            android:layout_marginStart="12dp"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            app:layout_constraintLeft_toRightOf="@id/profile_image"/>
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/right_arrow"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -62,8 +83,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Riding history"
+                android:text="서비스 이용내역"
                 android:textSize="16sp"
+                android:fontFamily="@font/font_main"
                 android:layout_toEndOf="@id/iv1"
                 android:layout_marginStart="16dp"
                 android:layout_centerVertical="true"/>
@@ -89,13 +111,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Riding guide"
+                android:text="이용 가이드"
                 android:textSize="16sp"
+                android:fontFamily="@font/font_main"
                 android:layout_toEndOf="@id/iv2"
                 android:layout_marginStart="16dp"
                 android:layout_centerVertical="true"/>
         </RelativeLayout>
-
+<!--
         <RelativeLayout
             android:id="@+id/refer_friend_section"
             android:layout_width="match_parent"
@@ -118,13 +141,14 @@
                 android:layout_height="wrap_content"
                 android:text="Refer a friend"
                 android:textSize="16sp"
+                android:fontFamily="@font/font_main"
                 android:layout_toEndOf="@id/iv3"
                 android:layout_marginStart="16dp"
                 android:layout_centerVertical="true"/>
         </RelativeLayout>
-
+-->
         <RelativeLayout
-            android:id="@+id/beam_business_section"
+            android:id="@+id/business_section"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
@@ -143,8 +167,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TTUK for Business"
+                android:text="협업 문의"
                 android:textSize="16sp"
+                android:fontFamily="@font/font_main"
                 android:layout_toEndOf="@id/iv4"
                 android:layout_marginStart="16dp"
                 android:layout_centerVertical="true"/>
@@ -170,8 +195,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sign out"
+                android:text="로그아웃"
                 android:textSize="16sp"
+                android:fontFamily="@font/font_main"
                 android:layout_toEndOf="@id/iv5"
                 android:layout_marginStart="16dp"
                 android:layout_centerVertical="true"/>
@@ -181,11 +207,10 @@
             android:id="@+id/app_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="App version TTUK-2.29.4-251400"
+            android:text="App version TTUK-1.01.1-00001"
             android:textSize="12sp"
             android:layout_marginTop="16dp"
             android:layout_gravity="center_horizontal"/>
     </LinearLayout>
 
-    
 </RelativeLayout>

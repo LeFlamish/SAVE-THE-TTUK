@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +27,7 @@ import java.util.Objects;
 
 public class ProfileFrag5 extends Fragment {
     private User user;
-    TextView email;
+    TextView title, email;
     String firebaseId;
     DatabaseReference mDatabaseRef;
 
@@ -37,11 +38,12 @@ public class ProfileFrag5 extends Fragment {
         if (getArguments() != null) {
             firebaseId = getArguments().getString("firebaseId");
         }
+        title = view.findViewById(R.id.title);
         email = view.findViewById(R.id.email);
 
         loadDataFromDatabase();
 
-        RelativeLayout profileSection = view.findViewById(R.id.profile_section);
+        ConstraintLayout profileSection = view.findViewById(R.id.profile_section);
         profileSection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,6 +70,12 @@ public class ProfileFrag5 extends Fragment {
                 startActivity(intent);
             }
         });
+
+        RelativeLayout businessSection = view.findViewById(R.id.business_section);
+        businessSection.setOnClickListener(v -> {
+            showCustomToast("카카오톡 채널로 문의해주세요");
+        });
+
 
         RelativeLayout signOutSection = view.findViewById(R.id.sign_out_section);
         signOutSection.setOnClickListener(v -> {
@@ -98,6 +106,7 @@ public class ProfileFrag5 extends Fragment {
 
     private void updateUI() {
         if (user != null) {
+            title.setText(user.getNickname());
             email.setText(user.getEmail());
         }
     }
