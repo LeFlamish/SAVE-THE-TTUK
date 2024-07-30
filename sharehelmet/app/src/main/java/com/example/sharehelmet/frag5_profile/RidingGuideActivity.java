@@ -2,6 +2,7 @@ package com.example.sharehelmet.frag5_profile;
 
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
@@ -13,6 +14,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 public class RidingGuideActivity extends AppCompatActivity {
 
+    ImageView backButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +23,7 @@ public class RidingGuideActivity extends AppCompatActivity {
         ViewPager2 viewPager = findViewById(R.id.viewPager_onBoarding);
         TabLayout tabLayout = findViewById(R.id.tab_onBoarding);
         Button nextButton = findViewById(R.id.button_next);
+        backButton = findViewById(R.id.back_button);
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(this);
         viewPager.setAdapter(adapter);
@@ -35,8 +38,17 @@ public class RidingGuideActivity extends AppCompatActivity {
                 viewPager.setCurrentItem(currentItem + 1);
             } else {
                 // 마지막 페이지
-                finish();
+                onBackPressed();
             }
         });
+        backButton.setOnClickListener(v->{
+            onBackPressed();
+        });
+    }
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        overridePendingTransition(R.anim.none,R.anim.horizontal_exit);
+        //TODO : write your animation
     }
 }

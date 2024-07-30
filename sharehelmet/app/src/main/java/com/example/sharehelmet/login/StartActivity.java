@@ -90,12 +90,14 @@ public class StartActivity extends AppCompatActivity {
             public void onClick(View v){
                 Intent intent = new Intent(StartActivity.this, RegisterActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.horizontal_enter,R.anim.none);
             }
         });
 
         loginBtn.setOnClickListener(v->{
             Intent intent = new Intent(StartActivity.this, LoginActivity.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.horizontal_enter,R.anim.horizontal_exit);
             finish();
         });
 

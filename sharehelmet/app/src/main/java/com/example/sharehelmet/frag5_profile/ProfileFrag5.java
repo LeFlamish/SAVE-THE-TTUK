@@ -22,6 +22,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Objects;
+
 public class ProfileFrag5 extends Fragment {
     private User user;
     TextView email;
@@ -54,6 +56,7 @@ public class ProfileFrag5 extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), RidingGuideActivity.class);
                 startActivity(intent);
+                requireActivity().overridePendingTransition(R.anim.horizontal_enter,R.anim.none);
             }
         });
 
