@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.naver.maps.geometry.LatLng;
+import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
@@ -51,11 +52,12 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     private List<Marker> markerList = new ArrayList<>();
     private ListView listView;
     private PlaceAdapter placeAdapter;
-    private int sortCriteria = 0;// 정렬 기준 플래그: 0 - 거리 가까운 순, 1 - 재고 적은 순, 2 - 재고 많은 순
+    private int sortCriteria = 0; // 정렬 기준 플래그: 0 - 거리 가까운 순, 1 - 재고 적은 순, 2 - 재고 많은 순
     private int stockMin = Integer.MIN_VALUE, stockMax = Integer.MAX_VALUE;
     private EditText stockMinEditText, stockMaxEditText;
     private Button applyFilterButton;
     private List<Place> places = new ArrayList<>();
+    private List<Place> allPlaces = new ArrayList<>(); // 모든 장소를 저장하는 리스트
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,7 +70,6 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         });
         listView = view.findViewById(R.id.place_list_view);
         return view;
-
     }
 
     @Override
@@ -147,6 +148,11 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
         // 처음에 거리 가까운 순으로 정렬 버튼 텍스트 설정
         sortButton.setText("거리 가까운 순");
+        listView.setOnItemClickListener((parent, view1, position, id) -> {
+            Place selectedPlace = places.get(position);
+            LatLng selectedLatLng = selectedPlace.latLng;
+            naverMap.moveCamera(CameraUpdate.scrollTo(selectedLatLng)); // 선택한 장소로 지도 이동
+        });
     }
 
     private void savePlace(String id, String name, double latitude, double longitude,int room_num) {
@@ -212,17 +218,48 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 clearMarkers();
 
-                places.clear();
+                allPlaces.clear();
+                Place closestPlaceWithStock = null;
+                double closestDistanceWithStock = Double.MAX_VALUE;
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String id = snapshot.getKey();
                     double latitude = snapshot.child("latitude").getValue(Double.class);
                     double longitude = snapshot.child("longitude").getValue(Double.class);
                     int stock = snapshot.child("stock").getValue(Integer.class);
                     String name = snapshot.getKey();
+
                     LatLng placeLatLng = new LatLng(latitude, longitude);
                     double distance = calculateDistance(currentLatLng, placeLatLng);
 
                     if (distance <= 1.5) {
-                        places.add(new Place(placeLatLng, distance, stock, name));
+                        Place place = new Place(id,placeLatLng, distance, stock, name);
+                        allPlaces.add(place);
+
+                        // 재고가 있는 마커 중에서 가장 가까운 마커를 찾기
+                        if (stock > 0 && distance < closestDistanceWithStock) {
+                            closestPlaceWithStock = place;
+                            closestDistanceWithStock = distance;
+                        }
+                    }
+
+                    Marker marker = new Marker();
+                    marker.setPosition(placeLatLng);
+                    marker.setCaptionText(name);
+                    if (stock == 0) {
+                        marker.setIconTintColor(Color.RED); // 재고가 0인 경우 마커를 빨간색으로 표시
+                    }
+                    marker.setMap(naverMap);
+                    markerList.add(marker);
+                }
+
+                // 가장 가까운 재고 있는 마커의 캡션 색상을 초록색으로 변경
+                if (closestPlaceWithStock != null) {
+                    for (Marker marker : markerList) {
+                        if (marker.getPosition().equals(closestPlaceWithStock.latLng)) {
+                            marker.setCaptionColor(Color.GREEN);
+                            break;
+                        }
                     }
                 }
 
@@ -235,30 +272,30 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
             }
         });
     }
+
     private void sortAndDisplayPlaces() {
-        List<Place> filteredPlaces = new ArrayList<>();
-        for (Place place : places) {
+        places.clear();
+        for (Place place : allPlaces) {
             if (place.stock >= stockMin && place.stock <= stockMax) {
-                filteredPlaces.add(place);
+                places.add(place);
             }
         }
 
         switch (sortCriteria) {
             case 0: // 거리 가까운 순 정렬
-                filteredPlaces.sort((p1, p2) -> Double.compare(p1.distance, p2.distance));
+                places.sort((p1, p2) -> Double.compare(p1.distance, p2.distance));
                 break;
             case 1: // 재고 적은 순 정렬
-                filteredPlaces.sort((p1, p2) -> Integer.compare(p1.stock, p2.stock));
+                places.sort((p1, p2) -> Integer.compare(p1.stock, p2.stock));
                 break;
             case 2: // 재고 많은 순 정렬
-                filteredPlaces.sort((p1, p2) -> Integer.compare(p2.stock, p1.stock));
+                places.sort((p1, p2) -> Integer.compare(p2.stock, p1.stock));
                 break;
         }
 
-        placeAdapter = new PlaceAdapter(getContext(), filteredPlaces);
+        placeAdapter = new PlaceAdapter(getContext(), places);
         listView.setAdapter(placeAdapter);
     }
-
 
     private double calculateDistance(LatLng start, LatLng end) {
         float[] results = new float[1];
@@ -316,13 +353,14 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         double distance;
         int stock;
         String name;
-        Place(LatLng latLng, double distance, int stock,String name) {
+        String id;
+
+        Place(String id,LatLng latLng, double distance, int stock, String name) {
+            this.id = id;
             this.latLng = latLng;
             this.distance = distance;
             this.stock = stock;
-            this.name=name;
+            this.name = name;
         }
     }
 }
-
-

@@ -60,6 +60,7 @@
         android:background="@drawable/white_round_top_border_20"
         android:orientation="vertical"
         android:elevation="40dp"
+        android:maxHeight="300dp"
         android:layout_marginBottom="56dp"
         app:behavior_hideable="false"
         app:behavior_peekHeight="60dp"
