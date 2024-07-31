@@ -43,7 +43,8 @@ import java.util.List;
 public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
-    private static final String LOCATION_TRACKING_MODE_KEY = "location_tracking_mode"; // 추가된 부분: 상태 저장 키
+    private static final String LOCATION_TRACKING_MODE_KEY = "location_tracking_mode";
+    private static final String SORT_KEY = "which_to_sort";
     private MapView mapView;
     private NaverMap naverMap;
     private FusedLocationSource locationSource;
@@ -59,7 +60,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     private Button applyFilterButton;
     private List<Place> places = new ArrayList<>();
     private List<Place> allPlaces = new ArrayList<>(); // 모든 장소를 저장하는 리스트
-
+    private Button sortButton;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag1_home, container, false);
@@ -133,23 +134,10 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
             sortAndDisplayPlaces();
         });
 
-        Button sortButton = view.findViewById(R.id.btn_sort);
+        sortButton = view.findViewById(R.id.btn_sort);
         sortButton.setOnClickListener(v -> {
             sortCriteria = (sortCriteria + 1) % 3; // 정렬 기준 변경: 0 -> 1 -> 2 -> 0
             sortAndDisplayPlaces(); // 정렬 및 표시 갱신
-
-            // 버튼 텍스트 변경
-            switch (sortCriteria) {
-                case 0:
-                    sortButton.setText("거리 가까운 순");
-                    break;
-                case 1:
-                    sortButton.setText("재고 적은 순");
-                    break;
-                case 2:
-                    sortButton.setText("재고 많은 순");
-                    break;
-            }
         });
 
         // 처음에 거리 가까운 순으로 정렬 버튼 텍스트 설정
@@ -159,11 +147,11 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
             LatLng selectedLatLng = selectedPlace.latLng;
             naverMap.moveCamera(CameraUpdate.scrollTo(selectedLatLng)); // 선택한 장소로 지도 이동
         });
-
-        // 상태 복원 코드 추가
         if (savedInstanceState != null) {
             locationTrackingMode = savedInstanceState.getInt(LOCATION_TRACKING_MODE_KEY, 0);
+            sortCriteria=savedInstanceState.getInt(SORT_KEY,0);
         }
+
     }
 
     private void savePlace(String id, String name, double latitude, double longitude, int room_num) {
@@ -283,6 +271,17 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     }
 
     private void sortAndDisplayPlaces() {
+        switch (sortCriteria) {
+            case 0:
+                sortButton.setText("거리 가까운 순");
+                break;
+            case 1:
+                sortButton.setText("재고 적은 순");
+                break;
+            case 2:
+                sortButton.setText("재고 많은 순");
+                break;
+        }
         places.clear();
         for (Place place : allPlaces) {
             if (place.stock >= stockMin && place.stock <= stockMax) {
@@ -362,6 +361,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(LOCATION_TRACKING_MODE_KEY, locationTrackingMode);
+        outState.putInt(SORT_KEY, sortCriteria);
     }
 
     @Override
@@ -369,7 +369,9 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
             locationTrackingMode = savedInstanceState.getInt(LOCATION_TRACKING_MODE_KEY, 0);
+            sortCriteria=savedInstanceState.getInt(SORT_KEY,0);
             setTrackingMode();
+            sortAndDisplayPlaces();
         }
     }
 
