@@ -43,11 +43,12 @@ import java.util.List;
 public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
+    private static final String LOCATION_TRACKING_MODE_KEY = "location_tracking_mode"; // 추가된 부분: 상태 저장 키
     private MapView mapView;
     private NaverMap naverMap;
     private FusedLocationSource locationSource;
-    private Button btnModeToggle;
-    private int locationTrackingMode = 1; // Start with Follow mode
+    private Button btnModeToggle, btnModeLocation;
+    private int locationTrackingMode = 0;
     private DatabaseReference db;
     private List<Marker> markerList = new ArrayList<>();
     private ListView listView;
@@ -78,6 +79,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
         mapView = view.findViewById(R.id.map);
         btnModeToggle = view.findViewById(R.id.btn_mode_toggle);
+        btnModeLocation = view.findViewById(R.id.btn_current_location);
 
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
@@ -88,6 +90,10 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
             if (naverMap != null) {
                 toggleLocationTrackingMode();
             }
+        });
+
+        btnModeLocation.setOnClickListener(v -> {
+            setTrackingMode();
         });
 
         db = FirebaseDatabase.getInstance().getReference();
@@ -153,16 +159,21 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
             LatLng selectedLatLng = selectedPlace.latLng;
             naverMap.moveCamera(CameraUpdate.scrollTo(selectedLatLng)); // 선택한 장소로 지도 이동
         });
+
+        // 상태 복원 코드 추가
+        if (savedInstanceState != null) {
+            locationTrackingMode = savedInstanceState.getInt(LOCATION_TRACKING_MODE_KEY, 0);
+        }
     }
 
-    private void savePlace(String id, String name, double latitude, double longitude,int room_num) {
-        Storage storage=new Storage();
+    private void savePlace(String id, String name, double latitude, double longitude, int room_num) {
+        Storage storage = new Storage();
         storage.setLocationID(id);
         storage.setLatitude(latitude);
         storage.setLongitude(longitude);
         storage.setStock(0);
-        ArrayList<String> storedHelmetID=new ArrayList<>();
-        for(int i=0;i<room_num;i++){
+        ArrayList<String> storedHelmetID = new ArrayList<>();
+        for (int i = 0; i < room_num; i++) {
             storedHelmetID.add("-");
         }
         storage.setStoredHelmetID(storedHelmetID);
@@ -170,6 +181,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
                 .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "Place added successfully", Toast.LENGTH_SHORT).show())
                 .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to add place", Toast.LENGTH_SHORT).show());
     }
+
     private void toggleLocationTrackingMode() {
         locationTrackingMode = (locationTrackingMode + 1) % 2;
         setTrackingMode();
@@ -192,13 +204,10 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         if (ContextCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         } else {
-            naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
+            naverMap.setLocationTrackingMode(getCurrentTrackingMode());
         }
 
         naverMap.addOnLocationChangeListener(location -> {
-            if (naverMap.getLocationTrackingMode() != getCurrentTrackingMode()) {
-                setTrackingMode();
-            }
             displayNearbyPlaces(location);
         });
     }
@@ -233,7 +242,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
                     double distance = calculateDistance(currentLatLng, placeLatLng);
 
                     if (distance <= 1.5) {
-                        Place place = new Place(id,placeLatLng, distance, stock, name);
+                        Place place = new Place(id, placeLatLng, distance, stock, name);
                         allPlaces.add(place);
 
                         // 재고가 있는 마커 중에서 가장 가까운 마커를 찾기
@@ -348,6 +357,22 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         mapView.onLowMemory();
     }
 
+    // 상태 저장 메서드 추가
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(LOCATION_TRACKING_MODE_KEY, locationTrackingMode);
+    }
+
+    @Override
+    public void onViewStateRestored(@NonNull Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            locationTrackingMode = savedInstanceState.getInt(LOCATION_TRACKING_MODE_KEY, 0);
+            setTrackingMode();
+        }
+    }
+
     public static class Place {
         LatLng latLng;
         double distance;
@@ -355,7 +380,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         String name;
         String id;
 
-        Place(String id,LatLng latLng, double distance, int stock, String name) {
+        Place(String id, LatLng latLng, double distance, int stock, String name) {
             this.id = id;
             this.latLng = latLng;
             this.distance = distance;
