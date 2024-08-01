@@ -22,9 +22,7 @@ public class PaymentFrag2 extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag2_payment, container, false);
-
-        RelativeLayout testView = view.findViewById(R.id.test);
-        testView.setOnClickListener(this);
+        
 
         ImageView paymentIcons = view.findViewById(R.id.payment_icons);
         paymentIcons.setOnClickListener(this);
