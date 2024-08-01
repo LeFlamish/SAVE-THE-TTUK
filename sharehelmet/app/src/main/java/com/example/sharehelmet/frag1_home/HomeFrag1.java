@@ -2,12 +2,14 @@ package com.example.sharehelmet.frag1_home;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -23,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import com.example.sharehelmet.PopupActivity;
 import com.example.sharehelmet.R;
 import com.example.sharehelmet.model.Storage;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,6 +56,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     private DatabaseReference db;
     private List<Marker> markerList = new ArrayList<>();
     private ListView listView;
+    private BottomSheetBehavior<View> bottomSheetBehavior;
     private int sortCriteria = 0; // 정렬 기준 플래그: 0 - 거리 가까운 순, 1 - 재고 적은 순, 2 - 재고 많은 순
     private int stockMin = Integer.MIN_VALUE, stockMax = Integer.MAX_VALUE;
     private EditText stockMinEditText, stockMaxEditText;
@@ -60,6 +64,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     private List<Place> allPlaces = new ArrayList<>(); // 모든 장소를 저장하는 리스트
     private int listViewIndex = -1;
     private int listViewTop = 0;
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag1_home, container, false);
@@ -69,7 +74,26 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
             Intent intent = new Intent(getActivity(), PopupActivity.class);
             startActivity(intent);
         });
+        View bottomSheet = view.findViewById(R.id.persistent_bottom_sheet);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+
         listView = view.findViewById(R.id.place_list_view);
+        listView.setOnTouchListener((v,event)->{
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // 리스트뷰 터치 시 바텀시트의 드래그 비활성화
+                        bottomSheetBehavior.setDraggable(false);
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        // 리스트뷰 터치 해제 시 바텀시트의 드래그 활성화
+                        bottomSheetBehavior.setDraggable(true);
+                        break;
+                }
+                return false; // 터치 이벤트를 리스트뷰에 전달
+            });
+
         return view;
     }
 
