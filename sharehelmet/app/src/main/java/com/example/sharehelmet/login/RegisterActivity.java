@@ -37,9 +37,9 @@ public class RegisterActivity extends AppCompatActivity {
 
     FirebaseAuth mFirebaseAuth;         //파이어 베이스 인증
     DatabaseReference mDatabaseRef;     //실시간 데이터 베이스
-    EditText editNAME, editMAIL, editPW;
-    TextView nameCheck, mailCheck, pwCheck;
-    String name, mail, pw;
+    EditText editNAME, editMAIL, editPW,checkPW;
+    TextView nameCheck, mailCheck, pwCheck,pwnotcorrect;
+    String name, mail, pw,pw2;
     Button signUp;
     ImageView backBtn;
     User USER;//TODO : 유저 클래스 수정했으면 181줄로
@@ -62,10 +62,12 @@ public class RegisterActivity extends AppCompatActivity {
         editNAME = findViewById(R.id.editNAME);
         editMAIL = findViewById(R.id.editMAIL);
         editPW   = findViewById(R.id.editPW);
+        checkPW=findViewById(R.id.checkPW);
 
         nameCheck = findViewById(R.id.nameCheck);
         mailCheck = findViewById(R.id.mailCheck);
         pwCheck   = findViewById(R.id.pwCheck);
+        pwnotcorrect=findViewById(R.id.pwnotcorrect);
 
         signUp = findViewById(R.id.signupbtn);
         backBtn = findViewById(R.id.back_to_start);
@@ -81,9 +83,11 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 nameCheck.setVisibility(View.INVISIBLE);
                 mailCheck.setVisibility(View.INVISIBLE);
+                pwnotcorrect.setVisibility(View.INVISIBLE);
                 name = editNAME.getText().toString().trim();
                 mail = editMAIL.getText().toString().trim();
                 pw   = editPW.getText().toString().trim();
+                pw2 = checkPW.getText().toString().trim();
                 //예외처리
                 if(name.isEmpty()){
                     editNAME.setError("닉네임을 입력해주세요");
@@ -98,6 +102,16 @@ public class RegisterActivity extends AppCompatActivity {
                 if(pw.isEmpty()){
                     editPW.setError("비밀번호를 입력해주세요");
                     editPW.requestFocus();
+                    return;
+                }
+                if(pw2.isEmpty()){
+                    checkPW.setError("비밀번호를 입력해주세요");
+                    checkPW.requestFocus();
+                    return;
+                }
+                if(!pw.equals(pw2)){
+                    checkPW.setError("비밀번호가 일치하지 않습니다");
+                    checkPW.requestFocus();
                     return;
                 }
 

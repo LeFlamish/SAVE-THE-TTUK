@@ -68,6 +68,7 @@ public class ProfileFrag5 extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), RidingHistoryActivity.class);
+                intent.putExtra("firebaseId", firebaseId);
                 startActivity(intent);
                 requireActivity().overridePendingTransition(R.anim.horizontal_enter,R.anim.none);
             }

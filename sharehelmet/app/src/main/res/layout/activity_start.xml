@@ -22,7 +22,6 @@
             android:layout_height="wrap_content"
             android:text="공유 킥보드를 위한\n헬멧 대여 서비스"
             android:fontFamily="@font/font_main"
-            android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -32,7 +31,6 @@
             android:layout_height="wrap_content"
             android:text="SAVETHE"
             android:fontFamily="@font/font_title"
-            android:textColor="@color/black"
             android:textSize="50sp"
             android:textStyle="bold"
             android:letterSpacing="0.05"
@@ -44,7 +42,6 @@
             android:layout_height="wrap_content"
             android:text="TTUK"
             android:fontFamily="@font/font_title_bold"
-            android:textColor="@color/black"
             android:textSize="80sp"
             android:textStyle="bold"
             android:letterSpacing="0.07"
