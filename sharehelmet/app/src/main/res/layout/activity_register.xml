@@ -160,6 +160,40 @@
                 android:visibility="invisible" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/box5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/box4">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="비밀번호 확인"
+                android:fontFamily="@font/font_main"
+                android:textSize="20sp" />
+            <EditText
+                android:id="@+id/checkPW"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/font_main"
+                android:hint="비밀번호를 입력해주세요"
+                android:inputType="textPassword"
+                android:minWidth="48dp"
+                android:minHeight="48dp" />
+            <TextView
+                android:id="@+id/pwnotcorrect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="비밀번호가 일치하지 않습니다."
+                android:textColor="#f54242"
+                android:fontFamily="@font/font_main"
+                android:visibility="invisible" />
+        </LinearLayout>
         <android.widget.Button
             android:id="@+id/signupbtn"
             android:layout_width="0dp"
@@ -173,7 +207,7 @@
             android:text="가입하기"
             android:textColor="@color/white"
             android:textSize="20sp"
-            app:layout_constraintTop_toBottomOf="@id/box4"
+            app:layout_constraintTop_toBottomOf="@id/box5"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"/>
 
