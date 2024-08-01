@@ -24,8 +24,8 @@ public class RidingHistoryActivity extends AppCompatActivity {
     }
     @Override
     public void onBackPressed(){
+        overridePendingTransition(0, R.anim.horizontal_exit);
         super.onBackPressed();
-        overridePendingTransition(R.anim.none, R.anim.horizontal_exit);
     }
 
 }

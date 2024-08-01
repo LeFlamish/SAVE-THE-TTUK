@@ -46,6 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         super.onBackPressed();
+        overridePendingTransition(0, R.anim.horizontal_exit);
     }
 
     @Override
@@ -112,6 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             showCustomToast("회원가입이 완료되었습니다");
                             finish();
+                            overridePendingTransition(0, R.anim.fade_out);
 
                         }else{
                             // Check the exception for specific error details

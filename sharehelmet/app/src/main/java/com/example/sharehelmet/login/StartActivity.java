@@ -97,7 +97,7 @@ public class StartActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(v->{
             Intent intent = new Intent(StartActivity.this, LoginActivity.class);
             startActivity(intent);
-            overridePendingTransition(R.anim.horizontal_enter,R.anim.horizontal_exit);
+            overridePendingTransition(R.anim.horizontal_enter,R.anim.fade_out);
             finish();
         });
 

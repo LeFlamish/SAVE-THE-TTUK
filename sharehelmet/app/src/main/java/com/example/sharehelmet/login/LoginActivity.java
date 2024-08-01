@@ -34,13 +34,12 @@ public class LoginActivity extends AppCompatActivity {
     ImageView backBtn;
     @Override
     public void onBackPressed(){
-        super.onBackPressed();
         Intent intent = new Intent(LoginActivity.this, StartActivity.class);
         intent.putExtra("isLogout",1);
         //login->start 는 액티비티를 바꾸는 거, signin->start는 signin을 끄는 거. 둘이 애니메이션 다르게 설정해야 함
-        //overridePendingTransition(R.anim.fade_in, R.anim.horizontal_exit);
         startActivity(intent);
         finish();
+        overridePendingTransition(R.anim.fade_in, R.anim.horizontal_exit);
     }
 
     @Override
