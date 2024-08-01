@@ -48,19 +48,18 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     private MapView mapView;
     private NaverMap naverMap;
     private FusedLocationSource locationSource;
-    private Button btnModeToggle, btnModeLocation;
+    private Button sortButton;
     private int locationTrackingMode = 0;
     private DatabaseReference db;
     private List<Marker> markerList = new ArrayList<>();
     private ListView listView;
-    private PlaceAdapter placeAdapter;
     private int sortCriteria = 0; // 정렬 기준 플래그: 0 - 거리 가까운 순, 1 - 재고 적은 순, 2 - 재고 많은 순
     private int stockMin = Integer.MIN_VALUE, stockMax = Integer.MAX_VALUE;
     private EditText stockMinEditText, stockMaxEditText;
-    private Button applyFilterButton;
     private List<Place> places = new ArrayList<>();
     private List<Place> allPlaces = new ArrayList<>(); // 모든 장소를 저장하는 리스트
-    private Button sortButton;
+    private int listViewIndex = -1;
+    private int listViewTop = 0;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag1_home, container, false);
@@ -79,8 +78,8 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState);
 
         mapView = view.findViewById(R.id.map);
-        btnModeToggle = view.findViewById(R.id.btn_mode_toggle);
-        btnModeLocation = view.findViewById(R.id.btn_current_location);
+        Button btnModeToggle = view.findViewById(R.id.btn_mode_toggle);
+        Button btnModeLocation = view.findViewById(R.id.btn_current_location);
 
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
@@ -113,7 +112,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         listView = view.findViewById(R.id.place_list_view);
         stockMinEditText = view.findViewById(R.id.stock_min);
         stockMaxEditText = view.findViewById(R.id.stock_max);
-        applyFilterButton = view.findViewById(R.id.apply_filter);
+        Button applyFilterButton = view.findViewById(R.id.apply_filter);
 
         applyFilterButton.setOnClickListener(v -> {
             String minText = stockMinEditText.getText().toString();
@@ -271,6 +270,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     }
 
     private void sortAndDisplayPlaces() {
+        saveListViewScrollPosition();
         switch (sortCriteria) {
             case 0:
                 sortButton.setText("거리 가까운 순");
@@ -301,10 +301,21 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
                 break;
         }
 
-        placeAdapter = new PlaceAdapter(getContext(), places);
+        PlaceAdapter placeAdapter = new PlaceAdapter(getContext(), places);
         listView.setAdapter(placeAdapter);
+        restoreListViewScrollPosition();
+    }
+    private void saveListViewScrollPosition() {
+        listViewIndex = listView.getFirstVisiblePosition();
+        View v = listView.getChildAt(0);
+        listViewTop = (v == null) ? 0 : (v.getTop() - listView.getPaddingTop());
     }
 
+    private void restoreListViewScrollPosition() {
+        if (listViewIndex != -1) {
+            listView.setSelectionFromTop(listViewIndex, listViewTop);
+        }
+    }
     private double calculateDistance(LatLng start, LatLng end) {
         float[] results = new float[1];
         Location.distanceBetween(start.latitude, start.longitude, end.latitude, end.longitude, results);
