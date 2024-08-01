@@ -71,7 +71,7 @@
             android:layout_width="40dp"
             android:layout_height="6dp"
             android:layout_gravity="center"
-            android:background="@drawable/gray_round_border_20"
+            android:background="@drawable/orange_round_border_10"
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

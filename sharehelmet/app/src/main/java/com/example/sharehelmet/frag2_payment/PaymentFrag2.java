@@ -35,7 +35,7 @@ public class PaymentFrag2 extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.test || id == R.id.payment_icons) {
+        if (id == R.id.payment_icons) {
             Intent intent = new Intent(getActivity(), TotalPaymentActivity.class);
             startActivity(intent);
         }
