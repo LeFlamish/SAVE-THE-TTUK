@@ -1,21 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".TotalPaymentActivity">
+    tools:context=".frag2_payment.TotalPaymentActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/upperBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent">
+
+        <ImageView
+            android:id="@+id/back_button"
+            android:layout_marginStart="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/back"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/font_main"
+            android:gravity="center"
+            android:text="충전하기"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:textStyle="normal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/money_select_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="24dp"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/upperBar">
+        <TextView
+            android:id="@+id/money_select_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="충전금액 선택"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/font_main"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:suffixText="  원"
+            android:gravity="end|center_vertical"
+            android:textSize="18sp"
+            android:fontFamily="@font/font_main"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            app:counterEnabled="true"
+            app:counterMaxLength="6"
+            app:layout_constraintTop_toBottomOf="@id/money_select_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/money_select_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:gravity="end|center_horizontal"
+                android:maxLength="6"/>
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
     <Button
-        android:text="통합결제 테스트"
-        android:background="#4529e5"
-        android:textColor="#fff"
-        android:onClick="PaymentTest"
-        android:layout_marginTop="10dp"
+        android:id="@+id/start_payment"
         android:layout_width="match_parent"
-        android:layout_height="40dp" />
+        android:layout_height="48dp"
+        android:text="결제하기"
+        android:textColor="#fff"
+        android:textSize="20sp"
+        android:fontFamily="@font/font_main"
+        android:background="@color/red_orange"
+        android:layout_marginBottom="48dp"
+        android:layout_marginHorizontal="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

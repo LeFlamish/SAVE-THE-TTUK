@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
             intent.putExtra("userid",firebaseuser.getUid());
             intent.putExtra("usermail",firebaseuser.getEmail());
             startActivity(intent);
-            //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             finish();
         }
     }

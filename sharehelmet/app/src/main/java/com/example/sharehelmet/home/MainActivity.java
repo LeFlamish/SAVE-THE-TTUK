@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         mail = intent.getStringExtra("usermail");
 
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
-        mDatabaseRef.child("users").child(firebaseId).addValueEventListener(new ValueEventListener() {
+        mDatabaseRef.child("users").child(firebaseId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 user = snapshot.getValue(User.class);

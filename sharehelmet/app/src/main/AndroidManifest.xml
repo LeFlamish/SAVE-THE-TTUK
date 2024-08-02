@@ -49,7 +49,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TotalPaymentActivity"
+            android:name=".frag2_payment.TotalPaymentActivity"
             android:exported="true"
             android:screenOrientation="portrait"></activity>
         <activity
