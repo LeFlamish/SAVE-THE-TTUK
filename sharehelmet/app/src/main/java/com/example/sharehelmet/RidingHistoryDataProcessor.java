@@ -34,7 +34,7 @@ public class RidingHistoryDataProcessor extends BaseAdapter {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                 Date date1 = dateFormat.parse(entry1.getKey());
                 Date date2 = dateFormat.parse(entry2.getKey());
-                return date1.compareTo(date2);
+                return date2.compareTo(date1);
             } catch (ParseException e) {
                 e.printStackTrace();
                 return 0;
