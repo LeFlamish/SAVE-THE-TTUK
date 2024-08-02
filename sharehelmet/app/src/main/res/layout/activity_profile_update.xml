@@ -64,15 +64,41 @@
             app:layout_constraintLeft_toLeftOf="parent"/>
 
         <EditText
-            android:id="@+id/edit_PW"
+            android:id="@+id/edit_PHONE"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="비밀번호"
+            android:hint="전화번호"
             android:layout_marginTop="16dp"
-            android:inputType="textPersonName"
+            android:inputType="phone"
             android:padding="16dp"
             android:background="@drawable/edit_text_background"
             app:layout_constraintTop_toBottomOf="@id/edit_NAME"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <EditText
+            android:id="@+id/edit_Current_PW"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="현재 비밀번호"
+            android:layout_marginTop="16dp"
+            android:inputType="textPassword"
+            android:padding="16dp"
+            android:background="@drawable/edit_text_background"
+            app:layout_constraintTop_toBottomOf="@id/edit_PHONE"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <EditText
+            android:id="@+id/edit_PW"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="변경할 비밀번호"
+            android:layout_marginTop="16dp"
+            android:inputType="textPassword"
+            android:padding="16dp"
+            android:background="@drawable/edit_text_background"
+            app:layout_constraintTop_toBottomOf="@id/edit_Current_PW"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"/>
 
@@ -82,7 +108,7 @@
             android:layout_height="wrap_content"
             android:hint="비밀번호 확인"
             android:layout_marginTop="16dp"
-            android:inputType="textEmailAddress"
+            android:inputType="textPassword"
             android:padding="16dp"
             android:background="@drawable/edit_text_background"
             app:layout_constraintTop_toBottomOf="@id/edit_PW"
