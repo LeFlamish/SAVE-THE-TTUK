@@ -251,26 +251,25 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
                     LatLng placeLatLng = new LatLng(latitude, longitude);
                     double distance = calculateDistance(currentLatLng, placeLatLng);
-
+                    Place place = new Place(id, placeLatLng, distance, stock, name);
+                    allPlaces.add(place);
                     if (distance <= 1.5) {
-                        Place place = new Place(id, placeLatLng, distance, stock, name);
-                        allPlaces.add(place);
+
 
                         // 재고가 있는 마커 중에서 가장 가까운 마커를 찾기
                         if (stock > 0 && distance < closestDistanceWithStock) {
                             closestPlaceWithStock = place;
                             closestDistanceWithStock = distance;
                         }
+                        Marker marker = new Marker();
+                        marker.setPosition(placeLatLng);
+                        marker.setCaptionText(name);
+                        if (stock == 0) {
+                            marker.setIconTintColor(Color.RED); // 재고가 0인 경우 마커를 빨간색으로 표시
+                        }
+                        marker.setMap(naverMap);
+                        markerList.add(marker);
                     }
-
-                    Marker marker = new Marker();
-                    marker.setPosition(placeLatLng);
-                    marker.setCaptionText(name);
-                    if (stock == 0) {
-                        marker.setIconTintColor(Color.RED); // 재고가 0인 경우 마커를 빨간색으로 표시
-                    }
-                    marker.setMap(naverMap);
-                    markerList.add(marker);
                 }
 
                 // 가장 가까운 재고 있는 마커의 캡션 색상을 초록색으로 변경
