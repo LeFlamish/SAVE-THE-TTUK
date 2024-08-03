@@ -247,6 +247,7 @@ public class QRFrag3 extends Fragment {
 
         if (resultText != null && resultText.startsWith("SAVE-THE-TTUK ")) {
             String storageId = resultText.substring("SAVE-THE-TTUK ".length()).trim();
+            barcodeView.pause();
             if(isover){
                 user.setNow_qr(3);
                 db.child("users").child(firebaseId).setValue(user);
@@ -354,13 +355,23 @@ public class QRFrag3 extends Fragment {
                 helmet.setUserId("-");
                 t21.setText(helmetId);
                 t22.setText(t14.getText());
-                t23.setText("0000원");
+
+                String[] parts = t14.getText().toString().split(":");
+                int hours = Integer.parseInt(parts[0]);
+                int minutes = Integer.parseInt(parts[1]);
+                int totalMinute=hours*60+minutes;
+                int totalPrice=300+totalMinute*50;
+                t23.setText(totalPrice+"원");
+
+                user.setMoney(user.getMoney()-totalPrice);
+
                 ArrayList<String> return_info=new ArrayList<>();
 
                 return_info.add(t21.getText().toString());
                 return_info.add(t22.getText().toString());
                 return_info.add(t23.getText().toString());
                 user.setReturn_info(return_info);
+
                 db.child("users").child(firebaseId).setValue(user);
                 mutableData.setValue(helmet);
                 return Transaction.success(mutableData);
