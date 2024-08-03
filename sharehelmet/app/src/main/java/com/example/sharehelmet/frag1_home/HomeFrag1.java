@@ -69,16 +69,17 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag1_home, container, false);
 
-        Button helpButton = view.findViewById(R.id.help);
-        helpButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), PopupActivity.class);
-            startActivity(intent);
-        });
-        View bottomSheet = view.findViewById(R.id.persistent_bottom_sheet);
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        try{
+            Button helpButton = view.findViewById(R.id.help);
+            helpButton.setOnClickListener(v -> {
+                Intent intent = new Intent(getActivity(), PopupActivity.class);
+                startActivity(intent);
+            });
+            View bottomSheet = view.findViewById(R.id.persistent_bottom_sheet);
+            bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 
-        listView = view.findViewById(R.id.place_list_view);
-        listView.setOnTouchListener((v,event)->{
+            listView = view.findViewById(R.id.place_list_view);
+            listView.setOnTouchListener((v,event)->{
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         // 리스트뷰 터치 시 바텀시트의 드래그 비활성화
@@ -93,6 +94,9 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
                 }
                 return false; // 터치 이벤트를 리스트뷰에 전달
             });
+        }catch (Exception ignored){
+
+        }
 
         return view;
     }
@@ -101,26 +105,30 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mapView = view.findViewById(R.id.map);
-        Button btnModeToggle = view.findViewById(R.id.btn_mode_toggle);
-        Button btnModeLocation = view.findViewById(R.id.btn_current_location);
+        try{
+            mapView = view.findViewById(R.id.map);
+            Button btnModeToggle = view.findViewById(R.id.btn_mode_toggle);
+            Button btnModeLocation = view.findViewById(R.id.btn_current_location);
 
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
+            mapView.onCreate(savedInstanceState);
+            mapView.getMapAsync(this);
 
-        locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
+            locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
 
-        btnModeToggle.setOnClickListener(v -> {
-            if (naverMap != null) {
-                toggleLocationTrackingMode();
-            }
-        });
+            btnModeToggle.setOnClickListener(v -> {
+                if (naverMap != null) {
+                    toggleLocationTrackingMode();
+                }
+            });
 
-        btnModeLocation.setOnClickListener(v -> {
-            setTrackingMode();
-        });
+            btnModeLocation.setOnClickListener(v -> {
+                setTrackingMode();
+            });
 
-        db = FirebaseDatabase.getInstance().getReference();
+            db = FirebaseDatabase.getInstance().getReference();
+        }catch(Exception ignored){
+
+        }
 
         /*savePlace("001", "IT 1호관", 35.88748984889353, 128.61274302005768,20);
         savePlace("002", "본관", 35.89044078812516, 128.61201882362366,20);
@@ -133,46 +141,50 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         savePlace("009", "도서관",35.89166632997614,128.61208319664001,20);
         savePlace("010", "일청담",35.8886304944912,128.61211539394523,20);*/
 
-        listView = view.findViewById(R.id.place_list_view);
-        stockMinEditText = view.findViewById(R.id.stock_min);
-        stockMaxEditText = view.findViewById(R.id.stock_max);
-        Button applyFilterButton = view.findViewById(R.id.apply_filter);
+        try{
+            listView = view.findViewById(R.id.place_list_view);
+            stockMinEditText = view.findViewById(R.id.stock_min);
+            stockMaxEditText = view.findViewById(R.id.stock_max);
+            Button applyFilterButton = view.findViewById(R.id.apply_filter);
 
-        applyFilterButton.setOnClickListener(v -> {
-            String minText = stockMinEditText.getText().toString();
-            String maxText = stockMaxEditText.getText().toString();
+            applyFilterButton.setOnClickListener(v -> {
+                String minText = stockMinEditText.getText().toString();
+                String maxText = stockMaxEditText.getText().toString();
 
-            if (!minText.isEmpty()) {
-                stockMin = Integer.parseInt(minText);
-            } else {
-                stockMin = Integer.MIN_VALUE;
+                if (!minText.isEmpty()) {
+                    stockMin = Integer.parseInt(minText);
+                } else {
+                    stockMin = Integer.MIN_VALUE;
+                }
+
+                if (!maxText.isEmpty()) {
+                    stockMax = Integer.parseInt(maxText);
+                } else {
+                    stockMax = Integer.MAX_VALUE;
+                }
+
+                sortAndDisplayPlaces();
+            });
+
+            sortButton = view.findViewById(R.id.btn_sort);
+            sortButton.setOnClickListener(v -> {
+                sortCriteria = (sortCriteria + 1) % 3; // 정렬 기준 변경: 0 -> 1 -> 2 -> 0
+                sortAndDisplayPlaces(); // 정렬 및 표시 갱신
+            });
+
+            // 처음에 거리 가까운 순으로 정렬 버튼 텍스트 설정
+            sortButton.setText("거리 가까운 순");
+            listView.setOnItemClickListener((parent, view1, position, id) -> {
+                Place selectedPlace = places.get(position);
+                LatLng selectedLatLng = selectedPlace.latLng;
+                naverMap.moveCamera(CameraUpdate.scrollTo(selectedLatLng)); // 선택한 장소로 지도 이동
+            });
+            if (savedInstanceState != null) {
+                locationTrackingMode = savedInstanceState.getInt(LOCATION_TRACKING_MODE_KEY, 0);
+                sortCriteria=savedInstanceState.getInt(SORT_KEY,0);
             }
-
-            if (!maxText.isEmpty()) {
-                stockMax = Integer.parseInt(maxText);
-            } else {
-                stockMax = Integer.MAX_VALUE;
-            }
-
-            sortAndDisplayPlaces();
-        });
-
-        sortButton = view.findViewById(R.id.btn_sort);
-        sortButton.setOnClickListener(v -> {
-            sortCriteria = (sortCriteria + 1) % 3; // 정렬 기준 변경: 0 -> 1 -> 2 -> 0
-            sortAndDisplayPlaces(); // 정렬 및 표시 갱신
-        });
-
-        // 처음에 거리 가까운 순으로 정렬 버튼 텍스트 설정
-        sortButton.setText("거리 가까운 순");
-        listView.setOnItemClickListener((parent, view1, position, id) -> {
-            Place selectedPlace = places.get(position);
-            LatLng selectedLatLng = selectedPlace.latLng;
-            naverMap.moveCamera(CameraUpdate.scrollTo(selectedLatLng)); // 선택한 장소로 지도 이동
-        });
-        if (savedInstanceState != null) {
-            locationTrackingMode = savedInstanceState.getInt(LOCATION_TRACKING_MODE_KEY, 0);
-            sortCriteria=savedInstanceState.getInt(SORT_KEY,0);
+        }catch (Exception ignored){
+            
         }
 
     }

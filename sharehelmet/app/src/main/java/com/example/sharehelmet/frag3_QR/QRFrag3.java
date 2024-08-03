@@ -204,6 +204,9 @@ public class QRFrag3 extends Fragment {
                 t11.setText(user.getRental_info().get(0));
                 t12.setText(user.getRental_info().get(1));
                 t13.setText(user.getRental_info().get(2));
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                rentalStartTime= LocalDateTime.parse(user.getRental_info().get(2), formatter);
+                updateElapsedTime();
                 Handler handler = new Handler(Looper.getMainLooper());
                 handler.postDelayed(new Runnable() {
                     @Override
