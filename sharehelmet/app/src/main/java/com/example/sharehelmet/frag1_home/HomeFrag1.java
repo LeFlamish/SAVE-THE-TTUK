@@ -184,7 +184,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
                 sortCriteria=savedInstanceState.getInt(SORT_KEY,0);
             }
         }catch (Exception ignored){
-            
+
         }
 
     }
@@ -220,19 +220,23 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
-        this.naverMap = naverMap;
+        try{
+            this.naverMap = naverMap;
 
-        naverMap.setLocationSource(locationSource);
+            naverMap.setLocationSource(locationSource);
 
-        if (ContextCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
-        } else {
-            naverMap.setLocationTrackingMode(getCurrentTrackingMode());
+            if (ContextCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+            } else {
+                naverMap.setLocationTrackingMode(getCurrentTrackingMode());
+            }
+
+            naverMap.addOnLocationChangeListener(location -> {
+                displayNearbyPlaces(location);
+            });
+        }catch(Exception ignored){
+
         }
-
-        naverMap.addOnLocationChangeListener(location -> {
-            displayNearbyPlaces(location);
-        });
     }
 
     private LocationTrackingMode getCurrentTrackingMode() {
@@ -240,105 +244,113 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     }
 
     private void displayNearbyPlaces(Location currentLocation) {
-        if (currentLocation == null) {
-            return;
+        try{
+            if (currentLocation == null) {
+                return;
+            }
+
+            LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+            db.child("places").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    clearMarkers();
+
+                    allPlaces.clear();
+                    Place closestPlaceWithStock = null;
+                    double closestDistanceWithStock = Double.MAX_VALUE;
+
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String id = snapshot.getKey();
+                        double latitude = snapshot.child("latitude").getValue(Double.class);
+                        double longitude = snapshot.child("longitude").getValue(Double.class);
+                        int stock = snapshot.child("stock").getValue(Integer.class);
+                        String name = snapshot.getKey();
+
+                        LatLng placeLatLng = new LatLng(latitude, longitude);
+                        double distance = calculateDistance(currentLatLng, placeLatLng);
+                        Place place = new Place(id, placeLatLng, distance, stock, name);
+                        allPlaces.add(place);
+                        if (distance <= 1.5) {
+
+
+                            // 재고가 있는 마커 중에서 가장 가까운 마커를 찾기
+                            if (stock > 0 && distance < closestDistanceWithStock) {
+                                closestPlaceWithStock = place;
+                                closestDistanceWithStock = distance;
+                            }
+                            Marker marker = new Marker();
+                            marker.setPosition(placeLatLng);
+                            marker.setCaptionText(name);
+                            if (stock == 0) {
+                                marker.setIconTintColor(Color.RED); // 재고가 0인 경우 마커를 빨간색으로 표시
+                            }
+                            marker.setMap(naverMap);
+                            markerList.add(marker);
+                        }
+                    }
+
+                    // 가장 가까운 재고 있는 마커의 캡션 색상을 초록색으로 변경
+                    if (closestPlaceWithStock != null) {
+                        for (Marker marker : markerList) {
+                            if (marker.getPosition().equals(closestPlaceWithStock.latLng)) {
+                                marker.setCaptionColor(Color.GREEN);
+                                break;
+                            }
+                        }
+                    }
+
+                    sortAndDisplayPlaces();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(getContext(), "데이터를 불러오는데 실패했습니다.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }catch (Exception ignored){
+
         }
-
-        LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-        db.child("places").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                clearMarkers();
-
-                allPlaces.clear();
-                Place closestPlaceWithStock = null;
-                double closestDistanceWithStock = Double.MAX_VALUE;
-
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String id = snapshot.getKey();
-                    double latitude = snapshot.child("latitude").getValue(Double.class);
-                    double longitude = snapshot.child("longitude").getValue(Double.class);
-                    int stock = snapshot.child("stock").getValue(Integer.class);
-                    String name = snapshot.getKey();
-
-                    LatLng placeLatLng = new LatLng(latitude, longitude);
-                    double distance = calculateDistance(currentLatLng, placeLatLng);
-                    Place place = new Place(id, placeLatLng, distance, stock, name);
-                    allPlaces.add(place);
-                    if (distance <= 1.5) {
-
-
-                        // 재고가 있는 마커 중에서 가장 가까운 마커를 찾기
-                        if (stock > 0 && distance < closestDistanceWithStock) {
-                            closestPlaceWithStock = place;
-                            closestDistanceWithStock = distance;
-                        }
-                        Marker marker = new Marker();
-                        marker.setPosition(placeLatLng);
-                        marker.setCaptionText(name);
-                        if (stock == 0) {
-                            marker.setIconTintColor(Color.RED); // 재고가 0인 경우 마커를 빨간색으로 표시
-                        }
-                        marker.setMap(naverMap);
-                        markerList.add(marker);
-                    }
-                }
-
-                // 가장 가까운 재고 있는 마커의 캡션 색상을 초록색으로 변경
-                if (closestPlaceWithStock != null) {
-                    for (Marker marker : markerList) {
-                        if (marker.getPosition().equals(closestPlaceWithStock.latLng)) {
-                            marker.setCaptionColor(Color.GREEN);
-                            break;
-                        }
-                    }
-                }
-
-                sortAndDisplayPlaces();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getContext(), "데이터를 불러오는데 실패했습니다.", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private void sortAndDisplayPlaces() {
-        saveListViewScrollPosition();
-        switch (sortCriteria) {
-            case 0:
-                sortButton.setText("거리 가까운 순");
-                break;
-            case 1:
-                sortButton.setText("재고 적은 순");
-                break;
-            case 2:
-                sortButton.setText("재고 많은 순");
-                break;
-        }
-        places.clear();
-        for (Place place : allPlaces) {
-            if (place.stock >= stockMin && place.stock <= stockMax) {
-                places.add(place);
+        try{
+            saveListViewScrollPosition();
+            switch (sortCriteria) {
+                case 0:
+                    sortButton.setText("거리 가까운 순");
+                    break;
+                case 1:
+                    sortButton.setText("재고 적은 순");
+                    break;
+                case 2:
+                    sortButton.setText("재고 많은 순");
+                    break;
             }
-        }
+            places.clear();
+            for (Place place : allPlaces) {
+                if (place.stock >= stockMin && place.stock <= stockMax) {
+                    places.add(place);
+                }
+            }
 
-        switch (sortCriteria) {
-            case 0: // 거리 가까운 순 정렬
-                places.sort((p1, p2) -> Double.compare(p1.distance, p2.distance));
-                break;
-            case 1: // 재고 적은 순 정렬
-                places.sort((p1, p2) -> Integer.compare(p1.stock, p2.stock));
-                break;
-            case 2: // 재고 많은 순 정렬
-                places.sort((p1, p2) -> Integer.compare(p2.stock, p1.stock));
-                break;
-        }
+            switch (sortCriteria) {
+                case 0: // 거리 가까운 순 정렬
+                    places.sort((p1, p2) -> Double.compare(p1.distance, p2.distance));
+                    break;
+                case 1: // 재고 적은 순 정렬
+                    places.sort((p1, p2) -> Integer.compare(p1.stock, p2.stock));
+                    break;
+                case 2: // 재고 많은 순 정렬
+                    places.sort((p1, p2) -> Integer.compare(p2.stock, p1.stock));
+                    break;
+            }
 
-        PlaceAdapter placeAdapter = new PlaceAdapter(getContext(), places);
-        listView.setAdapter(placeAdapter);
-        restoreListViewScrollPosition();
+            PlaceAdapter placeAdapter = new PlaceAdapter(getContext(), places);
+            listView.setAdapter(placeAdapter);
+            restoreListViewScrollPosition();
+        }catch (Exception ignored){
+
+        }
     }
     private void saveListViewScrollPosition() {
         listViewIndex = listView.getFirstVisiblePosition();
