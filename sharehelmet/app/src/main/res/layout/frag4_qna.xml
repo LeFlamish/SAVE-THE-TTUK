@@ -9,8 +9,11 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="How can we help you?"
-        android:textSize="24sp"
+        android:fontFamily="@font/font_main"
+        android:gravity="center"
+        android:text="무엇을 도와드릴까요?"
+        android:textColor="@color/black"
+        android:textSize="25sp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp"
         android:layout_alignParentTop="true"
@@ -30,9 +33,10 @@
             android:id="@+id/help_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Still need help? Get in touch!"
+            android:text="궁금한 점이 있으시면 언제든지 연락해 주세요!"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:fontFamily="@font/font_main"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -44,8 +48,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:text="Send us a message and we will find the best way to support you."
+            android:text="\n카카오톡 채널로 문의해주세요."
             android:textSize="14sp"
+            android:fontFamily="@font/font_main"
             android:layout_below="@id/help_text"
             android:layout_marginBottom="8dp"/>
 
@@ -59,9 +64,10 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/edit_text_background"
             android:backgroundTint="@color/yellow"
-            android:text="Chat on Kakao"
+            android:text="카카오톡 채널"
             android:textColor="@android:color/black"
             android:textSize="16sp"
+            android:fontFamily="@font/font_main"
             android:drawableLeft="@drawable/add_24"
             android:drawablePadding="8dp"
             android:elevation="16dp"
@@ -85,6 +91,7 @@
             android:text="Legal Disclosure"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:fontFamily="@font/font_main"
             android:layout_marginBottom="16dp"/>
 
         <LinearLayout
@@ -112,6 +119,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Terms of services"
+                    android:fontFamily="@font/font_main"
                     android:textSize="14sp"
                     android:layout_marginStart="16dp" />
             </LinearLayout>
@@ -136,6 +144,7 @@
                     android:layout_height="wrap_content"
                     android:text="Privacy policy"
                     android:textSize="14sp"
+                    android:fontFamily="@font/font_main"
                     android:layout_marginStart="16dp" />
             </LinearLayout>
 
@@ -159,6 +168,7 @@
                     android:layout_height="wrap_content"
                     android:text="Insurance"
                     android:textSize="14sp"
+                    android:fontFamily="@font/font_main"
                     android:layout_marginStart="16dp" />
             </LinearLayout>
         </LinearLayout>
