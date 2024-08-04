@@ -4,25 +4,30 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/house"
-        android:title="Home" />
+        android:title="Home"
+        android:textAppearance="@style/CustomBottomNavText"/>
 
     <item
         android:id="@+id/nav_search"
         android:icon="@drawable/credit_card_24"
-        android:title="Payment" />
+        android:title="Payment"
+        android:textAppearance="@style/CustomBottomNavText"/>
 
     <item
         android:id="@+id/nav_notifications"
         android:icon="@drawable/qr_24"
-        android:title="QR" />
+        android:title="QR"
+        android:textAppearance="@style/CustomBottomNavText"/>
 
     <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/message_question_24"
-        android:title="QnA" />
+        android:title="QnA"
+        android:textAppearance="@style/CustomBottomNavText"/>
 
     <item
         android:id="@+id/nav_settings"
         android:icon="@drawable/menu_burger_24"
-        android:title="Profile" />
+        android:title="Profile"
+        android:textAppearance="@style/CustomBottomNavText"/>
 </menu>
