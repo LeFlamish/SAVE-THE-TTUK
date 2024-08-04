@@ -1,6 +1,7 @@
 package com.example.sharehelmet.frag5_profile;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sharehelmet.R;
-import com.example.sharehelmet.RidingHistoryActivity;
 import com.example.sharehelmet.login.StartActivity;
 import com.example.sharehelmet.model.User;
 import com.google.firebase.database.DataSnapshot;
@@ -22,8 +22,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.Objects;
 
 public class ProfileFrag5 extends Fragment {
     private User user;
@@ -75,10 +73,7 @@ public class ProfileFrag5 extends Fragment {
         });
 
         RelativeLayout businessSection = view.findViewById(R.id.business_section);
-        businessSection.setOnClickListener(v -> {
-            showCustomToast("카카오톡 채널로 문의해주세요");
-        });
-
+        businessSection.setOnClickListener(v -> openKakaoTalkChannel());
 
         RelativeLayout signOutSection = view.findViewById(R.id.sign_out_section);
         signOutSection.setOnClickListener(v -> {
@@ -112,6 +107,12 @@ public class ProfileFrag5 extends Fragment {
             title.setText(user.getNickname());
             email.setText(user.getEmail());
         }
+    }
+
+    private void openKakaoTalkChannel() {
+        String url = "http://pf.kakao.com/_dLAxeK/chat";// 빔 채팅.
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(intent);
     }
 
     private void showCustomToast(String message) {

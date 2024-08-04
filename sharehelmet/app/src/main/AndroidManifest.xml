@@ -61,7 +61,7 @@
             android:exported="true"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".RidingHistoryActivity"
+            android:name=".frag5_profile.RidingHistoryActivity"
             android:exported="true"
             android:screenOrientation="portrait"></activity>
         <activity

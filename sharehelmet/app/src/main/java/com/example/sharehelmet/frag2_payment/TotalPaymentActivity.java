@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,7 @@ public class TotalPaymentActivity extends AppCompatActivity {
     private User user;
     TextInputEditText moneySelect;
     Button startPayment;
+    ImageView backButton;
     int userMoney;
     int chargeMoney;
 
@@ -63,9 +65,13 @@ public class TotalPaymentActivity extends AppCompatActivity {
 
         moneySelect = findViewById(R.id.money_select_edit);
         startPayment = findViewById(R.id.start_payment);
+        backButton = findViewById(R.id.back_button);
         setViews();
-
-
+    }
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        overridePendingTransition(0, R.anim.horizontal_exit);
     }
 
 
@@ -85,6 +91,7 @@ public class TotalPaymentActivity extends AppCompatActivity {
             }
             PaymentTest(v);
         });
+        backButton.setOnClickListener(v -> onBackPressed());
 
     }
 

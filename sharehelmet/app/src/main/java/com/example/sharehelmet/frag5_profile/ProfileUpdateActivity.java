@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,7 +16,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class ProfileUpdateActivity extends AppCompatActivity {
     FirebaseUser firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
-    Button deleteAccount;
+    Button changeAccount;
+    ImageView backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,16 +27,23 @@ public class ProfileUpdateActivity extends AppCompatActivity {
         loadDataFromDatabase();
         updateUI();
     }
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        overridePendingTransition(0, R.anim.horizontal_exit);
+    }
 
     protected void loadDataFromDatabase(){
 
     }
     protected void updateUI(){
-        deleteAccount = findViewById(R.id.update_btn);
+        changeAccount = findViewById(R.id.update_btn);
+        backButton = findViewById(R.id.back_button);
 
-        deleteAccount.setOnClickListener(v -> {
+        changeAccount.setOnClickListener(v -> {
             showCustomToast("프로필 수정 기능 구현 전입니다");
         });
+        backButton.setOnClickListener(v->onBackPressed());
     }
     protected void showCustomToast(String message) {
         LayoutInflater inflater = getLayoutInflater();
