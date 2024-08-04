@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sharehelmet.R;
+import com.example.sharehelmet.frag5_profile.ProfileUpdate.ProfileUpdateActivity;
 import com.example.sharehelmet.login.StartActivity;
 import com.example.sharehelmet.model.User;
 import com.google.firebase.database.DataSnapshot;
@@ -46,6 +47,7 @@ public class ProfileFrag5 extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ProfileUpdateActivity.class);
+                intent.putExtra("firebaseId",firebaseId);
                 startActivity(intent);
                 requireActivity().overridePendingTransition(R.anim.horizontal_enter,R.anim.none);
             }

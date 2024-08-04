@@ -53,7 +53,7 @@
             android:exported="true"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".frag5_profile.ProfileUpdateActivity"
+            android:name=".frag5_profile.ProfileUpdate.ProfileUpdateActivity"
             android:exported="true"
             android:screenOrientation="portrait"></activity>
         <activity

@@ -10,6 +10,7 @@ import java.util.Map;
 public class User implements Serializable {
     private String nickname;
     private String Email;
+    private String Phone;
     private int money;
     Map<String, String> Record = new HashMap<>();
     Map<String, Object> Cupons = new HashMap<>();
@@ -73,4 +74,11 @@ public class User implements Serializable {
         this.money = money;
     }
 
+    public String getPhone() {
+        return Phone;
+    }
+
+    public void setPhone(String phone) {
+        Phone = phone;
+    }
 }
