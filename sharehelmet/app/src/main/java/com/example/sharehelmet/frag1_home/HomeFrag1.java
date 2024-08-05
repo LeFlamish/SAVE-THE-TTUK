@@ -5,6 +5,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -234,6 +235,14 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
             naverMap.addOnLocationChangeListener(location -> {
                 displayNearbyPlaces(location);
             });
+            int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+            if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
+                naverMap.setMapType(NaverMap.MapType.Navi); // 다크 모드
+                naverMap.setNightModeEnabled(true);
+            } else {
+                naverMap.setMapType(NaverMap.MapType.Basic); // 라이트 모드
+                naverMap.setNightModeEnabled(false);
+            }
         }catch(Exception ignored){
 
         }
