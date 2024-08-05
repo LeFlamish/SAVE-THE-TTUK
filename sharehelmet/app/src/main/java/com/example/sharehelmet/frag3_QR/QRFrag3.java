@@ -478,7 +478,7 @@ public class QRFrag3 extends Fragment {
 
                 helmet.setBorrow(true);
                 helmet.setStorageId("-");
-                helmet.setUserId("0000");
+                helmet.setUserId(firebaseId);
 
                 rentalStartTime = LocalDateTime.now(); // 대여 시작 시간 저장
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
