@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.sharehelmet.R;
+import com.example.sharehelmet.frag1_home.HomeFrag1;
 import com.example.sharehelmet.model.Helmet;
 import com.example.sharehelmet.model.Storage;
 import com.example.sharehelmet.model.User;
@@ -66,32 +67,8 @@ public class QRFrag3 extends Fragment {
     private Button overButton;// 반납 버튼
     private boolean isover = false;
     Map<String, String> hashMap = new HashMap<>();
-
-    private void loadDataFromDatabase(View rootView) {
-        db = FirebaseDatabase.getInstance().getReference();
-        db.child("users").child(firebaseId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                user = snapshot.getValue(User.class);
-                if (user != null) {
-                    hashMap = user.getRecord();
-                    initializeUI(); // 데이터가 로드된 후 UI를 초기화
-                } else {
-                    Log.e("QRFrag3", "User not found");
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("QRFrag3", "Failed to read user data", error.toException());
-            }
-        });
-    }
-
-    private boolean isValidFirebaseId(String firebaseId) {
-        return !(firebaseId.contains(".") || firebaseId.contains("#") ||
-                firebaseId.contains("$") || firebaseId.contains("[") || firebaseId.contains("]"));
-    }
+    private Helmet helmet;
+    private Storage storage;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -134,7 +111,7 @@ public class QRFrag3 extends Fragment {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
         } else {
-            startScanning();
+            barcodeView.resume();
         }
 
         // 반납 버튼 클릭 이벤트 설정
@@ -147,7 +124,7 @@ public class QRFrag3 extends Fragment {
                 barcodeView.setVisibility(View.VISIBLE);
                 using_layout.setVisibility(View.GONE);
                 over_layout.setVisibility(View.GONE);
-                startScanning();
+                barcodeView.resume();
             }
         });
         overButton.setOnClickListener(new View.OnClickListener() {
@@ -159,7 +136,7 @@ public class QRFrag3 extends Fragment {
                 barcodeView.setVisibility(View.VISIBLE);
                 using_layout.setVisibility(View.GONE);
                 over_layout.setVisibility(View.GONE);
-                startScanning();
+                barcodeView.resume();
             }
         });
 
@@ -187,26 +164,150 @@ public class QRFrag3 extends Fragment {
 
         return view;
     }
-
+    private void loadDataFromDatabase(View rootView) {
+        db = FirebaseDatabase.getInstance().getReference();
+        db.child("users").child(firebaseId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                user = snapshot.getValue(User.class);
+                if (user != null) {
+                    hashMap = user.getRecord();
+                    initializeUI();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+    }
     private void initializeUI() {
-        if (user != null) {
-            if (user.getNow_qr() == 0) {
-                isover = false;
-                barcodeView.setVisibility(View.VISIBLE);
-                using_layout.setVisibility(View.GONE);
-                over_layout.setVisibility(View.GONE);
-                startScanning();
-            } else if (user.getNow_qr() == 1) {
-                barcodeView.setVisibility(View.GONE);
-                using_layout.setVisibility(View.VISIBLE);
-                over_layout.setVisibility(View.GONE);
-                barcodeView.pause();
-                t11.setText(user.getRental_info().get(0));
-                t12.setText(user.getRental_info().get(1));
-                t13.setText(user.getRental_info().get(2));
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                rentalStartTime= LocalDateTime.parse(user.getRental_info().get(2), formatter);
-                updateElapsedTime();
+        if (user.getNow_qr() == 0) {
+            Borrow_Barcode();
+        }
+        else if (user.getNow_qr() == 1) {
+            Borrow_Layout();
+            t11.setText(user.getRental_info().get(0));
+            t12.setText(user.getRental_info().get(1));
+            t13.setText(user.getRental_info().get(2));
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            rentalStartTime= LocalDateTime.parse(user.getRental_info().get(2), formatter);
+            updateElapsedTime();
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    updateElapsedTime();
+                    handler.postDelayed(this, 1000); // 1초마다 업데이트
+                }
+            }, 1000);
+        }
+        else if (user.getNow_qr() == 2) {
+            Return_Barcode();
+            t11.setText(user.getRental_info().get(0));
+            t12.setText(user.getRental_info().get(1));
+            t13.setText(user.getRental_info().get(2));
+        }
+        else if (user.getNow_qr() == 3) {
+            Return_Layout();
+            t21.setText(user.getReturn_info().get(0));
+            t22.setText(user.getReturn_info().get(1));
+            t23.setText(user.getReturn_info().get(2));
+        }
+    }
+
+    private void handleResult(BarcodeResult result) {
+        String resultText = result.getText();
+        if (resultText != null && resultText.startsWith("SAVE-THE-TTUK ")) {
+            String storageId = resultText.substring("SAVE-THE-TTUK ".length()).trim();
+            if(!isover){
+                BorrowHelmet1(storageId);
+            }
+            else {
+                ReturnHelmet1(storageId);
+            }
+        } else {
+            Toast.makeText(getContext(), "유효하지 않은 QR코드입니다", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private void BorrowHelmet1(String storageId) {
+        String locationID = storageId.substring(0, 3);
+        int helmetIndex = Integer.parseInt(storageId.substring(4, 7)) - 1;
+        db.child("places").orderByChild("locationID").equalTo(locationID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot placeSnapshot : dataSnapshot.getChildren()) {
+                        String placeKey = placeSnapshot.getKey();
+                        Storage storage1 = placeSnapshot.getValue(Storage.class);
+                        if (storage1 != null) {
+                            List<String> storedHelmetID = storage1.getStoredHelmetID();
+                            if (storedHelmetID != null && helmetIndex >= 0 && helmetIndex < storedHelmetID.size()) {
+                                String helmetId = storedHelmetID.get(helmetIndex);
+                                if (!"-".equals(helmetId)) {
+                                    Toast.makeText(getContext(), "No."+helmetId+" 헬멧 대여", Toast.LENGTH_SHORT).show();
+                                    Borrow_Layout();
+                                    BorrowHelmet2(placeKey, helmetIndex, helmetId);
+                                }
+                                else {
+                                    Toast.makeText(getContext(), "보관함이 비어있습니다.", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(getContext(), "보관함이 비어있습니다.", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(getContext(), "보관함 데이터를 찾지 못했습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                        return;
+                    }
+                } else {
+                    Toast.makeText(getContext(), "보관함이 존재하지 않습니다", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getContext(), "정보를 불러오지 못했습니다", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void BorrowHelmet2(String placeKey, int helmetIndex, String helmetId) {
+        db.child("places").child(placeKey).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                storage =snapshot.getValue(Storage.class);
+                storage.setStock(storage.getStock()-1);
+                List<String> storedHelmetID = storage.getStoredHelmetID();
+                if (storedHelmetID != null && helmetIndex >= 0 && helmetIndex < storedHelmetID.size()) {
+                    storedHelmetID.set(helmetIndex, "-");
+                }
+                db.child("places").child(placeKey).setValue(storage);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+
+
+        db.child("helmets").child(helmetId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                helmet =snapshot.getValue(Helmet.class);
+                helmet.setBorrow(true);
+                helmet.setStorageId("-");
+                helmet.setUserId(firebaseId);
+                rentalStartTime = LocalDateTime.now(); // 대여 시작 시간 저장
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                String formattedStartTime = rentalStartTime.format(formatter);
+                t11.setText("No."+ helmet.getHelmetId());
+                t12.setText(helmet.getBatteryState()+"%");
+                t13.setText(formattedStartTime);
+                db.child("helmets").child(helmetId).setValue(helmet);
+                ArrayList<String> rental_info=new ArrayList<>();
+                rental_info.add(t11.getText().toString());
+                rental_info.add(t12.getText().toString());
+                rental_info.add(t13.getText().toString());
+                user.setRental_info(rental_info);
+                user.setNow_qr(1);
+                db.child("users").child(firebaseId).setValue(user);
+
                 Handler handler = new Handler(Looper.getMainLooper());
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -215,55 +316,14 @@ public class QRFrag3 extends Fragment {
                         handler.postDelayed(this, 1000); // 1초마다 업데이트
                     }
                 }, 1000);
-            } else if (user.getNow_qr() == 2) {
-                isover = true;
-                t11.setText(user.getRental_info().get(0));
-                t12.setText(user.getRental_info().get(1));
-                t13.setText(user.getRental_info().get(2));
-                barcodeView.setVisibility(View.VISIBLE);
-                using_layout.setVisibility(View.GONE);
-                over_layout.setVisibility(View.GONE);
-                startScanning();
-            } else if (user.getNow_qr() == 3) {
-                barcodeView.setVisibility(View.GONE);
-                using_layout.setVisibility(View.GONE);
-                over_layout.setVisibility(View.VISIBLE);
-                barcodeView.pause();
-                t21.setText(user.getReturn_info().get(0));
-                t22.setText(user.getReturn_info().get(1));
-                t23.setText(user.getReturn_info().get(2));
             }
-        }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+
     }
 
-
-
-    private void startScanning() {
-        barcodeView.resume();
-    }
-
-    private void handleResult(BarcodeResult result) {
-        String resultText = result.getText();
-
-        if (resultText != null && resultText.startsWith("SAVE-THE-TTUK ")) {
-            String storageId = resultText.substring("SAVE-THE-TTUK ".length()).trim();
-            barcodeView.pause();
-            if(isover){
-                user.setNow_qr(3);
-                db.child("users").child(firebaseId).setValue(user);
-                returnHelmet(storageId);
-            }
-            else {
-                user.setNow_qr(1);
-                db.child("users").child(firebaseId).setValue(user);
-                findHelmetData(storageId);
-            }
-        } else {
-            Toast.makeText(getContext(), "유효하지 않은 QR코드입니다", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void returnHelmet(String storageId) {
+    private void ReturnHelmet1(String storageId) {
         String locationID = storageId.substring(0, 3);
         int helmetIndex = Integer.parseInt(storageId.substring(4, 7)) - 1;
 
@@ -280,7 +340,8 @@ public class QRFrag3 extends Fragment {
                                 if ("-".equals(storedHelmetID.get(helmetIndex))) {
                                     String helmetId = t11.getText().toString().substring(3); // 헬멧 ID 추출
                                     Toast.makeText(getContext(), "No."+helmetId+" 헬멧 반납", Toast.LENGTH_SHORT).show();
-                                    updateHelmetAndStockOnReturn(placeKey, helmetIndex, storage.getStock(), helmetId,storageId);
+                                    Return_Layout();
+                                    ReturnHelmet2(placeKey, helmetIndex, helmetId,storageId);
                                 } else {
                                     Toast.makeText(getContext(), "빈 보관함이 아닙니다.", Toast.LENGTH_SHORT).show();
                                 }
@@ -303,56 +364,36 @@ public class QRFrag3 extends Fragment {
         });
     }
 
-    private void updateHelmetAndStockOnReturn(String placeKey, int helmetIndex, int currentStock, String helmetId,String storageId) {
-        db.child("places").child(placeKey).runTransaction(new Transaction.Handler() {
+    private void ReturnHelmet2(String placeKey, int helmetIndex, String helmetId,String storageId) {
+        db.child("places").child(placeKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public Transaction.Result doTransaction(MutableData mutableData) {
-                Storage storage = mutableData.getValue(Storage.class);
-                if (storage == null) {
-                    return Transaction.success(mutableData);
-                }
-
-                int newStock = currentStock + 1;
-                storage.setStock(newStock);
-
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                storage=snapshot.getValue(Storage.class);
+                storage.setStock(storage.getStock()+1);
                 List<String> storedHelmetID = storage.getStoredHelmetID();
                 if (storedHelmetID != null && helmetIndex >= 0 && helmetIndex < storedHelmetID.size()) {
                     storedHelmetID.set(helmetIndex, helmetId);
                 }
-
-                mutableData.setValue(storage);
-                return Transaction.success(mutableData);
+                db.child("places").child(placeKey).setValue(storage);
             }
-
             @Override
-            public void onComplete(DatabaseError databaseError, boolean committed, DataSnapshot dataSnapshot) {
-                if (databaseError != null) {
-                    Toast.makeText(getContext(), "보관소 데이터 업데이트 실패", Toast.LENGTH_SHORT).show();
-                } else {
-                    updateHelmetDataOnReturn(helmetId,storageId);
-                }
-            }
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
-    }
 
-    private void updateHelmetDataOnReturn(String helmetId,String storageId) {
-        db.child("helmets").child(helmetId).runTransaction(new Transaction.Handler() {
+        db.child("helmets").child(helmetId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public Transaction.Result doTransaction(MutableData mutableData) {
-                Helmet helmet = mutableData.getValue(Helmet.class);
-                if (helmet == null) {
-                    return Transaction.success(mutableData);
-                }
-                LocalDateTime rentalEndTime = LocalDateTime.now(); // 대여 시작 시간 저장
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                String formattedEndTime = rentalEndTime.format(formatter);
-
-                hashMap.put(t13.getText().toString(),formattedEndTime);
-                user.setRecord(hashMap);
-
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                helmet=snapshot.getValue(Helmet.class);
                 helmet.setBorrow(false);
                 helmet.setStorageId(storageId);
                 helmet.setUserId("-");
+                db.child("helmets").child(helmetId).setValue(helmet);
+
+                LocalDateTime rentalEndTime = LocalDateTime.now(); // 대여 시작 시간 저장
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                String formattedEndTime = rentalEndTime.format(formatter);
+                hashMap.put(t13.getText().toString(),formattedEndTime);
+                user.setRecord(hashMap);
                 t21.setText(helmetId);
                 t22.setText(t14.getText());
 
@@ -364,7 +405,7 @@ public class QRFrag3 extends Fragment {
                 t23.setText(totalPrice+"원");
 
                 user.setMoney(user.getMoney()-totalPrice);
-
+                user.setNow_qr(3);
                 ArrayList<String> return_info=new ArrayList<>();
 
                 return_info.add(t21.getText().toString());
@@ -373,154 +414,17 @@ public class QRFrag3 extends Fragment {
                 user.setReturn_info(return_info);
 
                 db.child("users").child(firebaseId).setValue(user);
-                mutableData.setValue(helmet);
-                return Transaction.success(mutableData);
             }
-
             @Override
-            public void onComplete(DatabaseError databaseError, boolean committed, DataSnapshot dataSnapshot) {
-                if (databaseError != null) {
-                    Toast.makeText(getContext(), "헬멧 데이터 업데이트 실패", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "헬멧이 성공적으로 반납되었습니다.", Toast.LENGTH_SHORT).show();
-                    // 반납 완료 후 UI 업데이트
-                    isover=false;
-                    barcodeView.setVisibility(View.GONE);
-                    barcodeView.pause();
-                    using_layout.setVisibility(View.GONE);
-                    over_layout.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-    }
-
-    private void findHelmetData(String storageId) {
-        String locationID = storageId.substring(0, 3);
-        int helmetIndex = Integer.parseInt(storageId.substring(4, 7)) - 1;
-
-        db.child("places").orderByChild("locationID").equalTo(locationID).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot placeSnapshot : dataSnapshot.getChildren()) {
-                        String placeKey = placeSnapshot.getKey();
-                        Storage storage = placeSnapshot.getValue(Storage.class);
-                        if (storage != null) {
-                            List<String> storedHelmetID = storage.getStoredHelmetID();
-                            if (storedHelmetID != null && helmetIndex >= 0 && helmetIndex < storedHelmetID.size()) {
-                                String helmetId = storedHelmetID.get(helmetIndex);
-                                if (!"-".equals(helmetId)) {
-                                    Toast.makeText(getContext(), "No."+helmetId+" 헬멧 대여", Toast.LENGTH_SHORT).show();
-                                    updateHelmetAndStock(placeKey, helmetIndex, storage.getStock(), helmetId);
-                                } else {
-                                    Toast.makeText(getContext(), "보관함이 비어있습니다.", Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                Toast.makeText(getContext(), "보관함이 비어있습니다.", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(getContext(), "보관함 데이터를 찾지 못했습니다.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                } else {
-                    Toast.makeText(getContext(), "보관합이 존재하지 않습니다", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getContext(), "정보를 불러오지 못했습니다", Toast.LENGTH_SHORT).show();
-            }
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
 
-    private void updateHelmetAndStock(String placeKey, int helmetIndex, int currentStock, String helmetId) {
-        db.child("places").child(placeKey).runTransaction(new Transaction.Handler() {
-            @Override
-            public Transaction.Result doTransaction(MutableData mutableData) {
-                Storage storage = mutableData.getValue(Storage.class);
-                if (storage == null) {
-                    return Transaction.success(mutableData);
-                }
 
-                int newStock = currentStock - 1;
-                storage.setStock(newStock);
 
-                List<String> storedHelmetID = storage.getStoredHelmetID();
-                if (storedHelmetID != null && helmetIndex >= 0 && helmetIndex < storedHelmetID.size()) {
-                    storedHelmetID.set(helmetIndex, "-");
-                }
 
-                mutableData.setValue(storage);
-                return Transaction.success(mutableData);
-            }
 
-            @Override
-            public void onComplete(DatabaseError databaseError, boolean committed, DataSnapshot dataSnapshot) {
-                if (databaseError != null) {
-                    Toast.makeText(getContext(), "보관소 데이터 업데이트 실패", Toast.LENGTH_SHORT).show();
-                } else {
-                    updateHelmetData(helmetId);
-                }
-            }
-        });
-    }
 
-    private void updateHelmetData(String helmetId) {
-        db.child("helmets").child(helmetId).runTransaction(new Transaction.Handler() {
-            @Override
-            public Transaction.Result doTransaction(MutableData mutableData) {
-                Helmet helmet = mutableData.getValue(Helmet.class);
-                if (helmet == null) {
-                    return Transaction.success(mutableData);
-                }
-
-                helmet.setBorrow(true);
-                helmet.setStorageId("-");
-                helmet.setUserId(firebaseId);
-
-                rentalStartTime = LocalDateTime.now(); // 대여 시작 시간 저장
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                String formattedStartTime = rentalStartTime.format(formatter);
-                t11.setText("No."+helmet.getHelmetId());
-                t12.setText(helmet.getBatteryState()+"%");
-                t13.setText(formattedStartTime); // 대여 시작 시간 텍스트 뷰 업데이트
-
-                ArrayList<String> rental_info=new ArrayList<>();
-
-                rental_info.add(t11.getText().toString());
-                rental_info.add(t12.getText().toString());
-                rental_info.add(t13.getText().toString());
-                user.setRental_info(rental_info);
-                db.child("users").child(firebaseId).setValue(user);
-                mutableData.setValue(helmet);
-                return Transaction.success(mutableData);
-            }
-
-            @Override
-            public void onComplete(DatabaseError databaseError, boolean committed, DataSnapshot dataSnapshot) {
-                if (databaseError != null) {
-                    Toast.makeText(getContext(), "헬멧 데이터 업데이트 실패", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "헬멧이 성공적으로 대여되었습니다.", Toast.LENGTH_SHORT).show();
-                    // 헬멧 데이터 업데이트 성공 후 레이아웃 전환
-                    barcodeView.setVisibility(View.GONE);
-                    barcodeView.pause();
-                    using_layout.setVisibility(View.VISIBLE);
-                    // 대여 시간 경과 업데이트
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            updateElapsedTime();
-                            handler.postDelayed(this, 1000); // 1초마다 업데이트
-                        }
-                    }, 1000);
-                }
-            }
-        });
-    }
 
     private void updateElapsedTime() {
         if (rentalStartTime != null) {
@@ -530,30 +434,40 @@ public class QRFrag3 extends Fragment {
             long minutes = duration.toMinutes() % 60;
             long seconds = duration.getSeconds() % 60;
             String elapsedTime = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
-            t14.setText(elapsedTime); // 경과 시간 텍스트 뷰 업데이트
+            t14.setText(elapsedTime);
         }
     }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startScanning();
-            } else {
-                Toast.makeText(getContext(), "QR 스캔을 위해 카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show();
-            }
-        }
+    public void Borrow_Barcode(){
+        isover=false;
+        barcodeView.setVisibility(View.VISIBLE);
+        using_layout.setVisibility(View.GONE);
+        over_layout.setVisibility(View.GONE);
+        barcodeView.resume();
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
+    public void Borrow_Layout(){
+        isover=false;
+        barcodeView.setVisibility(View.GONE);
+        using_layout.setVisibility(View.VISIBLE);
+        over_layout.setVisibility(View.GONE);
+        barcodeView.pause();
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
+    public void Return_Barcode(){
+        isover=true;
+        barcodeView.setVisibility(View.VISIBLE);
+        using_layout.setVisibility(View.GONE);
+        over_layout.setVisibility(View.GONE);
+        barcodeView.resume();
+    }
+    public void Return_Layout(){
+        isover=true;
+        barcodeView.setVisibility(View.GONE);
+        using_layout.setVisibility(View.GONE);
+        over_layout.setVisibility(View.VISIBLE);
+        barcodeView.pause();
+    }
+    private boolean isValidFirebaseId(String firebaseId) {
+        return !(firebaseId.contains(".") || firebaseId.contains("#") ||
+                firebaseId.contains("$") || firebaseId.contains("[") || firebaseId.contains("]"));
     }
     private void saveHelmetData(String id, String storageID) {
         Helmet helmet = new Helmet();
@@ -570,7 +484,6 @@ public class QRFrag3 extends Fragment {
                 })
                 .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to add helmet", Toast.LENGTH_SHORT).show());
     }
-
     private void updatePlaceData(String storageID, String helmetId) {
         String locationID = storageID.substring(0, 3);
         int helmetIndex = Integer.parseInt(storageID.substring(4, 7)) - 1;
@@ -609,12 +522,27 @@ public class QRFrag3 extends Fragment {
                     }
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(getContext(), "Failed to update place data", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {barcodeView.resume();}
+            else {Toast.makeText(getContext(), "QR 스캔을 위해 카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show();}
+        }
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }
 
