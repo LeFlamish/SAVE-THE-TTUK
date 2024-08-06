@@ -1,6 +1,7 @@
 package com.example.sharehelmet.frag3_QR;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,8 +20,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.sharehelmet.BluetoothService;
 import com.example.sharehelmet.R;
-import com.example.sharehelmet.frag1_home.HomeFrag1;
 import com.example.sharehelmet.model.Helmet;
 import com.example.sharehelmet.model.Storage;
 import com.example.sharehelmet.model.User;
@@ -246,6 +247,10 @@ public class QRFrag3 extends Fragment {
                                     Toast.makeText(getContext(), "No."+helmetId+" 헬멧 대여", Toast.LENGTH_SHORT).show();
                                     Borrow_Layout();
                                     BorrowHelmet2(placeKey, helmetIndex, helmetId);
+                                    Intent serviceIntent = new Intent(getActivity(), BluetoothService.class);
+                                    serviceIntent.putExtra("BLUETOOTH_ADDRESS", "00:11:22:33:AA:BB");
+                                    serviceIntent.putExtra("HelmetID",helmetId);
+                                    getActivity().startService(serviceIntent);
                                 }
                                 else {
                                     Toast.makeText(getContext(), "보관함이 비어있습니다.", Toast.LENGTH_SHORT).show();
