@@ -35,11 +35,9 @@ import java.util.List;
 import java.util.Locale;
 
 public class BorrowingFragment3 extends Fragment {
-    private String storageId;
     private String firebaseId;
     private String helmetId;
     private User user;
-    private Storage storage;
     private Helmet helmet;
     private TextView t11;
     private TextView t12;
@@ -60,8 +58,6 @@ public class BorrowingFragment3 extends Fragment {
         if (bundle != null) {
             firebaseId=bundle.getString("firebaseId");
         }
-
-
         db.child("users").child(firebaseId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -76,9 +72,6 @@ public class BorrowingFragment3 extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
-
-
-
         returnButton = view.findViewById(R.id.return_button);
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +79,7 @@ public class BorrowingFragment3 extends Fragment {
                 user.setNow_qr(2);
                 db.child("users").child(firebaseId).setValue(user);
 
-
+                //프래그먼트 이동
                 BarcodeEndFragment3 barcodeEndFragment3=new BarcodeEndFragment3();
                 Bundle bundle = new Bundle();
                 bundle.putString("firebaseId",firebaseId);
@@ -106,23 +99,18 @@ public class BorrowingFragment3 extends Fragment {
             @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                //helmets 파베 수정
                 helmet=snapshot.getValue(Helmet.class);
                 helmet.setBorrow(true);
                 helmet.setStorageId("-");
                 helmet.setUserId(firebaseId);
-
-                t11.setText(helmetId);
-
-
-                t12.setText("100%");//나중에 수정
-
-
-                t13.setText(user.getRental_info().get(1));
-
-
                 db.child("helmets").child(helmetId).setValue(helmet);
 
-
+                //텍스트뷰 표시
+                t11.setText(helmetId);
+                t12.setText("100%");//나중에 수정
+                t13.setText(user.getRental_info().get(1));
                 updateElapsedTime();
                 Handler handler = new Handler(Looper.getMainLooper());
                 handler.postDelayed(new Runnable() {

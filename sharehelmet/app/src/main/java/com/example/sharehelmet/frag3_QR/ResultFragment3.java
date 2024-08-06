@@ -35,13 +35,11 @@ public class ResultFragment3 extends Fragment {
     private String firebaseId;
     private String helmetId;
     private User user;
-    private Storage storage;
     private Helmet helmet;
     private TextView t21;
     private TextView t22;
     private TextView t23;
     private DatabaseReference db;
-    private LocalDateTime rentalStartTime;
     private Button overButton;
     Map<String, String> hashMap = new HashMap<>();
     @Override
@@ -59,8 +57,6 @@ public class ResultFragment3 extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 user = snapshot.getValue(User.class);
                 if (user != null) {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                    rentalStartTime= LocalDateTime.parse(user.getRental_info().get(1), formatter);
                     hashMap = user.getRecord();
                     helmetId=user.getReturn_info().get(0);
                     storageId=user.getReturn_info().get(3);
@@ -82,6 +78,7 @@ public class ResultFragment3 extends Fragment {
                 user.setNow_qr(0);
                 db.child("users").child(firebaseId).setValue(user);
 
+                //프래그먼트 이동
                 BarcodeStartFragment3 barcodeStartFragment3=new BarcodeStartFragment3();
                 Bundle bundle = new Bundle();
                 bundle.putString("firebaseId",firebaseId);
@@ -99,27 +96,26 @@ public class ResultFragment3 extends Fragment {
         db.child("helmets").child(helmetId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                //helmets 파베 수정
                 helmet=snapshot.getValue(Helmet.class);
                 helmet.setBorrow(false);
                 helmet.setStorageId(storageId);
                 helmet.setUserId("-");
                 db.child("helmets").child(helmetId).setValue(helmet);
 
-                LocalDateTime rentalEndTime = LocalDateTime.now(); // 대여 시작 시간 저장
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                String formattedEndTime = rentalEndTime.format(formatter);
-                hashMap.put(user.getRental_info().get(1),formattedEndTime);
-
+                //텍스트뷰 표시
                 t21.setText(user.getReturn_info().get(0));
                 t22.setText(user.getReturn_info().get(1));
                 t23.setText(user.getReturn_info().get(2));
 
-
+                //users 파베 수정
+                LocalDateTime rentalEndTime = LocalDateTime.now(); // 대여 시작 시간 저장
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                String formattedEndTime = rentalEndTime.format(formatter);
+                hashMap.put(user.getRental_info().get(1),formattedEndTime);
                 user.setRecord(hashMap);
-
-
                 user.setMoney(user.getMoney()-Integer.parseInt(t23.getText().toString()));
-
                 db.child("users").child(firebaseId).setValue(user);
             }
             @Override

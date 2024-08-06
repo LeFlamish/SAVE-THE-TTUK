@@ -1,26 +1,14 @@
 package com.example.sharehelmet.frag3_QR;
 
-import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-
-import com.example.sharehelmet.BluetoothService;
 import com.example.sharehelmet.R;
 import com.example.sharehelmet.model.Helmet;
 import com.example.sharehelmet.model.Storage;
@@ -32,21 +20,7 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.DataSnapshot;
-import com.google.zxing.BarcodeFormat;
-import com.journeyapps.barcodescanner.BarcodeCallback;
-import com.journeyapps.barcodescanner.BarcodeResult;
-import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-import com.journeyapps.barcodescanner.DefaultDecoderFactory;
-
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 public class QRFrag3 extends Fragment {
     private User user;
@@ -101,40 +75,18 @@ public class QRFrag3 extends Fragment {
         });
     }
     private void initializeUI() {
+        Fragment fragment;
         Bundle bundle = new Bundle();
         bundle.putString("firebaseId",firebaseId);
-        if (user.getNow_qr() == 0) {
-            BarcodeStartFragment3 barcodeStartFragment3=new BarcodeStartFragment3();
-            barcodeStartFragment3.setArguments(bundle);
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, barcodeStartFragment3)
-                    .addToBackStack(null)
-                    .commit();
-        }
-        else if (user.getNow_qr() == 1) {
-            BorrowingFragment3 borrowingFragment3=new BorrowingFragment3();
-            borrowingFragment3.setArguments(bundle);
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, borrowingFragment3)
-                    .addToBackStack(null)
-                    .commit();
-        }
-        else if (user.getNow_qr() == 2) {
-            BarcodeEndFragment3 barcodeEndFragment3=new BarcodeEndFragment3();
-            barcodeEndFragment3.setArguments(bundle);
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, barcodeEndFragment3)
-                    .addToBackStack(null)
-                    .commit();
-        }
-        else if (user.getNow_qr() == 3) {
-            ResultFragment3 resultFragment3=new ResultFragment3();
-            resultFragment3.setArguments(bundle);
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, resultFragment3)
-                    .addToBackStack(null)
-                    .commit();
-        }
+        if (user.getNow_qr() == 0) {fragment=new BarcodeStartFragment3();}
+        else if (user.getNow_qr() == 1) {fragment=new BorrowingFragment3();}
+        else if (user.getNow_qr() == 2) {fragment=new BarcodeEndFragment3();}
+        else{fragment=new ResultFragment3();}
+        fragment.setArguments(bundle);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     private boolean isValidFirebaseId(String firebaseId) {
@@ -148,7 +100,6 @@ public class QRFrag3 extends Fragment {
         helmet.setBorrow(false);
         helmet.setStorageId(storageID);
         helmet.setUserId("-");
-
         db.child("helmets").child(id).setValue(helmet)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(getContext(), "Helmet added successfully", Toast.LENGTH_SHORT).show();
@@ -159,7 +110,6 @@ public class QRFrag3 extends Fragment {
     private void updatePlaceData(String storageID, String helmetId) {
         String locationID = storageID.substring(0, 3);
         int helmetIndex = Integer.parseInt(storageID.substring(4, 7)) - 1;
-
         db.child("places").orderByChild("locationID").equalTo(locationID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

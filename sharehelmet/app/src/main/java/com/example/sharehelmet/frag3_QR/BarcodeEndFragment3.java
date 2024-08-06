@@ -85,7 +85,9 @@ public class BarcodeEndFragment3 extends Fragment {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                         rentalStartTime= LocalDateTime.parse(user.getRental_info().get(1), formatter);
                         helmetId = user.getRental_info().get(0);
+                        barcodeView.pause();
                         ReturnHelmet1();
+                        barcodeView.resume();
                     }
                 }
                 @Override
@@ -110,29 +112,26 @@ public class BarcodeEndFragment3 extends Fragment {
                             List<String> storedHelmetID = storage.getStoredHelmetID();
                             if (storedHelmetID != null && helmetIndex >= 0 && helmetIndex < storedHelmetID.size()) {
                                 if ("-".equals(storedHelmetID.get(helmetIndex))) {
-                                    barcodeView.pause();
 
+                                    //토스트 메세지
                                     Toast.makeText(getContext(), "No."+helmetId+" 헬멧 반납", Toast.LENGTH_SHORT).show();
 
+                                    //places 파베 수정
                                     storedHelmetID.set(helmetIndex, helmetId);
+                                    storage.setStock(storage.getStock()+1);
                                     db.child("places").child(placeKey).setValue(storage);
 
+                                    //users 파베 수정
                                     ArrayList<String> return_info=new ArrayList<>();
                                     return_info.add(helmetId);
                                     return_info.add(updateElapsedTime());
-                                    String[] parts = updateElapsedTime().split(":");
-                                    int hours = Integer.parseInt(parts[0]);
-                                    int minutes = Integer.parseInt(parts[1]);
-                                    int totalMinute=hours*60+minutes;
-                                    int totalPrice=300+totalMinute*50;
-                                    return_info.add(String.valueOf(totalPrice));
+                                    return_info.add(String.valueOf(calculateMoney()));
                                     return_info.add(storageId);
                                     user.setNow_qr(3);
                                     user.setReturn_info(return_info);
-
-
                                     db.child("users").child(firebaseId).setValue(user);
 
+                                    //프래그먼트 이동
                                     ResultFragment3 resultFragment3=new ResultFragment3();
                                     Bundle bundle = new Bundle();
                                     bundle.putString("firebaseId",firebaseId);
@@ -155,7 +154,6 @@ public class BarcodeEndFragment3 extends Fragment {
                     Toast.makeText(getContext(), "보관합이 존재하지 않습니다", Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(getContext(), "정보를 불러오지 못했습니다", Toast.LENGTH_SHORT).show();
@@ -169,9 +167,15 @@ public class BarcodeEndFragment3 extends Fragment {
             long hours = duration.toHours();
             long minutes = duration.toMinutes() % 60;
             long seconds = duration.getSeconds() % 60;
-            String elapsedTime = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
-            return elapsedTime;
+            return String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
         }
         return null;
+    }
+    private int calculateMoney(){
+        String[] parts = updateElapsedTime().split(":");
+        int hours = Integer.parseInt(parts[0]);
+        int minutes = Integer.parseInt(parts[1]);
+        int totalMinute=hours*60+minutes;
+        return 300+totalMinute*50;
     }
 }

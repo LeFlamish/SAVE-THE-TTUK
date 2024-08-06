@@ -1,21 +1,17 @@
 package com.example.sharehelmet.frag3_QR;
 
-
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-
 import com.example.sharehelmet.R;
 import com.example.sharehelmet.model.Storage;
 import com.example.sharehelmet.model.User;
@@ -25,12 +21,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.DefaultDecoderFactory;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -80,7 +74,9 @@ public class BarcodeStartFragment3 extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     user = snapshot.getValue(User.class);
                     if (user != null) {
+                        barcodeView.pause();
                         BorrowHelmet1();
+                        barcodeView.resume();
                     }
                 }
                 @Override
@@ -105,19 +101,16 @@ public class BarcodeStartFragment3 extends Fragment {
                             if (storedHelmetID != null && helmetIndex >= 0 && helmetIndex < storedHelmetID.size()) {
                                 String helmetId = storedHelmetID.get(helmetIndex);
                                 if (!"-".equals(helmetId)) {
-                                    barcodeView.pause();
 
-
+                                    //토스트 메세지
                                     Toast.makeText(getContext(), "No."+helmetId+" 헬멧 대여", Toast.LENGTH_SHORT).show();
 
-
-
-
+                                    //places 파베 수정
                                     storedHelmetID.set(helmetIndex, "-");
+                                    storage.setStock(storage.getStock()-1);
                                     db.child("places").child(placeKey).setValue(storage);
 
-
-
+                                    //Users 파베 수정
                                     LocalDateTime rentalStartTime = LocalDateTime.now(); // 대여 시작 시간 저장
                                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                                     String formattedStartTime = rentalStartTime.format(formatter);
@@ -128,18 +121,15 @@ public class BarcodeStartFragment3 extends Fragment {
                                     user.setRental_info(rental_info);
                                     db.child("users").child(firebaseId).setValue(user);
 
-
-
+                                    //프래그먼트 이동
                                     BorrowingFragment3 borrowingFragment3=new BorrowingFragment3();
                                     Bundle bundle = new Bundle();
                                     bundle.putString("firebaseId",firebaseId);
                                     borrowingFragment3.setArguments(bundle);
-
                                     getActivity().getSupportFragmentManager().beginTransaction()
                                             .replace(R.id.fragment_container, borrowingFragment3)
                                             .addToBackStack(null)
                                             .commit();
-
                                 }
                                 else {
                                     Toast.makeText(getContext(), "보관함이 비어있습니다.", Toast.LENGTH_SHORT).show();
