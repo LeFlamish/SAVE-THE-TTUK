@@ -1,34 +1,26 @@
 package com.example.sharehelmet.frag3_QR;
 
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.example.sharehelmet.R;
 import com.example.sharehelmet.model.Helmet;
-import com.example.sharehelmet.model.Storage;
 import com.example.sharehelmet.model.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 
 public class ResultFragment3 extends Fragment {
     private String storageId;
@@ -42,15 +34,14 @@ public class ResultFragment3 extends Fragment {
     private DatabaseReference db;
     private Button overButton;
     Map<String, String> hashMap = new HashMap<>();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_result3, container, false);
-
         Bundle bundle = getArguments();
         if (bundle != null) {
             firebaseId=bundle.getString("firebaseId");
         }
-
         db = FirebaseDatabase.getInstance().getReference();
         db.child("users").child(firebaseId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -66,11 +57,9 @@ public class ResultFragment3 extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
-
         t21 = view.findViewById(R.id.overhelmetId);
         t22 = view.findViewById(R.id.overtime);
         t23 = view.findViewById(R.id.overcharge);
-
         overButton = view.findViewById(R.id.returntostart);
         overButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +81,6 @@ public class ResultFragment3 extends Fragment {
         return view;
     }
     private void ReturnHelmet2() {
-
         db.child("helmets").child(helmetId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

@@ -3,20 +3,16 @@ package com.example.sharehelmet.frag3_QR;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.example.sharehelmet.R;
-import com.example.sharehelmet.model.Helmet;
 import com.example.sharehelmet.model.Storage;
 import com.example.sharehelmet.model.User;
 import com.google.firebase.database.DataSnapshot;
@@ -30,7 +26,6 @@ import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.DefaultDecoderFactory;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -48,6 +43,7 @@ public class BarcodeEndFragment3 extends Fragment {
     private String storageId;
     private LocalDateTime rentalStartTime;
     String helmetId;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_barcode_end3, container, false);
@@ -100,7 +96,6 @@ public class BarcodeEndFragment3 extends Fragment {
     private void ReturnHelmet1() {
         String locationID = storageId.substring(0, 3);
         int helmetIndex = Integer.parseInt(storageId.substring(4, 7)) - 1;
-
         db.child("places").orderByChild("locationID").equalTo(locationID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -151,7 +146,7 @@ public class BarcodeEndFragment3 extends Fragment {
                         }
                     }
                 } else {
-                    Toast.makeText(getContext(), "보관합이 존재하지 않습니다", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "보관함이 존재하지 않습니다", Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
