@@ -27,6 +27,7 @@ public class QRFrag3 extends Fragment {
     String firebaseId;
     private DatabaseReference db;
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag3_qr, container, false);
@@ -88,7 +89,6 @@ public class QRFrag3 extends Fragment {
                 .addToBackStack(null)
                 .commit();
     }
-
     private boolean isValidFirebaseId(String firebaseId) {
         return !(firebaseId.contains(".") || firebaseId.contains("#") ||
                 firebaseId.contains("$") || firebaseId.contains("[") || firebaseId.contains("]"));
