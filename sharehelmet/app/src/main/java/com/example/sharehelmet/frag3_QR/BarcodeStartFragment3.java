@@ -20,11 +20,13 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
 import com.example.sharehelmet.R;
 import com.example.sharehelmet.home.MainActivity;
 import com.example.sharehelmet.model.Storage;
@@ -74,7 +76,7 @@ public class BarcodeStartFragment3 extends Fragment {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
         Bundle bundle = getArguments();
         if (bundle != null) {
-            firebaseId=bundle.getString("firebaseId");
+            firebaseId = bundle.getString("firebaseId");
         }
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
@@ -90,8 +92,10 @@ public class BarcodeStartFragment3 extends Fragment {
             public void barcodeResult(BarcodeResult result) {
                 handleResult(result.getText());
             }
+
             @Override
-            public void possibleResultPoints(List<com.google.zxing.ResultPoint> resultPoints) {}
+            public void possibleResultPoints(List<com.google.zxing.ResultPoint> resultPoints) {
+            }
         });
         turnOnLight = view.findViewById(R.id.turn_on_light);
         turnOnLight.setOnClickListener(v -> {
@@ -103,6 +107,7 @@ public class BarcodeStartFragment3 extends Fragment {
         });
         return view;
     }
+
     private void handleResult(String resultText) {
         if (resultText != null && resultText.startsWith("SAVE-THE-TTUK ")) {
             storageId = resultText.substring("SAVE-THE-TTUK ".length()).trim();
@@ -156,10 +161,7 @@ public class BarcodeStartFragment3 extends Fragment {
                         String placeKey = placeSnapshot.getKey();
                         Storage storage = placeSnapshot.getValue(Storage.class);
                         if (storage != null) {
-                            double storageLatitude = storage.getLatitude();
-                            double storageLongitude = storage.getLongitude();
-                            double length_between_me_storage = haversine(myLatitude, myLongitude, storageLatitude, storageLongitude);
-                            if(length_between_me_storage<=10000){
+                            if(haversine(myLatitude, myLongitude, storage.getLatitude(), storage.getLongitude())<=10000){
                                 ArrayList<String> storedHelmetID = storage.getStoredHelmetID();
                                 if (storedHelmetID != null && helmetIndex >= 0 && helmetIndex < storedHelmetID.size()) {
                                     String helmetId = storedHelmetID.get(helmetIndex);
