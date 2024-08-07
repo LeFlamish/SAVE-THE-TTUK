@@ -1,11 +1,17 @@
 package com.example.sharehelmet.frag3_QR;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +45,10 @@ public class BarcodeStartFragment3 extends Fragment {
     private DatabaseReference db;
     private User user;
     private String storageId;
+    private boolean isFlashOn = false;
+    private CameraManager cameraManager;
+    private String cameraId;
+    private ImageButton turnOnLight, writeCode;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -62,6 +72,20 @@ public class BarcodeStartFragment3 extends Fragment {
             }
             @Override
             public void possibleResultPoints(List<com.google.zxing.ResultPoint> resultPoints) {}
+        });
+        cameraManager = (CameraManager)getActivity().getSystemService(Context.CAMERA_SERVICE);
+        try{
+            cameraId = cameraManager.getCameraIdList()[0];
+        }catch(CameraAccessException e){
+            e.printStackTrace();
+        }
+        turnOnLight = view.findViewById(R.id.turn_on_light);
+        turnOnLight.setOnClickListener(v -> {
+            toggleFlashLight();
+        });
+        writeCode = view.findViewById(R.id.write_code);
+        writeCode.setOnClickListener(v -> {
+            showCustomToast("clicked2");
         });
         return view;
     }
@@ -152,5 +176,42 @@ public class BarcodeStartFragment3 extends Fragment {
                 Toast.makeText(getContext(), "정보를 불러오지 못했습니다", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                barcodeView.resume();
+            } else {
+                Toast.makeText(getActivity(), "Camera permission is required to use the flashlight", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    private void toggleFlashLight(){
+        if (isFlashOn) {
+            barcodeView.setTorchOff();
+            isFlashOn = false;
+        } else {
+            barcodeView.setTorchOn();
+            isFlashOn = true;
+        }
+    }
+
+    private void showCustomToast(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast, null);
+
+        TextView text = layout.findViewById(R.id.toast_text);
+        text.setText(message);
+
+        //ImageView image = layout.findViewById(R.id.toast_images);
+        //image.setImageResource(R.drawable.logo01); // 원하는 아이콘 리소스 설정
+
+        Toast toast = new Toast(getContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
     }
 }

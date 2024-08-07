@@ -69,6 +69,7 @@
         app:layout_constraintTop_toBottomOf="@+id/qr_area">
 
         <ImageButton
+            android:id="@+id/turn_on_light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -99,6 +100,7 @@
         app:layout_constraintTop_toBottomOf="@+id/qr_area">
 
         <android.widget.ImageButton
+            android:id="@+id/write_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
