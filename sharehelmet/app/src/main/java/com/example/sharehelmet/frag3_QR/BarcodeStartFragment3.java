@@ -97,7 +97,7 @@ public class BarcodeStartFragment3 extends Fragment {
                         String placeKey = placeSnapshot.getKey();
                         Storage storage = placeSnapshot.getValue(Storage.class);
                         if (storage != null) {
-                            List<String> storedHelmetID = storage.getStoredHelmetID();
+                            ArrayList<String> storedHelmetID = storage.getStoredHelmetID();
                             if (storedHelmetID != null && helmetIndex >= 0 && helmetIndex < storedHelmetID.size()) {
                                 String helmetId = storedHelmetID.get(helmetIndex);
                                 if (!"-".equals(helmetId)) {
@@ -107,6 +107,7 @@ public class BarcodeStartFragment3 extends Fragment {
 
                                     //places 파베 수정
                                     storedHelmetID.set(helmetIndex, "-");
+                                    storage.setStoredHelmetID(storedHelmetID);
                                     storage.setStock(storage.getStock()-1);
                                     db.child("places").child(placeKey).setValue(storage);
 
