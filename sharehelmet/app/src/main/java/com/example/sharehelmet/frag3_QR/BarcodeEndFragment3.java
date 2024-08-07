@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 import com.example.sharehelmet.R;
 import com.example.sharehelmet.model.Storage;
@@ -43,12 +44,14 @@ public class BarcodeEndFragment3 extends Fragment {
     private String storageId;
     private LocalDateTime rentalStartTime;
     String helmetId;
+    Button back_button;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_barcode_end3, container, false);
         db = FirebaseDatabase.getInstance().getReference();
         barcodeView = view.findViewById(R.id.barcode_scanner);
+        back_button=view.findViewById(R.id.back);
         Bundle bundle = getArguments();
         if (bundle != null) {
             firebaseId=bundle.getString("firebaseId");
@@ -58,6 +61,31 @@ public class BarcodeEndFragment3 extends Fragment {
         } else {
             barcodeView.resume();
         }
+        db.child("users").child(firebaseId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                user = snapshot.getValue(User.class);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                user.setNow_qr(1);
+                db.child("users").child(firebaseId).setValue(user);
+
+                //프래그먼트 이동
+                BorrowingFragment3 borrowingFragment3=new BorrowingFragment3();
+                Bundle bundle = new Bundle();
+                bundle.putString("firebaseId",firebaseId);
+                borrowingFragment3.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, borrowingFragment3)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
         barcodeView.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory(Collections.singletonList(BarcodeFormat.QR_CODE)));
         barcodeView.decodeContinuous(new BarcodeCallback() {
             @Override
