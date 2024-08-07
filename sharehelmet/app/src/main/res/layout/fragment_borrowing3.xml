@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".frag3_QR.BorrowingFragment3">
-
+    <com.naver.maps.map.MapView
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
+    <Button
+        android:id="@+id/btn_current_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="현재 위치"
+        android:background="@android:color/holo_blue_light"
+        android:textColor="@android:color/white"/>
     <LinearLayout
         android:id="@+id/using"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <!-- 이용 상태 정보 -->
@@ -17,7 +28,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:padding="24dp"
             android:text="이용 상태 정보"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -34,7 +44,6 @@
             android:id="@+id/helmetIdLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             android:paddingStart="20dp"
             android:text="헬멧 ID"
             android:textSize="16sp"
@@ -44,7 +53,6 @@
             android:id="@+id/helmetId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             android:paddingStart="20dp"
             android:textSize="16sp" />
 
@@ -60,7 +68,6 @@
             android:id="@+id/batteryLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             android:paddingStart="20dp"
             android:text="배터리"
             android:textSize="16sp"
@@ -70,7 +77,6 @@
             android:id="@+id/battery"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             android:paddingStart="20dp"
             android:textSize="16sp" />
 
@@ -86,7 +92,6 @@
             android:id="@+id/startTimeLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             android:paddingStart="20dp"
             android:text="시작 시간"
             android:textSize="16sp"
@@ -96,7 +101,6 @@
             android:id="@+id/start_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             android:paddingStart="20dp"
             android:textSize="16sp" />
 
@@ -112,7 +116,6 @@
             android:id="@+id/usingTimeLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             android:paddingStart="20dp"
             android:text="사용 시간"
             android:textSize="16sp"
@@ -122,7 +125,6 @@
             android:id="@+id/using_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             android:paddingStart="20dp"
             android:text="00:00:00"
             android:textSize="16sp" />
@@ -138,9 +140,8 @@
             android:id="@+id/return_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             android:backgroundTint="@color/red_orange"
             android:text="반납" />
     </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>
