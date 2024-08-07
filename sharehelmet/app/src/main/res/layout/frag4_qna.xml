@@ -68,7 +68,7 @@
             android:textColor="@android:color/black"
             android:textSize="16sp"
             android:fontFamily="@font/font_main"
-            android:drawableLeft="@drawable/add_24"
+            android:drawableLeft="@drawable/kakao_talkxml"
             android:drawablePadding="8dp"
             android:elevation="16dp"
             android:padding="12dp"
@@ -88,7 +88,7 @@
             android:id="@+id/legal_disclosure_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Legal Disclosure"
+            android:text="법적 공개 사항"
             android:textSize="16sp"
             android:textStyle="bold"
             android:fontFamily="@font/font_main"
@@ -104,7 +104,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:gravity="center_vertical"
                 android:clickable="true"
                 android:focusable="true"
@@ -113,14 +116,14 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/add_24" />
+                    android:src="@drawable/document" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Terms of services"
+                    android:text="서비스 약관"
                     android:fontFamily="@font/font_main"
-                    android:textSize="14sp"
+                    android:textSize="15sp"
                     android:layout_marginStart="16dp" />
             </LinearLayout>
 
@@ -128,7 +131,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:gravity="center_vertical"
                 android:clickable="true"
                 android:focusable="true"
@@ -137,13 +143,13 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/add_24" />
+                    android:src="@drawable/document" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Privacy policy"
-                    android:textSize="14sp"
+                    android:text="개인정보 처리방침"
+                    android:textSize="15sp"
                     android:fontFamily="@font/font_main"
                     android:layout_marginStart="16dp" />
             </LinearLayout>
@@ -152,7 +158,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:gravity="center_vertical"
                 android:clickable="true"
                 android:focusable="true"
@@ -161,13 +170,13 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/add_24" />
+                    android:src="@drawable/document" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Insurance"
-                    android:textSize="14sp"
+                    android:text="보험"
+                    android:textSize="15sp"
                     android:fontFamily="@font/font_main"
                     android:layout_marginStart="16dp" />
             </LinearLayout>
