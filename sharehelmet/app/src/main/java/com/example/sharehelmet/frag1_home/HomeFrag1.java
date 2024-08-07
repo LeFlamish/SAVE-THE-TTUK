@@ -65,6 +65,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     private List<Place> allPlaces = new ArrayList<>(); // 모든 장소를 저장하는 리스트
     private int listViewIndex = -1;
     private int listViewTop = 0;
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

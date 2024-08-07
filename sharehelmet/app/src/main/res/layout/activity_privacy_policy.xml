@@ -1,0 +1,14 @@
+<!-- activity_privacy_policy.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/privacy_policy_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="개인정보 처리방침 내용"
+        android:textSize="18sp"
+        android:layout_centerInParent="true"/>
+</RelativeLayout>

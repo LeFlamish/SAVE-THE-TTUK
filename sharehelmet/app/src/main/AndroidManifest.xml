@@ -56,11 +56,23 @@
             android:exported="true"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".frag5_profile.ProfileUpdate.ProfileUpdateActivity"
+            android:name=".PopupActivity"
             android:exported="true"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".PopupActivity"
+            android:name=".frag4_QnA.InsuranceActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".frag4_QnA.PrivacyPolicyActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".frag4_QnA.ServiceTermsActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".frag5_profile.ProfileUpdate.ProfileUpdateActivity"
             android:exported="true"
             android:screenOrientation="portrait"></activity>
         <activity

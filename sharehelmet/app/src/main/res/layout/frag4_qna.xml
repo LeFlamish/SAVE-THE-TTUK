@@ -101,6 +101,7 @@
             android:layout_below="@id/legal_disclosure_title">
 
             <LinearLayout
+                android:id="@+id/service_terms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -128,6 +129,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/privacy_policy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -155,6 +157,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/insurance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -182,6 +185,4 @@
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
-
-
 </RelativeLayout>

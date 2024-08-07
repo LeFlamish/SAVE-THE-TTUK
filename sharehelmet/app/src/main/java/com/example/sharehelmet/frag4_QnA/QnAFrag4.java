@@ -10,10 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.example.sharehelmet.R;
 
 public class QnAFrag4 extends Fragment {
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -22,13 +24,36 @@ public class QnAFrag4 extends Fragment {
         Button chatKakaoButton = view.findViewById(R.id.chat_kakao);
         chatKakaoButton.setOnClickListener(v -> openKakaoTalkChannel());
 
+        LinearLayout serviceTerms = view.findViewById(R.id.service_terms);
+        serviceTerms.setOnClickListener(v -> openServiceTermsActivity());
+
+        LinearLayout privacyPolicy = view.findViewById(R.id.privacy_policy);
+        privacyPolicy.setOnClickListener(v -> openPrivacyPolicyActivity());
+
+        LinearLayout insurance = view.findViewById(R.id.insurance);
+        insurance.setOnClickListener(v -> openInsuranceActivity());
+
         return view;
     }
 
     private void openKakaoTalkChannel() {
-//        String url = "http://pf.kakao.com/_dLAxeK/chat";// 빔 채팅.
-        String url = "http://pf.kakao.com/_KxnEyG/chat";// 뚝 채팅.
+        String url = "http://pf.kakao.com/_KxnEyG/chat";
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(intent);
+    }
+
+    private void openServiceTermsActivity() {
+        Intent intent = new Intent(getActivity(), ServiceTermsActivity.class);
+        startActivity(intent);
+    }
+
+    private void openPrivacyPolicyActivity() {
+        Intent intent = new Intent(getActivity(), PrivacyPolicyActivity.class);
+        startActivity(intent);
+    }
+
+    private void openInsuranceActivity() {
+        Intent intent = new Intent(getActivity(), InsuranceActivity.class);
         startActivity(intent);
     }
 }
