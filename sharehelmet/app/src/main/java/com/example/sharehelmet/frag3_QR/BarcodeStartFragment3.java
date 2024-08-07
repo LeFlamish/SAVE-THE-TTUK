@@ -1,7 +1,9 @@
 package com.example.sharehelmet.frag3_QR;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraManager;
@@ -9,6 +11,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 public class BarcodeStartFragment3 extends Fragment {
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
@@ -46,9 +50,9 @@ public class BarcodeStartFragment3 extends Fragment {
     private User user;
     private String storageId;
     private boolean isFlashOn = false;
-    private CameraManager cameraManager;
-    private String cameraId;
+    private String insteadQrResult;
     private ImageButton turnOnLight, writeCode;
+    private static final Pattern CODE_PATTERN = Pattern.compile("^\\d{3}-\\d{3}$");
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -68,29 +72,22 @@ public class BarcodeStartFragment3 extends Fragment {
         barcodeView.decodeContinuous(new BarcodeCallback() {
             @Override
             public void barcodeResult(BarcodeResult result) {
-                handleResult(result);
+                handleResult(result.getText());
             }
             @Override
             public void possibleResultPoints(List<com.google.zxing.ResultPoint> resultPoints) {}
         });
-        cameraManager = (CameraManager)getActivity().getSystemService(Context.CAMERA_SERVICE);
-        try{
-            cameraId = cameraManager.getCameraIdList()[0];
-        }catch(CameraAccessException e){
-            e.printStackTrace();
-        }
         turnOnLight = view.findViewById(R.id.turn_on_light);
         turnOnLight.setOnClickListener(v -> {
             toggleFlashLight();
         });
         writeCode = view.findViewById(R.id.write_code);
         writeCode.setOnClickListener(v -> {
-            showCustomToast("clicked2");
+            showEditTextDialog();
         });
         return view;
     }
-    private void handleResult(BarcodeResult result) {
-        String resultText = result.getText();
+    private void handleResult(String resultText) {
         if (resultText != null && resultText.startsWith("SAVE-THE-TTUK ")) {
             storageId = resultText.substring("SAVE-THE-TTUK ".length()).trim();
             db.child("users").child(firebaseId).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -197,6 +194,41 @@ public class BarcodeStartFragment3 extends Fragment {
             barcodeView.setTorchOn();
             isFlashOn = true;
         }
+    }
+    public void showEditTextDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_edit_text, null);
+        builder.setView(dialogView);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                EditText editText = dialogView.findViewById(R.id.editText);
+                String inputText = editText.getText().toString().trim();
+                handleDialogInput(inputText);
+                dialog.cancel();
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void handleDialogInput(String input) {
+        if(!CODE_PATTERN.matcher(input).matches()){
+            showCustomToast("코드 형식이 맞지 않습니다");
+            return;
+        }
+        insteadQrResult = "SAVE-THE-TTUK " + input;
+        handleResult(insteadQrResult);
     }
 
     private void showCustomToast(String message) {
