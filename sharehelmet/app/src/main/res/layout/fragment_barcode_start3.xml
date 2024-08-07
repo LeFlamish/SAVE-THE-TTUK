@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".frag3_QR.BarcodeStartFragment3">
@@ -8,12 +10,114 @@
     <com.journeyapps.barcodescanner.DecoratedBarcodeView
         android:id="@+id/barcode_scanner"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:zxing_scanner_layout="@layout/custom_barcode_scanner" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="대여중"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="바코드를 사각형 안에 비춰주세요."
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:text="QR 코드는 보관함에 있습니다"
         android:textColor="@color/white"
-        android:layout_gravity="center|top" />
-</FrameLayout>
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/qr_area"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|top"
+        android:layout_margin="16dp"
+        android:text="QR 대여"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/barcode_scanner"
+        app:layout_constraintStart_toStartOf="@+id/barcode_scanner"
+        app:layout_constraintTop_toTopOf="@+id/barcode_scanner" />
+
+    <View
+        android:id="@+id/qr_area"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Left Button and Text -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintStart_toStartOf="@+id/qr_area"
+        app:layout_constraintTop_toBottomOf="@+id/qr_area">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            android:src="@drawable/torchxml"
+            android:background="@drawable/circle"
+            android:backgroundTint="#595959"
+            android:contentDescription="라이트 켜기"
+            app:tint="@color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="라이트 켜기"
+            android:textColor="@color/white"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <!-- Right Button and Text -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        android:layout_marginStart="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/qr_area"
+        app:layout_constraintTop_toBottomOf="@+id/qr_area">
+
+        <android.widget.ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            android:src="@drawable/keyboardxml"
+            android:background="@drawable/circle"
+            android:backgroundTint="#595959"
+            android:contentDescription="코드 직접 입력"
+            android:tint="@color/white"
+             />
+<!--        android:tint="@color/zxing_transparent"-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="코드 직접 입력"
+            android:textColor="@color/white"
+            android:gravity="center" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -59,12 +59,14 @@
         android:layout_height="match_parent"
         android:background="@drawable/round_bottom_sheet_background"
         android:orientation="vertical"
-        android:elevation="70dp"
+
+        android:elevation="16dp"
         android:maxHeight="500dp"
         android:layout_marginBottom="56dp"
         app:behavior_hideable="false"
         app:behavior_peekHeight="60dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
 
         <View
             android:id="@+id/view2"

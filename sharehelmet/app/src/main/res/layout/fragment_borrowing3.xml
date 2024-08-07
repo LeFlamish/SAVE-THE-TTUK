@@ -1,26 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     tools:context=".frag3_QR.BorrowingFragment3">
+
     <com.naver.maps.map.MapView
         android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
-    <Button
-        android:id="@+id/btn_current_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="현재 위치"
-        android:background="@android:color/holo_blue_light"
-        android:textColor="@android:color/white"/>
-    <LinearLayout
+        android:layout_height="match_parent"
+
+        >
+
+        <Button
+            android:id="@+id/btn_current_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="현재 위치"
+            android:background="@android:color/holo_blue_light"
+            android:textColor="@android:color/white" />
+
+    </com.naver.maps.map.MapView>
+
+    <!-- 구분선 -->
+    <View
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#FFCFCFCF"
+        android:layout_marginVertical="0dp"
+        app:layout_constraintTop_toBottomOf="@id/map"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/persistent_bottom_sheet"
+        />
+
+
+    <!-- Persistent Bottom Sheet -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/persistent_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/round_bottom_sheet_background"
+        android:orientation="vertical"
+
+        android:elevation="20dp"
+        android:maxHeight="360dp"
+
+
+        app:behavior_hideable="false"
+        app:behavior_peekHeight="60dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="40dp"
+            android:layout_height="6dp"
+            android:layout_gravity="center"
+            android:background="@drawable/background_gray_border_10"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
         android:id="@+id/using"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+
+        app:layout_constraintTop_toBottomOf="@id/view2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+
+        >
 
         <!-- 이용 상태 정보 -->
         <TextView
@@ -30,118 +86,159 @@
             android:gravity="center"
             android:text="이용 상태 정보"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:padding="12dp"
+            android:layout_marginBottom="0dp"
+            />
 
         <!-- 구분선 -->
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="#FFCFCFCF"
-            android:layout_marginVertical="3dp" />
+            android:layout_marginBottom="6dp" />
+
 
         <!-- 헬멧 ID 항목 -->
-        <TextView
-            android:id="@+id/helmetIdLabel"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="20dp"
-            android:text="헬멧 ID"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            android:layout_marginBottom="0dp">
 
-        <TextView
-            android:id="@+id/helmetId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="20dp"
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/helmetIdLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:text="헬멧 ID"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-        <!-- 구분선 -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="#FFCFCFCF"
-            android:layout_marginVertical="3dp" />
+            <TextView
+                android:id="@+id/helmetId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+            <!-- 구분선 -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#FFCFCFCF"
+                android:layout_marginVertical="6dp" />
+
 
         <!-- 배터리 항목 -->
-        <TextView
-            android:id="@+id/batteryLabel"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="20dp"
-            android:text="배터리"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            android:layout_marginBottom="0dp">
 
-        <TextView
-            android:id="@+id/battery"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="20dp"
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/batteryLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:text="배터리"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-        <!-- 구분선 -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="#FFCFCFCF"
-            android:layout_marginVertical="3dp" />
+            <TextView
+                android:id="@+id/battery"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:textSize="16sp" />
+
+
+        </LinearLayout>
+            <!-- 구분선 -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#FFCFCFCF"
+                android:layout_marginVertical="6dp" />
+
+
+
 
         <!-- 시작 시간 항목 -->
-        <TextView
-            android:id="@+id/startTimeLabel"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="20dp"
-            android:text="시작 시간"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            android:layout_marginBottom="0dp">
 
-        <TextView
-            android:id="@+id/start_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="20dp"
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/startTimeLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:text="시작 시간"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-        <!-- 구분선 -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="#FFCFCFCF"
-            android:layout_marginVertical="3dp" />
+            <TextView
+                android:id="@+id/start_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:textSize="16sp" />
+
+
+        </LinearLayout>
+
+            <!-- 구분선 -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#FFCFCFCF"
+                android:layout_marginVertical="6dp" />
+        />
 
         <!-- 사용 시간 항목 -->
-        <TextView
-            android:id="@+id/usingTimeLabel"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="20dp"
-            android:text="사용 시간"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            android:layout_marginBottom="0dp">
 
-        <TextView
-            android:id="@+id/using_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="20dp"
-            android:text="00:00:00"
-            android:textSize="16sp" />
+            <TextView
+                android:id="@+id/usingTimeLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:text="사용 시간"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-        <!-- 구분선 -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="#FFCFCFCF"
-            android:layout_marginVertical="3dp" />
+            <TextView
+                android:id="@+id/using_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:text="00:00:00"
+                android:textSize="16sp" />
+        </LinearLayout>
 
-        <android.widget.Button
+            <!-- 구분선 -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#FFCFCFCF"
+                android:layout_marginVertical="6dp" />
+
+        <Button
             android:id="@+id/return_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/red_orange"
             android:text="반납" />
     </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
