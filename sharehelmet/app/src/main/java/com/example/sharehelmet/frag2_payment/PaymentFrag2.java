@@ -26,6 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,10 +38,12 @@ public class PaymentFrag2 extends Fragment  {
     String firebaseId;
     DatabaseReference mDatabaseRef;
     private User user;
+    private int money;
 
     ImageView paymentIcons;
     EditText promotionCodeEdit;
     TextView promotionButton;
+    TextView money_textview;
     ListView cuponList;
 
     Map<String, Object> userCupon = new HashMap<>();
@@ -49,6 +53,7 @@ public class PaymentFrag2 extends Fragment  {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag2_payment, container, false);
+        money_textview=view.findViewById(R.id.beam_credits_amount);
         if (getArguments() != null) {
             firebaseId = getArguments().getString("firebaseId");
             loadDataFromDatabase();
@@ -60,7 +65,6 @@ public class PaymentFrag2 extends Fragment  {
         cuponList = view.findViewById(R.id.cupon_list);
 
         setViews();//클릭리스너 설정
-
 
         return view;
     }
@@ -102,22 +106,25 @@ public class PaymentFrag2 extends Fragment  {
     protected void loadDataFromDatabase(){
         mDatabaseRef = FirebaseDatabase.getInstance().getReference();
         //유저와 유저 쿠폰 리스트 가져오기
-        mDatabaseRef.child("users").child(firebaseId).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseRef.child("users").child(firebaseId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.getValue(User.class) != null){
                     user = snapshot.getValue(User.class);
                     userCupon = user.getCupons();
+                    money_textview.setText(String.valueOf(user.getMoney()));
                     updateUI();
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.e("PaymentFrag2", "Failed to read user data.", error.toException());
             }
         });
+
         //전체 쿠폰 리스트 가져오기
-        mDatabaseRef.child("cuponList").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseRef.child("cuponList").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.getValue() != null){
