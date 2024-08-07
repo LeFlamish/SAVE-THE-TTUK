@@ -1,14 +1,90 @@
-<!-- activity_service_terms.xml -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- res/layout/activity_service_terms.xml -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/service_terms_text"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="서비스 약관 내용"
-        android:textSize="18sp"
-        android:layout_centerInParent="true"/>
-</RelativeLayout>
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/service_terms_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/service_terms_title"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/service_terms_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/service_terms_date"
+            android:textSize="16sp"
+            android:layout_marginBottom="16dp"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:id="@+id/service_terms_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/service_terms_text"
+            android:textSize="14sp"
+            android:layout_marginBottom="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:lineSpacingExtra="8dp"
+            android:textIsSelectable="true" />
+
+        <TextView
+            android:id="@+id/service_terms_section_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/service_terms_section_title"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp" />
+
+        <TextView
+            android:id="@+id/service_terms_section_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/service_terms_section_text"
+            android:textSize="14sp"
+            android:layout_marginBottom="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:lineSpacingExtra="8dp"
+            android:textIsSelectable="true" />
+
+        <!-- 새로운 섹션 추가 -->
+        <TextView
+            android:id="@+id/service_terms_section_2_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/service_terms_section_2_title"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp" />
+
+        <TextView
+            android:id="@+id/service_terms_section_2_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/service_terms_section_2_text"
+            android:textSize="14sp"
+            android:layout_marginBottom="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:lineSpacingExtra="8dp"
+            android:textIsSelectable="true" />
+    </LinearLayout>
+</ScrollView>
