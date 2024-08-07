@@ -26,7 +26,8 @@ public class QnAFrag4 extends Fragment {
     }
 
     private void openKakaoTalkChannel() {
-        String url = "http://pf.kakao.com/_dLAxeK/chat";// 빔 채팅.
+//        String url = "http://pf.kakao.com/_dLAxeK/chat";// 빔 채팅.
+        String url = "http://pf.kakao.com/_KxnEyG/chat";// 뚝 채팅.
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(intent);
     }

@@ -5,10 +5,115 @@
     android:layout_height="match_parent"
     tools:context=".frag3_QR.ResultFragment3">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:id="@+id/over"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical">
+
+        <!-- 이용 결과 -->
+        <TextView
+            android:id="@+id/overUsageStatusLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="이용 결과"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- 구분선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginVertical="3dp"
+            android:background="#FFCFCFCF" />
+
+        <!-- 헬멧 ID 항목 -->
+        <TextView
+            android:id="@+id/overhelmetIdLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:paddingStart="20dp"
+            android:text="헬멧 ID"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/overhelmetId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:paddingStart="20dp"
+            android:textSize="16sp" />
+
+        <!-- 구분선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginVertical="3dp"
+            android:background="#FFCFCFCF" />
+
+        <!-- 사용 시간 항목 -->
+        <TextView
+            android:id="@+id/overtimeLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:paddingStart="20dp"
+            android:text="사용 시간"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/overtime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:paddingStart="20dp"
+            android:textSize="16sp" />
+
+        <!-- 구분선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginVertical="3dp"
+            android:background="#FFCFCFCF" />
+
+        <!-- 추가 요금 항목 -->
+        <TextView
+            android:id="@+id/overchargeLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:paddingStart="20dp"
+            android:text="추가 요금"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/overcharge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:paddingStart="20dp"
+            android:textSize="16sp" />
+
+        <!-- 구분선 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginVertical="3dp"
+            android:background="#FFCFCFCF" />
+
+        <android.widget.Button
+            android:id="@+id/returntostart"
+            android:backgroundTint="@color/red_orange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="돌아가기" />
+    </LinearLayout>
 
 </FrameLayout>
