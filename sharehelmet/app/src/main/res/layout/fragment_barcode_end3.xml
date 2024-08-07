@@ -9,5 +9,11 @@
         android:id="@+id/barcode_scanner"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="반납중"
+        android:textColor="@color/white"
+        android:layout_gravity="center|top" />
 
 </FrameLayout>
