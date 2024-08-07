@@ -82,7 +82,6 @@ public class BarcodeEndFragment3 extends Fragment {
                 borrowingFragment3.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, borrowingFragment3)
-                        .addToBackStack(null)
                         .commit();
             }
         });
@@ -162,7 +161,6 @@ public class BarcodeEndFragment3 extends Fragment {
                                     resultFragment3.setArguments(bundle);
                                     getActivity().getSupportFragmentManager().beginTransaction()
                                             .replace(R.id.fragment_container, resultFragment3)
-                                            .addToBackStack(null)
                                             .commit();
                                 } else {
                                     Toast.makeText(getContext(), "빈 보관함이 아닙니다.", Toast.LENGTH_SHORT).show();

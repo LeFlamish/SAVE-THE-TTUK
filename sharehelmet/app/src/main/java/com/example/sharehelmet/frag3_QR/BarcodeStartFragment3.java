@@ -150,7 +150,6 @@ public class BarcodeStartFragment3 extends Fragment {
                                     borrowingFragment3.setArguments(bundle);
                                     getActivity().getSupportFragmentManager().beginTransaction()
                                             .replace(R.id.fragment_container, borrowingFragment3)
-                                            .addToBackStack(null)
                                             .commit();
                                 }
                                 else {
@@ -200,7 +199,7 @@ public class BarcodeStartFragment3 extends Fragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_edit_text, null);
         builder.setView(dialogView);
-
+        barcodeView.pause();
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -214,6 +213,7 @@ public class BarcodeStartFragment3 extends Fragment {
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                barcodeView.resume();
                 dialog.cancel();
             }
         });

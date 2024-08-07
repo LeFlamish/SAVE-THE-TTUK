@@ -74,7 +74,6 @@ public class ResultFragment3 extends Fragment {
                 barcodeStartFragment3.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, barcodeStartFragment3)
-                        .addToBackStack(null)
                         .commit();
             }
         });

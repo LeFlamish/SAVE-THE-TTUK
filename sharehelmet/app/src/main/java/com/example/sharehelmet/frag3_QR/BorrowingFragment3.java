@@ -115,7 +115,6 @@ public class BorrowingFragment3 extends Fragment implements OnMapReadyCallback {
                 barcodeEndFragment3.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, barcodeEndFragment3)
-                        .addToBackStack(null)
                         .commit();
             }
         });

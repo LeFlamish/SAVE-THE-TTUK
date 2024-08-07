@@ -86,7 +86,6 @@ public class QRFrag3 extends Fragment {
         fragment.setArguments(bundle);
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
                 .commit();
     }
     private boolean isValidFirebaseId(String firebaseId) {
