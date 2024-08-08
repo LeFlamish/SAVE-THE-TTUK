@@ -85,7 +85,7 @@
         <View
             android:id="@+id/view2"
             android:layout_width="40dp"
-            android:layout_height="6dp"
+            android:layout_height="4dp"
             android:layout_gravity="center"
             android:background="@drawable/background_gray_border_10"
             android:layout_marginTop="16dp"
