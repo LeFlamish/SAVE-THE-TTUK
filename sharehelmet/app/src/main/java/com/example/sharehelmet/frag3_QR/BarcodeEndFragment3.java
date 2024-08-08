@@ -62,7 +62,7 @@ public class BarcodeEndFragment3 extends Fragment {
     Button back_button;
     private ImageButton turnOnLight, writeCode;
     private boolean isFlashOn = false;
-    private static final Pattern CODE_PATTERN = Pattern.compile("^\\d{3}-\\d{3}$");
+    private static final Pattern CODE_PATTERN = Pattern.compile("^\\d{3}\\d{3}$");
     private FusedLocationProviderClient fusedLocationClient;
     private String insteadQrResult;
 
@@ -177,7 +177,7 @@ public class BarcodeEndFragment3 extends Fragment {
             showCustomToast("코드 형식이 맞지 않습니다");
             return;
         }
-        insteadQrResult = "SAVE-THE-TTUK " + input;
+        insteadQrResult = "SAVE-THE-TTUK " + input.substring(0,3)+"-"+input.substring(3,6);
         handleResult(insteadQrResult);
     }
     @Override
