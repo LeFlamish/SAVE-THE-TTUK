@@ -38,6 +38,7 @@ import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.util.FusedLocationSource;
 
+import java.text.NumberFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -134,7 +135,7 @@ public class BorrowingFragment3 extends Fragment implements OnMapReadyCallback {
                 db.child("helmets").child(helmetId).setValue(helmet);
 
                 //텍스트뷰 표시
-                helmetName.setText(helmetId);
+                helmetName.setText("#" + helmetId);
                 battery.setText("100%");//나중에 수정
                 startTime.setText(user.getRental_info().get(1));
                 updateElapsedTime();
@@ -151,15 +152,20 @@ public class BorrowingFragment3 extends Fragment implements OnMapReadyCallback {
             public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
+    @SuppressLint("SetTextI18n")
     private void updateElapsedTime() {
         if (rentalStartTime != null) {
             LocalDateTime now = LocalDateTime.now();
             Duration duration = Duration.between(rentalStartTime, now);
-            long hours = duration.toHours();
-            long minutes = duration.toMinutes() % 60;
+            long minutes = duration.toMinutes();
             long seconds = duration.getSeconds() % 60;
-            String elapsedTime = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
+            String elapsedTime = String.format(Locale.getDefault(), "%d:%02d", minutes, seconds);
+            long moneyAmount = 300 + minutes * 50;
+            NumberFormat numberFormat = NumberFormat.getInstance(Locale.getDefault());
+            String formattedMoney = numberFormat.format(moneyAmount);
+
             usingTime.setText(elapsedTime);
+            price.setText(formattedMoney + "원");
         }
     }
 

@@ -204,19 +204,16 @@ public class BarcodeEndFragment3 extends Fragment {
         if (rentalStartTime != null) {
             LocalDateTime now = LocalDateTime.now();
             Duration duration = Duration.between(rentalStartTime, now);
-            long hours = duration.toHours();
-            long minutes = duration.toMinutes() % 60;
+            long minutes = duration.toMinutes();
             long seconds = duration.getSeconds() % 60;
-            return String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
+            return String.format(Locale.getDefault(), "%d:%02d", minutes, seconds);
         }
         return null;
     }
     private int calculateMoney(){
         String[] parts = updateElapsedTime().split(":");
-        int hours = Integer.parseInt(parts[0]);
-        int minutes = Integer.parseInt(parts[1]);
-        int totalMinute=hours*60+minutes;
-        return 300+totalMinute*50;
+        int minutes = Integer.parseInt(parts[0]);
+        return 300+minutes*50;
     }
     private void showCustomToast(String message) {
         Context context = getContext();
