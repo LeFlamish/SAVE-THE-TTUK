@@ -32,7 +32,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.sharehelmet.R;
-import com.example.sharehelmet.home.MainActivity;
 import com.example.sharehelmet.model.Storage;
 import com.example.sharehelmet.model.User;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -48,7 +47,6 @@ import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.journeyapps.barcodescanner.DefaultDecoderFactory;
-import com.naver.maps.geometry.LatLng;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -60,6 +58,7 @@ import java.util.regex.Pattern;
 
 public class BarcodeStartFragment3 extends Fragment {
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
+    private static final int LOCATION_REQUEST_CODE = 1000;
     private DecoratedBarcodeView barcodeView;
     private String firebaseId;
     private DatabaseReference db;
@@ -69,7 +68,6 @@ public class BarcodeStartFragment3 extends Fragment {
     private String insteadQrResult;
     private ImageButton turnOnLight, writeCode;
     private static final Pattern CODE_PATTERN = Pattern.compile("^\\d{3}-\\d{3}$");
-    private static final int LOCATION_REQUEST_CODE = 1000;
     private FusedLocationProviderClient fusedLocationClient;
     private OnBackPressedCallback callback;
     private Context mContext = null;
@@ -79,19 +77,23 @@ public class BarcodeStartFragment3 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_barcode_start3, container, false);
         db = FirebaseDatabase.getInstance().getReference();
         barcodeView = view.findViewById(R.id.barcode_scanner);
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+
         Bundle bundle = getArguments();
         if (bundle != null) {
             firebaseId = bundle.getString("firebaseId");
         }
+
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
         } else {
             barcodeView.resume();
         }
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
         }
+
         barcodeView.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory(Collections.singletonList(BarcodeFormat.QR_CODE)));
         barcodeView.decodeContinuous(new BarcodeCallback() {
             @Override
@@ -103,14 +105,13 @@ public class BarcodeStartFragment3 extends Fragment {
             public void possibleResultPoints(List<com.google.zxing.ResultPoint> resultPoints) {
             }
         });
+
         turnOnLight = view.findViewById(R.id.turn_on_light);
-        turnOnLight.setOnClickListener(v -> {
-            toggleFlashLight();
-        });
+        turnOnLight.setOnClickListener(v -> toggleFlashLight());
+
         writeCode = view.findViewById(R.id.write_code);
-        writeCode.setOnClickListener(v -> {
-            showEditTextDialog();
-        });
+        writeCode.setOnClickListener(v -> showEditTextDialog());
+
         return view;
     }
 
@@ -120,32 +121,38 @@ public class BarcodeStartFragment3 extends Fragment {
             db.child("users").child(firebaseId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    user = snapshot.getValue(User.class);
-                    if (user != null) {
-                        barcodeView.pause();
-                        fusedLocationClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
-                            @Override
-                            public void onSuccess(Location location) {
-                                if (location != null) {
-                                    double myLatitude = location.getLatitude();
-                                    double myLongitude = location.getLongitude();
-                                    BorrowHelmet1(myLatitude, myLongitude);
-                                } else {
-                                    showCustomToast("현재 위치를 가져올 수 없습니다");
+                    if (isAdded()) {
+                        user = snapshot.getValue(User.class);
+                        if (user != null) {
+                            barcodeView.pause();
+                            fusedLocationClient.getLastLocation().addOnSuccessListener(requireActivity(), new OnSuccessListener<Location>() {
+                                @Override
+                                public void onSuccess(Location location) {
+                                    if (location != null) {
+                                        double myLatitude = location.getLatitude();
+                                        double myLongitude = location.getLongitude();
+                                        BorrowHelmet1(myLatitude, myLongitude);
+                                    } else {
+                                        showCustomToast("현재 위치를 가져올 수 없습니다");
+                                    }
                                 }
-                            }
-                        });
-                        barcodeView.resume();
+                            });
+                            barcodeView.resume();
+                        }
                     }
                 }
+
                 @Override
-                public void onCancelled(@NonNull DatabaseError error) {}
+                public void onCancelled(@NonNull DatabaseError error) {
+                    showCustomToast("정보를 불러오지 못했습니다");
+                }
             });
         } else {
             showCustomToast("유효하지 않은 QR 코드입니다");
         }
     }
-    public double haversine(double lat1, double lon1, double lat2, double lon2) {
+
+    private double haversine(double lat1, double lon1, double lat2, double lon2) {
         final int R = 6371; // Radius of the Earth in kilometers
         double latDistance = Math.toRadians(lat2 - lat1);
         double lonDistance = Math.toRadians(lon2 - lon1);
@@ -154,8 +161,9 @@ public class BarcodeStartFragment3 extends Fragment {
                 * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double distance = R * c;
-        return distance*1000;
+        return distance * 1000;
     }
+
     private void BorrowHelmet1(double myLatitude, double myLongitude) {
         String locationID = storageId.substring(0, 3);
         int helmetIndex = Integer.parseInt(storageId.substring(4, 7)) - 1;
@@ -167,74 +175,73 @@ public class BarcodeStartFragment3 extends Fragment {
                         String placeKey = placeSnapshot.getKey();
                         Storage storage = placeSnapshot.getValue(Storage.class);
                         if (storage != null) {
-                            if(haversine(myLatitude, myLongitude, storage.getLatitude(), storage.getLongitude())<=10000){
+                            if (haversine(myLatitude, myLongitude, storage.getLatitude(), storage.getLongitude()) <= 10000) {
                                 ArrayList<String> storedHelmetID = storage.getStoredHelmetID();
                                 if (storedHelmetID != null && helmetIndex >= 0 && helmetIndex < storedHelmetID.size()) {
                                     String helmetId = storedHelmetID.get(helmetIndex);
                                     if (!"-".equals(helmetId)) {
 
-                                        //토스트 메세지
-                                        showCustomToast("No."+helmetId+" 헬멧 대여");
+                                        showCustomToast("No." + helmetId + " 헬멧 대여");
 
-                                        //places 파베 수정
                                         storedHelmetID.set(helmetIndex, "-");
                                         storage.setStoredHelmetID(storedHelmetID);
-                                        storage.setStock(storage.getStock()-1);
+                                        storage.setStock(storage.getStock() - 1);
                                         db.child("places").child(placeKey).setValue(storage);
 
-                                        //Users 파베 수정
                                         LocalDateTime rentalStartTime = LocalDateTime.now(); // 대여 시작 시간 저장
                                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                                         String formattedStartTime = rentalStartTime.format(formatter);
-                                        ArrayList<String> rental_info=new ArrayList<>();
+                                        ArrayList<String> rental_info = new ArrayList<>();
                                         rental_info.add(helmetId);
                                         rental_info.add(formattedStartTime);
                                         user.setNow_qr(1);
                                         user.setRental_info(rental_info);
                                         db.child("users").child(firebaseId).setValue(user);
 
-                                        //프래그먼트 이동
-                                        BorrowingFragment3 borrowingFragment3=new BorrowingFragment3();
+                                        BorrowingFragment3 borrowingFragment3 = new BorrowingFragment3();
                                         Bundle bundle = new Bundle();
-                                        bundle.putString("firebaseId",firebaseId);
+                                        bundle.putString("firebaseId", firebaseId);
                                         borrowingFragment3.setArguments(bundle);
-                                        getActivity().getSupportFragmentManager().beginTransaction()
-                                                .replace(R.id.fragment_container, borrowingFragment3)
-                                                .commit();
-                                    }
-                                    else {
+                                        if (isAdded()) {
+                                            getActivity().getSupportFragmentManager().beginTransaction()
+                                                    .replace(R.id.fragment_container, borrowingFragment3)
+                                                    .commit();
+                                        }
+                                    } else {
                                         showCustomToast("보관함이 비어있습니다");
                                     }
                                 } else {
                                     showCustomToast("보관함이 비어있습니다");
                                 }
-                            }
-                            else{
+                            } else {
                                 showCustomToast("보관함이 너무 멀리 있습니다");
                             }
-                        }
-                        else {
+                        } else {
                             showCustomToast("보관함 데이터를 찾지 못했습니다");
                         }
                         return;
                     }
-                }
-                else {
+                } else {
                     showCustomToast("보관함이 존재하지 않습니다");
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 showCustomToast("정보를 불러오지 못했습니다");
             }
         });
     }
+
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
-        barcodeView.setTorchOff();
+        if (barcodeView != null) {
+            barcodeView.setTorchOff();
+        }
         isFlashOn = false;
     }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -243,14 +250,18 @@ public class BarcodeStartFragment3 extends Fragment {
         callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                // 뒤로가기 클릭 시 동작하는 로직
-                barcodeView.setTorchOff();
+                if (barcodeView != null) {
+                    barcodeView.setTorchOff();
+                }
                 isFlashOn = false;
-                requireActivity().finish();
+                if (isAdded()) {
+                    requireActivity().finish();
+                }
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -260,7 +271,7 @@ public class BarcodeStartFragment3 extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1) {
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 barcodeView.resume();
             } else {
@@ -268,17 +279,21 @@ public class BarcodeStartFragment3 extends Fragment {
             }
         }
     }
-    private void toggleFlashLight(){
-        if (isFlashOn) {
-            barcodeView.setTorchOff();
-            isFlashOn = false;
-        } else {
-            barcodeView.setTorchOn();
-            isFlashOn = true;
+
+    private void toggleFlashLight() {
+        if (barcodeView != null) {
+            if (isFlashOn) {
+                barcodeView.setTorchOff();
+                isFlashOn = false;
+            } else {
+                barcodeView.setTorchOn();
+                isFlashOn = true;
+            }
         }
     }
+
     public void showEditTextDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_edit_text, null);
         builder.setView(dialogView);
@@ -306,7 +321,7 @@ public class BarcodeStartFragment3 extends Fragment {
     }
 
     private void handleDialogInput(String input) {
-        if(!CODE_PATTERN.matcher(input).matches()){
+        if (!CODE_PATTERN.matcher(input).matches()) {
             showCustomToast("코드 형식이 맞지 않습니다");
             return;
         }
@@ -315,12 +330,8 @@ public class BarcodeStartFragment3 extends Fragment {
     }
 
     private void showCustomToast(String message) {
-        Context context = getContext();
-        if (context == null) {
-            context = getActivity();
-        }
-
-        if (context != null) {
+        if (isAdded() && getContext() != null) {
+            Context context = getContext();
             LayoutInflater inflater = LayoutInflater.from(context);
             View layout = inflater.inflate(R.layout.custom_toast, null);
 
@@ -332,7 +343,7 @@ public class BarcodeStartFragment3 extends Fragment {
             toast.setView(layout);
             toast.show();
         } else {
-            Log.e("MyFragment", "Context is null, cannot show Toast");
+            Log.e("BarcodeStartFragment3", "Fragment is not attached to an Activity or Context is null, cannot show Toast");
         }
     }
 }
