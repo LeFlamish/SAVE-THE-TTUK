@@ -102,7 +102,6 @@ public class ResultFragment3 extends Fragment {
                 String formattedEndTime = rentalEndTime.format(formatter);
                 hashMap.put(user.getRental_info().get(1),formattedEndTime);
                 user.setRecord(hashMap);
-                user.setMoney(user.getMoney()-Integer.parseInt(t23.getText().toString()));
                 db.child("users").child(firebaseId).setValue(user);
             }
             @Override

@@ -152,6 +152,7 @@ public class BarcodeEndFragment3 extends Fragment {
                                     return_info.add(storageId);
                                     user.setNow_qr(3);
                                     user.setReturn_info(return_info);
+                                    user.setMoney(user.getMoney()-Integer.parseInt(String.valueOf(calculateMoney())));
                                     db.child("users").child(firebaseId).setValue(user);
 
                                     //프래그먼트 이동
