@@ -67,7 +67,6 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     private BottomSheetBehavior<View> bottomSheetBehavior;
     private int sortCriteria = 0; // 정렬 기준 플래그: 0 - 거리 가까운 순, 1 - 재고 적은 순, 2 - 재고 많은 순
     private int stockMin = Integer.MIN_VALUE, stockMax = Integer.MAX_VALUE;
-    private EditText stockMinEditText, stockMaxEditText;
     private List<Place> places = new ArrayList<>();
     private List<Place> allPlaces = new ArrayList<>(); // 모든 장소를 저장하는 리스트
     private int listViewIndex = -1;
@@ -153,28 +152,6 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
         try{
             listView = view.findViewById(R.id.place_list_view);
-            stockMinEditText = view.findViewById(R.id.stock_min);
-            stockMaxEditText = view.findViewById(R.id.stock_max);
-            Button applyFilterButton = view.findViewById(R.id.apply_filter);
-
-            applyFilterButton.setOnClickListener(v -> {
-                String minText = stockMinEditText.getText().toString();
-                String maxText = stockMaxEditText.getText().toString();
-
-                if (!minText.isEmpty()) {
-                    stockMin = Integer.parseInt(minText);
-                } else {
-                    stockMin = Integer.MIN_VALUE;
-                }
-
-                if (!maxText.isEmpty()) {
-                    stockMax = Integer.parseInt(maxText);
-                } else {
-                    stockMax = Integer.MAX_VALUE;
-                }
-
-                sortAndDisplayPlaces();
-            });
             spinnerSort = view.findViewById(R.id.spinner_sort);
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                     R.array.sort_options, android.R.layout.simple_spinner_item);
