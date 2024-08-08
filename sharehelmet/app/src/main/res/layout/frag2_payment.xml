@@ -7,9 +7,7 @@
     android:padding="16dp">
 
     <!-- Available Beam Credits -->
-
-
-    <!-- Payment Method Section -->
+    
     <RelativeLayout
         android:id="@+id/credits_container"
         android:layout_width="match_parent"
@@ -70,9 +68,28 @@
 
             <ImageView
                 android:id="@+id/icon_kakao_pay"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/bootpayxml" />
+
+            <ImageView
+                android:id="@+id/icon_amex"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="4dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/symbol_cr_npaygr_large" />
+
+
+
+            <ImageView
+                android:id="@+id/icon_mastercard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/bootpayxml" />
+                android:layout_marginStart="4dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/tosspayxml" />
 
             <ImageView
                 android:id="@+id/icon_visa"
@@ -82,21 +99,12 @@
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/payment_icon_yellow_small" />
 
-            <ImageView
-                android:id="@+id/icon_mastercard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:src="@drawable/kakao_talkxml" />
 
-            <ImageView
-                android:id="@+id/icon_amex"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:src="@drawable/kakao_talkxml" />
-        </LinearLayout>
+            </LinearLayout>
     </RelativeLayout>
+
+
+    <!-- Payment Method Section -->
 
     <RelativeLayout
         android:id="@+id/payment_method_section"
