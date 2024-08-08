@@ -35,8 +35,10 @@ import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
+import com.naver.maps.map.UiSettings;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.util.FusedLocationSource;
+import com.naver.maps.map.widget.LocationButtonView;
 
 import java.text.NumberFormat;
 import java.time.Duration;
@@ -182,6 +184,16 @@ public class BorrowingFragment3 extends Fragment implements OnMapReadyCallback {
             naverMap.addOnLocationChangeListener(location -> {
                 displayNearbyPlaces(location);
             });
+            UiSettings uiSettings = naverMap.getUiSettings();
+            uiSettings.setCompassEnabled(true);
+            uiSettings.setZoomControlEnabled(false);
+            uiSettings.setLogoMargin(0, 0, 0, 0);
+            uiSettings.setScaleBarEnabled(true);
+
+            // LocationButtonView 연결
+            LocationButtonView locationButtonView = getView().findViewById(R.id.location);
+            locationButtonView.setMap(naverMap);
+            
             int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
             if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
                 naverMap.setMapType(NaverMap.MapType.Navi); // 다크 모드
