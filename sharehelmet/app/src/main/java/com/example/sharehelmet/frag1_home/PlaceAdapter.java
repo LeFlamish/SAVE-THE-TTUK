@@ -49,7 +49,7 @@ public class PlaceAdapter extends BaseAdapter {
 
         placeName.setText(place.name);
         placeDistance.setText(String.format("%.2f km", place.distance));
-        placeStock.setText("재고: " + place.stock);
+        placeStock.setText(String.format("%d개", place.stock));
 
         return convertView;
     }
