@@ -17,8 +17,13 @@ import com.example.sharehelmet.model.Cupon;
 import java.util.List;
 
 public class CuponAdapter extends ArrayAdapter<Cupon> {
+    private Context context;
+    private List<Cupon> cupons;
+
     public CuponAdapter(Context context, List<Cupon> cupons) {
         super(context, 0, cupons);
+        this.context = context;
+        this.cupons = cupons;
     }
 
     @NonNull

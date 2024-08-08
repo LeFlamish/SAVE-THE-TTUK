@@ -1,5 +1,6 @@
 package com.example.sharehelmet.frag2_payment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -153,7 +154,12 @@ public class PaymentFrag2 extends Fragment  {
             );
             cuponListData.add(tempCupon);
         }
-        CuponAdapter adapter = new CuponAdapter(getContext(), cuponListData);
+        Context context = getContext();
+        if (context == null) {
+            Log.e("PaymentFrag2", "Context is null");
+            return;
+        }
+        CuponAdapter adapter = new CuponAdapter(context, cuponListData);
         cuponList.setAdapter(adapter);
     }
 
