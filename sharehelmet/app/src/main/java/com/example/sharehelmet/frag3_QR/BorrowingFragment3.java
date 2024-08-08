@@ -54,10 +54,7 @@ public class BorrowingFragment3 extends Fragment implements OnMapReadyCallback {
     private String helmetId;
     private User user;
     private Helmet helmet;
-    private TextView t11;
-    private TextView t12;
-    private TextView t13;
-    private TextView t14;
+    private TextView helmetName, price, battery, usingTime, startTime;
     private DatabaseReference db;
     private LocalDateTime rentalStartTime;
     private Button returnButton;
@@ -79,10 +76,13 @@ public class BorrowingFragment3 extends Fragment implements OnMapReadyCallback {
             naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
         });
         db = FirebaseDatabase.getInstance().getReference();
-        t11 = view.findViewById(R.id.helmetId);
-        t12 = view.findViewById(R.id.battery);
-        t13 = view.findViewById(R.id.start_time);
-        t14 = view.findViewById(R.id.using_time);
+
+        helmetName = view.findViewById(R.id.helmet_id);
+        price = view.findViewById(R.id.price_num);
+        battery = view.findViewById(R.id.battery_num);
+        usingTime = view.findViewById(R.id.using_time_num);
+        startTime = view.findViewById(R.id.start_time_num);
+
         Bundle bundle = getArguments();
         if (bundle != null) {
             firebaseId=bundle.getString("firebaseId");
@@ -134,9 +134,9 @@ public class BorrowingFragment3 extends Fragment implements OnMapReadyCallback {
                 db.child("helmets").child(helmetId).setValue(helmet);
 
                 //텍스트뷰 표시
-                t11.setText(helmetId);
-                t12.setText("100%");//나중에 수정
-                t13.setText(user.getRental_info().get(1));
+                helmetName.setText(helmetId);
+                battery.setText("100%");//나중에 수정
+                startTime.setText(user.getRental_info().get(1));
                 updateElapsedTime();
                 Handler handler = new Handler(Looper.getMainLooper());
                 handler.postDelayed(new Runnable() {
@@ -159,7 +159,7 @@ public class BorrowingFragment3 extends Fragment implements OnMapReadyCallback {
             long minutes = duration.toMinutes() % 60;
             long seconds = duration.getSeconds() % 60;
             String elapsedTime = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
-            t14.setText(elapsedTime);
+            usingTime.setText(elapsedTime);
         }
     }
 
