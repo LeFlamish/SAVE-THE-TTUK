@@ -1,6 +1,7 @@
 package com.example.sharehelmet.frag3_QR;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -70,6 +71,7 @@ public class BarcodeStartFragment3 extends Fragment {
     private static final int LOCATION_REQUEST_CODE = 1000;
     private FusedLocationProviderClient fusedLocationClient;
     private OnBackPressedCallback callback;
+    private Context mContext = null;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -128,7 +130,7 @@ public class BarcodeStartFragment3 extends Fragment {
                                     double myLongitude = location.getLongitude();
                                     BorrowHelmet1(myLatitude, myLongitude);
                                 } else {
-                                    Toast.makeText(getContext(), "현재 위치를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show();
+                                    showCustomToast("현재 위치를 가져올 수 없습니다");
                                 }
                             }
                         });
@@ -139,7 +141,7 @@ public class BarcodeStartFragment3 extends Fragment {
                 public void onCancelled(@NonNull DatabaseError error) {}
             });
         } else {
-            Toast.makeText(getContext(), "유효하지 않은 QR코드입니다", Toast.LENGTH_SHORT).show();
+            showCustomToast("유효하지 않은 QR 코드입니다");
         }
     }
     public double haversine(double lat1, double lon1, double lat2, double lon2) {
@@ -171,7 +173,7 @@ public class BarcodeStartFragment3 extends Fragment {
                                     if (!"-".equals(helmetId)) {
 
                                         //토스트 메세지
-                                        Toast.makeText(getContext(), "No."+helmetId+" 헬멧 대여", Toast.LENGTH_SHORT).show();
+                                        showCustomToast("No."+helmetId+" 헬멧 대여");
 
                                         //places 파베 수정
                                         storedHelmetID.set(helmetIndex, "-");
@@ -200,31 +202,29 @@ public class BarcodeStartFragment3 extends Fragment {
                                                 .commit();
                                     }
                                     else {
-                                        Toast.makeText(getContext(), "보관함이 비어있습니다.", Toast.LENGTH_SHORT).show();
+                                        showCustomToast("보관함이 비어있습니다");
                                     }
                                 } else {
-                                    Toast.makeText(getContext(), "보관함이 비어있습니다.", Toast.LENGTH_SHORT).show();
+                                    showCustomToast("보관함이 비어있습니다");
                                 }
                             }
                             else{
-                                Toast.makeText(getContext(), "보관함이 너무 멀리 있습니다.", Toast.LENGTH_SHORT).show();
+                                showCustomToast("보관함이 너무 멀리 있습니다");
                             }
-
-
                         }
                         else {
-                            Toast.makeText(getContext(), "보관함 데이터를 찾지 못했습니다.", Toast.LENGTH_SHORT).show();
+                            showCustomToast("보관함 데이터를 찾지 못했습니다");
                         }
                         return;
                     }
                 }
                 else {
-                    Toast.makeText(getContext(), "보관함이 존재하지 않습니다", Toast.LENGTH_SHORT).show();
+                    showCustomToast("보관함이 존재하지 않습니다");
                 }
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getContext(), "정보를 불러오지 못했습니다", Toast.LENGTH_SHORT).show();
+                showCustomToast("정보를 불러오지 못했습니다");
             }
         });
     }
@@ -237,6 +237,7 @@ public class BarcodeStartFragment3 extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        mContext = context;
 
         callback = new OnBackPressedCallback(true) {
             @Override
@@ -249,6 +250,11 @@ public class BarcodeStartFragment3 extends Fragment {
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mContext = null;
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -257,7 +263,7 @@ public class BarcodeStartFragment3 extends Fragment {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 barcodeView.resume();
             } else {
-                Toast.makeText(getActivity(), "Camera permission is required to use the flashlight", Toast.LENGTH_SHORT).show();
+                showCustomToast("플래시라이트 사용을 위해 카메라 권한이 필요합니다");
             }
         }
     }
@@ -313,12 +319,14 @@ public class BarcodeStartFragment3 extends Fragment {
 
         TextView text = layout.findViewById(R.id.toast_text);
         text.setText(message);
-
-        //ImageView image = layout.findViewById(R.id.toast_images);
-        //image.setImageResource(R.drawable.logo01); // 원하는 아이콘 리소스 설정
-
-        Toast toast = new Toast(getContext());
-        toast.setDuration(Toast.LENGTH_LONG);
+        if(mContext==null){
+            Activity activity = getActivity();
+            if (activity != null) {
+                mContext = activity.getApplicationContext();
+            }
+        }
+        Toast toast = new Toast(mContext);
+        toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(layout);
         toast.show();
     }
