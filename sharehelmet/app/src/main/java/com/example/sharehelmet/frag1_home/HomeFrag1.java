@@ -45,8 +45,10 @@ import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
+import com.naver.maps.map.UiSettings;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.util.FusedLocationSource;
+import com.naver.maps.map.widget.LocationButtonView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -230,6 +232,17 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
             } else {
                 naverMap.setLocationTrackingMode(getCurrentTrackingMode());
             }
+
+            // 설정 코드 추가
+            UiSettings uiSettings = naverMap.getUiSettings();
+            uiSettings.setCompassEnabled(true);
+            uiSettings.setZoomControlEnabled(false);
+            uiSettings.setLogoMargin(0, 0, 0, 0);
+            uiSettings.setScaleBarEnabled(true);
+
+            // LocationButtonView 연결
+            LocationButtonView locationButtonView = getView().findViewById(R.id.location);
+            locationButtonView.setMap(naverMap);
 
             naverMap.addOnLocationChangeListener(location -> {
                 displayNearbyPlaces(location);
