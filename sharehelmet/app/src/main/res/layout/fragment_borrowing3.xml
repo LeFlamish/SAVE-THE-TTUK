@@ -11,7 +11,6 @@
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         >
 
         <Button
@@ -20,10 +19,22 @@
             android:layout_height="wrap_content"
             android:text="현재 위치"
             android:background="@android:color/holo_blue_light"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:visibility="gone"/>
 
     </com.naver.maps.map.MapView>
-
+    <!-- Location Button -->
+    <com.naver.maps.map.widget.LocationButtonView
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="65dp"
+        android:layout_marginEnd="16dp"
+        app:layout_anchor="@+id/persistent_bottom_sheet"
+        app:layout_anchorGravity="top|end"
+        android:elevation="16dp"
+        />
     <!-- 구분선 -->
     <View
         android:id="@+id/line1"
