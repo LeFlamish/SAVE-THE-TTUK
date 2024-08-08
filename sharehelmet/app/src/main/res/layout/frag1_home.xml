@@ -11,16 +11,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <!-- Location Button -->
+    <com.naver.maps.map.widget.LocationButtonView
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="65dp"
+        android:layout_marginEnd="16dp"
+        app:layout_anchor="@+id/persistent_bottom_sheet"
+        app:layout_anchorGravity="top|end"
+        />
+
     <Button
         android:id="@+id/btn_current_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="현재 위치"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
         android:background="@android:color/holo_blue_light"
-        android:textColor="@android:color/white"/>
+        android:text="현재 위치"
+        android:textColor="@android:color/white"
+        android:visibility="gone" />
 
 
     <android.widget.Button
@@ -41,15 +54,15 @@
         android:id="@+id/btn_mode_toggle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="모드 변경"
-        android:fontFamily="@font/font_main"
-        android:layout_marginBottom="70dp"
         android:layout_marginRight="16dp"
+        android:layout_marginBottom="70dp"
         android:background="@android:color/holo_green_light"
+        android:fontFamily="@font/font_main"
+        android:text="모드 변경"
         android:textColor="@android:color/white"
+        android:visibility="gone"
         app:layout_anchor="@+id/persistent_bottom_sheet"
-        app:layout_anchorGravity="top|end"
-        />
+        app:layout_anchorGravity="top|end" />
     <!--    android:layout_gravity="bottom|end"-->
 
     <!-- Persistent Bottom Sheet -->
