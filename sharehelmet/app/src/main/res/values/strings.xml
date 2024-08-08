@@ -94,5 +94,12 @@
     <string name="insurance_policy_contact_subtitle">궁금한 점이 있으시면 언제든지 문의해 주세요!
         \n010-2024-0807</string>
 
+    <string-array name="sort_options">
+        <item>거리 가까운 순</item>
+        <item>재고 적은 순</item>
+        <item>재고 많은 순</item>
+    </string-array>
+
+
 
 </resources>

@@ -3,22 +3,29 @@ package com.example.sharehelmet.frag1_home;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -52,7 +59,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     private MapView mapView;
     private NaverMap naverMap;
     private FusedLocationSource locationSource;
-    private Button sortButton;
+    private Spinner spinnerSort;
     private int locationTrackingMode = 0;
     private DatabaseReference db;
     private List<Marker> markerList = new ArrayList<>();
@@ -99,6 +106,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         }catch (Exception ignored){
 
         }
+
 
         return view;
     }
@@ -167,15 +175,28 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
                 sortAndDisplayPlaces();
             });
+            spinnerSort = view.findViewById(R.id.spinner_sort);
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                    R.array.sort_options, android.R.layout.simple_spinner_item);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerSort.setAdapter(adapter);
 
-            sortButton = view.findViewById(R.id.btn_sort);
-            sortButton.setOnClickListener(v -> {
-                sortCriteria = (sortCriteria + 1) % 3; // 정렬 기준 변경: 0 -> 1 -> 2 -> 0
-                sortAndDisplayPlaces(); // 정렬 및 표시 갱신
+            spinnerSort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    sortCriteria = position;
+                    sortAndDisplayPlaces();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    // Do nothing
+                }
             });
 
-            // 처음에 거리 가까운 순으로 정렬 버튼 텍스트 설정
-            sortButton.setText("거리 가까운 순");
+            // Initial sorting and displaying of places
+            sortAndDisplayPlaces();
+
             listView.setOnItemClickListener((parent, view1, position, id) -> {
                 Place selectedPlace = places.get(position);
                 LatLng selectedLatLng = selectedPlace.latLng;
@@ -323,17 +344,17 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     }
 
     private void sortAndDisplayPlaces() {
-        try{
+        try {
             saveListViewScrollPosition();
             switch (sortCriteria) {
                 case 0:
-                    sortButton.setText("거리 가까운 순");
+                    spinnerSort.setSelection(0);
                     break;
                 case 1:
-                    sortButton.setText("재고 적은 순");
+                    spinnerSort.setSelection(1);
                     break;
                 case 2:
-                    sortButton.setText("재고 많은 순");
+                    spinnerSort.setSelection(2);
                     break;
             }
             places.clear();
@@ -358,8 +379,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
             PlaceAdapter placeAdapter = new PlaceAdapter(getContext(), places);
             listView.setAdapter(placeAdapter);
             restoreListViewScrollPosition();
-        }catch (Exception ignored){
-
+        } catch (Exception ignored) {
         }
     }
     private void saveListViewScrollPosition() {
