@@ -13,6 +13,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -314,20 +315,24 @@ public class BarcodeStartFragment3 extends Fragment {
     }
 
     private void showCustomToast(String message) {
-        LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.custom_toast, null);
-
-        TextView text = layout.findViewById(R.id.toast_text);
-        text.setText(message);
-        if(mContext==null){
-            Activity activity = getActivity();
-            if (activity != null) {
-                mContext = activity.getApplicationContext();
-            }
+        Context context = getContext();
+        if (context == null) {
+            context = getActivity();
         }
-        Toast toast = new Toast(mContext);
-        toast.setDuration(Toast.LENGTH_SHORT);
-        toast.setView(layout);
-        toast.show();
+
+        if (context != null) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View layout = inflater.inflate(R.layout.custom_toast, null);
+
+            TextView text = layout.findViewById(R.id.toast_text);
+            text.setText(message);
+
+            Toast toast = new Toast(context);
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout);
+            toast.show();
+        } else {
+            Log.e("MyFragment", "Context is null, cannot show Toast");
+        }
     }
 }

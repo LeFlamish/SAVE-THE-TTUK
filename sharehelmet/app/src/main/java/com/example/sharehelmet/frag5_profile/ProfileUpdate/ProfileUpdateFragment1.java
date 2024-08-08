@@ -145,7 +145,7 @@ public class ProfileUpdateFragment1 extends Fragment {
             text.setText(message);
 
             Toast toast = new Toast(context);
-            toast.setDuration(Toast.LENGTH_LONG);
+            toast.setDuration(Toast.LENGTH_SHORT);
             toast.setView(layout);
             toast.show();
         } else {
