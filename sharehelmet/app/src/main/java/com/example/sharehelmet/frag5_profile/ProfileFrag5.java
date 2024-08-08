@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
@@ -78,14 +79,23 @@ public class ProfileFrag5 extends Fragment {
         businessSection.setOnClickListener(v -> openKakaoTalkChannel());
 
         RelativeLayout signOutSection = view.findViewById(R.id.sign_out_section);
-        signOutSection.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), StartActivity.class);
-            intent.putExtra("isLogout", 1);
-            startActivity(intent);
-            getActivity().finish();
-        });
+        signOutSection.setOnClickListener(v -> showLogoutConfirmationDialog());
 
         return view;
+    }
+
+    private void showLogoutConfirmationDialog() {
+        new AlertDialog.Builder(getContext())
+                .setTitle("로그아웃")
+                .setMessage("정말 로그아웃하시겠습니까?")
+                .setPositiveButton("확인", (dialog, which) -> {
+                    Intent intent = new Intent(getActivity(), StartActivity.class);
+                    intent.putExtra("isLogout", 1);
+                    startActivity(intent);
+                    getActivity().finish();
+                })
+                .setNegativeButton("취소", null)
+                .show();
     }
 
     private void loadDataFromDatabase() {

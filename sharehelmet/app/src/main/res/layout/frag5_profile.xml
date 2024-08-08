@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:padding="16dp">
+    android:padding="0dp">
+
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profile_section"
@@ -12,10 +14,11 @@
         android:layout_height="wrap_content"
         android:paddingVertical="16dp"
         android:paddingLeft="16dp"
-        android:background="?attr/selectableItemBackground"
+        android:background="@drawable/white_border_20"
         android:clickable="true"
         android:focusable="true"
-        android:layout_marginBottom="16dp">
+        android:elevation="8dp"
+        android:layout_marginBottom="0dp">
         <ImageView
             android:id="@+id/profile_image"
             android:layout_width="60dp"
@@ -47,170 +50,190 @@
             app:layout_constraintTop_toBottomOf="@id/title"
             app:layout_constraintLeft_toRightOf="@id/profile_image"/>
         <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/right_24"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/back"
+            android:rotation="180"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="12dp"
+
         android:layout_below="@id/profile_section"
-        android:padding="16dp"
-        android:background="@drawable/white_round_border_20">
+        >
 
-        <RelativeLayout
-            android:id="@+id/riding_history_section"
+
+
+
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:layout_marginBottom="8dp"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true">
+            android:orientation="vertical"
+            android:paddingRight="16dp"
+            android:paddingLeft="16dp"
+            android:background="@drawable/white_round_border_20">
 
-            <ImageView
-                android:id="@+id/iv1"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/time_past_24"
-                android:layout_alignParentStart="true"/>
+            <RelativeLayout
+                android:id="@+id/riding_history_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:layout_marginBottom="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/iv1"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/time_past_24"
+                    android:layout_alignParentStart="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="서비스 이용내역"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/font_main"
+                    android:layout_toEndOf="@id/iv1"
+                    android:layout_marginStart="16dp"
+                    android:layout_centerVertical="true"/>
+
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/riding_guide_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:layout_marginBottom="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/iv2"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/guide_alt_24"
+                    android:layout_alignParentStart="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="이용 가이드"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/font_main"
+                    android:layout_toEndOf="@id/iv2"
+                    android:layout_marginStart="16dp"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+    <!--
+            <RelativeLayout
+                android:id="@+id/refer_friend_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:layout_marginBottom="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/iv3"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/house"
+                    android:layout_alignParentStart="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Refer a friend"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/font_main"
+                    android:layout_toEndOf="@id/iv3"
+                    android:layout_marginStart="16dp"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+    -->
+            <RelativeLayout
+                android:id="@+id/business_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:layout_marginBottom="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/iv4"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/handshake_24"
+                    android:layout_alignParentStart="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="협업 문의"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/font_main"
+                    android:layout_toEndOf="@id/iv4"
+                    android:layout_marginStart="16dp"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/sign_out_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:layout_marginBottom="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/iv5"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/power_24"
+                    android:layout_alignParentStart="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="로그아웃"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/font_main"
+                    android:layout_toEndOf="@id/iv5"
+                    android:layout_marginStart="16dp"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
 
             <TextView
+                android:id="@+id/app_version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="서비스 이용내역"
-                android:textSize="16sp"
-                android:fontFamily="@font/font_main"
-                android:layout_toEndOf="@id/iv1"
-                android:layout_marginStart="16dp"
-                android:layout_centerVertical="true"/>
-        </RelativeLayout>
+                android:text="App version TTUK-1.01.1-00001"
+                android:textSize="12sp"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
 
-        <RelativeLayout
-            android:id="@+id/riding_guide_section"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:layout_marginBottom="8dp"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView
-                android:id="@+id/iv2"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/guide_alt_24"
-                android:layout_alignParentStart="true"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="이용 가이드"
-                android:textSize="16sp"
-                android:fontFamily="@font/font_main"
-                android:layout_toEndOf="@id/iv2"
-                android:layout_marginStart="16dp"
-                android:layout_centerVertical="true"/>
-        </RelativeLayout>
-<!--
-        <RelativeLayout
-            android:id="@+id/refer_friend_section"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:layout_marginBottom="8dp"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView
-                android:id="@+id/iv3"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/house"
-                android:layout_alignParentStart="true"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Refer a friend"
-                android:textSize="16sp"
-                android:fontFamily="@font/font_main"
-                android:layout_toEndOf="@id/iv3"
-                android:layout_marginStart="16dp"
-                android:layout_centerVertical="true"/>
-        </RelativeLayout>
--->
-        <RelativeLayout
-            android:id="@+id/business_section"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:layout_marginBottom="8dp"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView
-                android:id="@+id/iv4"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/handshake_24"
-                android:layout_alignParentStart="true"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="협업 문의"
-                android:textSize="16sp"
-                android:fontFamily="@font/font_main"
-                android:layout_toEndOf="@id/iv4"
-                android:layout_marginStart="16dp"
-                android:layout_centerVertical="true"/>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/sign_out_section"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:layout_marginBottom="8dp"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView
-                android:id="@+id/iv5"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/power_24"
-                android:layout_alignParentStart="true"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="로그아웃"
-                android:textSize="16sp"
-                android:fontFamily="@font/font_main"
-                android:layout_toEndOf="@id/iv5"
-                android:layout_marginStart="16dp"
-                android:layout_centerVertical="true"/>
-        </RelativeLayout>
-
-        <TextView
-            android:id="@+id/app_version"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="App version TTUK-1.01.1-00001"
-            android:textSize="12sp"
-            android:layout_marginTop="16dp"
-            android:layout_gravity="center_horizontal"/>
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
