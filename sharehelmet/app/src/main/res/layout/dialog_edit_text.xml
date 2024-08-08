@@ -18,5 +18,6 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/font_main"
         android:textSize="16sp"
-        android:hint="000-000" />
+        android:hint="000000"
+        android:inputType="number" />
 </LinearLayout>
