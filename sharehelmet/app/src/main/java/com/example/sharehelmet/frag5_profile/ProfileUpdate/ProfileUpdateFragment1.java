@@ -2,6 +2,7 @@ package com.example.sharehelmet.frag5_profile.ProfileUpdate;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -131,15 +132,24 @@ public class ProfileUpdateFragment1 extends Fragment {
     }
 
     private void showCustomToast(String message) {
-        LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.custom_toast, null);
+        Context context = getContext();
+        if (context == null) {
+            context = getActivity();
+        }
 
-        TextView text = layout.findViewById(R.id.toast_text);
-        text.setText(message);
+        if (context != null) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View layout = inflater.inflate(R.layout.custom_toast, null);
 
-        Toast toast = new Toast(getContext());
-        toast.setDuration(Toast.LENGTH_LONG);
-        toast.setView(layout);
-        toast.show();
+            TextView text = layout.findViewById(R.id.toast_text);
+            text.setText(message);
+
+            Toast toast = new Toast(context);
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout);
+            toast.show();
+        } else {
+            Log.e("MyFragment", "Context is null, cannot show Toast");
+        }
     }
 }

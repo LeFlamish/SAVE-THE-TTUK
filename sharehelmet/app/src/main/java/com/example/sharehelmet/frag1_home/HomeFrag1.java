@@ -3,7 +3,9 @@ package com.example.sharehelmet.frag1_home;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -48,6 +50,7 @@ import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.UiSettings;
 import com.naver.maps.map.overlay.Marker;
+import com.naver.maps.map.overlay.Overlay;
 import com.naver.maps.map.util.FusedLocationSource;
 import com.naver.maps.map.widget.LocationButtonView;
 
@@ -303,6 +306,13 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
                             Marker marker = new Marker();
                             marker.setPosition(placeLatLng);
                             marker.setCaptionText(name);
+                            marker.setOnClickListener(new Overlay.OnClickListener() {
+                                @Override
+                                public boolean onClick(@NonNull Overlay overlay) {
+                                    showDialog(name,stock,distance);
+                                    return true;
+                                }
+                            });
                             if (stock == 0) {
                                 marker.setIconTintColor(Color.RED); // 재고가 0인 경우 마커를 빨간색으로 표시
                             }
@@ -468,5 +478,26 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
             this.stock = stock;
             this.name = name;
         }
+    }
+
+    public void showDialog(String name,int stock,double length) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog, null);
+        TextView t1=(TextView)dialogView.findViewById(R.id.name);
+        TextView t2=(TextView)dialogView.findViewById(R.id.stock);
+        TextView t3=(TextView)dialogView.findViewById(R.id.distance);
+        t1.setText(name);
+        t2.setText(stock+"개");
+        t3.setText(String.format("%.2fkm", length));
+        builder.setView(dialogView);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

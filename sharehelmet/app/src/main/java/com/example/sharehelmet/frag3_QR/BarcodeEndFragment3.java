@@ -1,6 +1,8 @@
 package com.example.sharehelmet.frag3_QR;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -8,10 +10,13 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.example.sharehelmet.R;
 import com.example.sharehelmet.model.Storage;
@@ -43,6 +48,7 @@ public class BarcodeEndFragment3 extends Fragment {
     private User user;
     private String storageId;
     private LocalDateTime rentalStartTime;
+    private Context mContext;
     String helmetId;
     Button back_button;
 
@@ -96,6 +102,17 @@ public class BarcodeEndFragment3 extends Fragment {
         });
         return view;
     }
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mContext = context;
+    }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mContext = null;
+    }
+
     private void handleResult(BarcodeResult result) {
         String resultText = result.getText();
         if (resultText != null && resultText.startsWith("SAVE-THE-TTUK ")) {
@@ -117,7 +134,7 @@ public class BarcodeEndFragment3 extends Fragment {
                 public void onCancelled(@NonNull DatabaseError error) {}
             });
         } else {
-            Toast.makeText(getContext(), "유효하지 않은 QR코드입니다", Toast.LENGTH_SHORT).show();
+            showCustomToast("유효하지 않은 QR코드입니다");
         }
     }
     private void ReturnHelmet1() {
@@ -136,7 +153,7 @@ public class BarcodeEndFragment3 extends Fragment {
                                 if ("-".equals(storedHelmetID.get(helmetIndex))) {
 
                                     //토스트 메세지
-                                    Toast.makeText(getContext(), "No."+helmetId+" 헬멧 반납", Toast.LENGTH_SHORT).show();
+                                    showCustomToast("No."+helmetId+" 헬멧 반납");
 
                                     //places 파베 수정
                                     storedHelmetID.set(helmetIndex, helmetId);
@@ -164,22 +181,22 @@ public class BarcodeEndFragment3 extends Fragment {
                                             .replace(R.id.fragment_container, resultFragment3)
                                             .commit();
                                 } else {
-                                    Toast.makeText(getContext(), "빈 보관함이 아닙니다.", Toast.LENGTH_SHORT).show();
+                                    showCustomToast("빈 보관함이 아닙니다");
                                 }
                             } else {
-                                Toast.makeText(getContext(), "유효하지 않은 보관소 번호입니다", Toast.LENGTH_SHORT).show();
+                                showCustomToast("유효하지 않은 보관소 번호입니다");
                             }
                         } else {
-                            Toast.makeText(getContext(), "보관함 데이터를 찾지 못했습니다.", Toast.LENGTH_SHORT).show();
+                            showCustomToast("보관함 데이터를 찾지 못했습니다");
                         }
                     }
                 } else {
-                    Toast.makeText(getContext(), "보관함이 존재하지 않습니다", Toast.LENGTH_SHORT).show();
+                    showCustomToast("보관함이 존재하지 않습니다");
                 }
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getContext(), "정보를 불러오지 못했습니다", Toast.LENGTH_SHORT).show();
+                showCustomToast("정보를 불러오지 못했습니다");
             }
         });
     }
@@ -200,5 +217,26 @@ public class BarcodeEndFragment3 extends Fragment {
         int minutes = Integer.parseInt(parts[1]);
         int totalMinute=hours*60+minutes;
         return 300+totalMinute*50;
+    }
+    private void showCustomToast(String message) {
+        Context context = getContext();
+        if (context == null) {
+            context = getActivity();
+        }
+
+        if (context != null) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View layout = inflater.inflate(R.layout.custom_toast, null);
+
+            TextView text = layout.findViewById(R.id.toast_text);
+            text.setText(message);
+
+            Toast toast = new Toast(context);
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setView(layout);
+            toast.show();
+        } else {
+            Log.e("MyFragment", "Context is null, cannot show Toast");
+        }
     }
 }
