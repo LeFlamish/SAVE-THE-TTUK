@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -80,7 +81,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         View view = inflater.inflate(R.layout.frag1_home, container, false);
 
         try{
-            Button helpButton = view.findViewById(R.id.help);
+            ImageButton helpButton = view.findViewById(R.id.help);
             helpButton.setOnClickListener(v -> {
                 Intent intent = new Intent(getActivity(), PopupActivity.class);
                 startActivity(intent);
