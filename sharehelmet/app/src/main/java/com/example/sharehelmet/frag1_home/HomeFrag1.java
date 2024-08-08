@@ -484,7 +484,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog, null);
-        TextView t1=(TextView)dialogView.findViewById(R.id.name);
+        TextView t1=(TextView)dialogView.findViewById(R.id.station_name_text);
         TextView t2=(TextView)dialogView.findViewById(R.id.stock);
         TextView t3=(TextView)dialogView.findViewById(R.id.distance);
         t1.setText(name);
