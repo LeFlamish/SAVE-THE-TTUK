@@ -21,11 +21,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.sharehelmet.R;
 import com.example.sharehelmet.home.MainActivity;
@@ -67,6 +69,7 @@ public class BarcodeStartFragment3 extends Fragment {
     private static final Pattern CODE_PATTERN = Pattern.compile("^\\d{3}-\\d{3}$");
     private static final int LOCATION_REQUEST_CODE = 1000;
     private FusedLocationProviderClient fusedLocationClient;
+    private OnBackPressedCallback callback;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -225,6 +228,28 @@ public class BarcodeStartFragment3 extends Fragment {
             }
         });
     }
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        barcodeView.setTorchOff();
+        isFlashOn = false;
+    }
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // 뒤로가기 클릭 시 동작하는 로직
+                barcodeView.setTorchOff();
+                isFlashOn = false;
+                requireActivity().finish();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
