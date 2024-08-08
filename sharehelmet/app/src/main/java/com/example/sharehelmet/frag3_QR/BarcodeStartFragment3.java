@@ -346,4 +346,15 @@ public class BarcodeStartFragment3 extends Fragment {
             Log.e("BarcodeStartFragment3", "Fragment is not attached to an Activity or Context is null, cannot show Toast");
         }
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        barcodeView.resume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        barcodeView.pause();
+    }
 }

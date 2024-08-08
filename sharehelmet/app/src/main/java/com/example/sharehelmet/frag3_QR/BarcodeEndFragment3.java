@@ -335,4 +335,15 @@ public class BarcodeEndFragment3 extends Fragment {
             Log.e("MyFragment", "Context is null, cannot show Toast");
         }
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        barcodeView.resume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        barcodeView.pause();
+    }
 }
