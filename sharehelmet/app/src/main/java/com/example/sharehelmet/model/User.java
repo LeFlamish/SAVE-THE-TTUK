@@ -5,6 +5,7 @@ import com.naver.maps.geometry.LatLng;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class User implements Serializable {
@@ -12,7 +13,7 @@ public class User implements Serializable {
     private String Email;
     private String Phone;
     private int money;
-    Map<String, String> Record = new HashMap<>();
+    Map<String, List<String>> Record = new HashMap<>();
     Map<String, Object> Cupons = new HashMap<>();
     private int now_qr;
     //0:대여qr
@@ -30,11 +31,11 @@ public class User implements Serializable {
         this.now_qr=0;
     }
 
-    public Map<String, String> getRecord() {
+    public Map<String, List<String>> getRecord() {
         return Record;
     }
     public Map<String, Object> getCupons() { return Cupons; }
-    public void setRecord(Map<String, String> record) {
+    public void setRecord(Map<String, List<String>> record) {
         Record = record;
     }
     public void setCupons(Map<String, Object> cupons){ Cupons = cupons; }
