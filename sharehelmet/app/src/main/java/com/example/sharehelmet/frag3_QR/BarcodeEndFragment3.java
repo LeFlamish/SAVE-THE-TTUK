@@ -45,8 +45,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class BarcodeEndFragment3 extends Fragment {
@@ -65,6 +67,7 @@ public class BarcodeEndFragment3 extends Fragment {
     private static final Pattern CODE_PATTERN = Pattern.compile("^\\d{3}\\d{3}$");
     private FusedLocationProviderClient fusedLocationClient;
     private String insteadQrResult;
+    Map<String, List<String>> hashMap = new HashMap<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -240,7 +243,7 @@ public class BarcodeEndFragment3 extends Fragment {
                         String placeKey = placeSnapshot.getKey();
                         Storage storage = placeSnapshot.getValue(Storage.class);
                         if (storage != null) {
-                            if(haversine(myLatitude, myLongitude, storage.getLatitude(), storage.getLongitude())<=10000){
+                            if(haversine(myLatitude, myLongitude, storage.getLatitude(), storage.getLongitude())<=5*100000000){
                                 ArrayList<String> storedHelmetID = storage.getStoredHelmetID();
                                 if (storedHelmetID != null && helmetIndex >= 0 && helmetIndex < storedHelmetID.size()) {
                                     if ("-".equals(storedHelmetID.get(helmetIndex))) {
@@ -263,6 +266,24 @@ public class BarcodeEndFragment3 extends Fragment {
                                         user.setNow_qr(3);
                                         user.setReturn_info(return_info);
                                         user.setMoney(user.getMoney()-Integer.parseInt(String.valueOf(calculateMoney())));
+
+                                        db.child("users").child(firebaseId).setValue(user);
+
+                                        LocalDateTime rentalEndTime = LocalDateTime.now(); // 대여 시작 시간 저장
+                                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss", Locale.getDefault());
+                                        String formattedEndTime = rentalEndTime.format(formatter);
+
+                                        ArrayList<String> result=new ArrayList<>();
+                                        result.add(user.getRental_info().get(1).split(" ")[1]);
+                                        result.add(formattedEndTime);
+                                        result.add(user.getReturn_info().get(0));
+                                        result.add(user.getReturn_info().get(1));
+                                        result.add(user.getReturn_info().get(2));
+                                        result.add(user.getRental_info().get(2));
+                                        result.add(locationID);
+                                        hashMap=user.getRecord();
+                                        hashMap.put(user.getRental_info().get(1),result);
+                                        user.setRecord(hashMap);
                                         db.child("users").child(firebaseId).setValue(user);
 
                                         //프래그먼트 이동

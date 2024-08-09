@@ -18,10 +18,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.naver.maps.geometry.LatLng;
+import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.UiSettings;
+import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.widget.LocationButtonView;
 
 import java.text.ParseException;
@@ -98,9 +101,9 @@ public class RidingDetailActivity extends AppCompatActivity implements OnMapRead
     }
     private void update(){
         sortedEntries = new ArrayList<>(hashMap.entrySet());
-        sortedEntries.sort((entry1, entry2) -> {
+        sortedEntries.sort((entry2, entry1) -> {
             // 키를 먼저 비교
-            int keyCompare = entry1.getKey().compareTo(entry2.getKey());
+            int keyCompare = entry1.getKey().split(" ")[0].compareTo(entry2.getKey().split(" ")[0]);
             if (keyCompare != 0) {
                 return keyCompare;
             }
@@ -124,7 +127,8 @@ public class RidingDetailActivity extends AppCompatActivity implements OnMapRead
         TextView money1=findViewById(R.id.money1);
         TextView money2=findViewById(R.id.money2);
         TextView helmet=findViewById(R.id.helmet);
-
+        TextView start_location_tv=findViewById(R.id.start_location_tv);
+        TextView end_location_tv=findViewById(R.id.end_location_tv);
 
         SimpleDateFormat timeFormat24 = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()); // 24시간 형식
         SimpleDateFormat timeFormat12 = new SimpleDateFormat("hh:mm a", Locale.ENGLISH); // 12시간 형식 AM/PM
@@ -147,9 +151,60 @@ public class RidingDetailActivity extends AppCompatActivity implements OnMapRead
 
         String startTimeFormatted = timeFormat12.format(startTime);
         String endTimeFormatted = timeFormat12.format(endTime);
+        db.child("places").orderByChild("locationID").equalTo(values.get(5))
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            // snapshot.getKey()로 각 매칭되는 데이터의 키를 얻을 수 있음
+                            String key = snapshot.getKey();
+                            start_location_tv.setText(key);
+                            double latitude = snapshot.child("latitude").getValue(Double.class);
+                            double longitude = snapshot.child("longitude").getValue(Double.class);
+                            startLatLng = new LatLng(latitude, longitude);
+                            Marker marker = new Marker();
+                            marker.setPosition(startLatLng);
+                            marker.setCaptionText("출발");
+                            marker.setMap(naverMap);
+                        }
+                        if (startLatLng != null && endLatLng != null) {
+                            moveCameraToMidpoint(startLatLng, endLatLng);
+                        }
+                    }
 
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e("FirebaseError", "Error occurred: " + databaseError.getMessage());
+                    }
+                });
+        db.child("places").orderByChild("locationID").equalTo(values.get(6))
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            // snapshot.getKey()로 각 매칭되는 데이터의 키를 얻을 수 있음
+                            String key = snapshot.getKey();
+                            end_location_tv.setText(key);
+                            double latitude = snapshot.child("latitude").getValue(Double.class);
+                            double longitude = snapshot.child("longitude").getValue(Double.class);
+                            endLatLng = new LatLng(latitude, longitude);
+                            Marker marker = new Marker();
+                            marker.setPosition(endLatLng);
+                            marker.setCaptionText("도착");
+                            marker.setMap(naverMap);
+                        }
+                        if (startLatLng != null && endLatLng != null) {
+                            moveCameraToMidpoint(startLatLng, endLatLng);
+                        }
+                    }
 
-        riding_date_text_view.setText(entry.getKey());
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e("FirebaseError", "Error occurred: " + databaseError.getMessage());
+                    }
+                });
+
+        riding_date_text_view.setText(entry.getKey().split(" ")[0]);
         start_time_tv.setText(startTimeFormatted);
         end_time_tv.setText(endTimeFormatted);
         money1.setText(String.valueOf(calculateMoney(values.get(3))));
@@ -160,6 +215,16 @@ public class RidingDetailActivity extends AppCompatActivity implements OnMapRead
 
         backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(v -> onBackPressed());
+    }
+    LatLng startLatLng = null;
+    LatLng endLatLng = null;
+    private void moveCameraToMidpoint(LatLng startLatLng, LatLng endLatLng) {
+        double midLat = (startLatLng.latitude + endLatLng.latitude) / 2;
+        double midLng = (startLatLng.longitude + endLatLng.longitude) / 2;
+        LatLng midpoint = new LatLng(midLat, midLng);
+
+        CameraUpdate cameraUpdate = CameraUpdate.scrollTo(midpoint);
+        naverMap.moveCamera(cameraUpdate);
     }
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {

@@ -175,7 +175,7 @@ public class BarcodeStartFragment3 extends Fragment {
                         String placeKey = placeSnapshot.getKey();
                         Storage storage = placeSnapshot.getValue(Storage.class);
                         if (storage != null) {
-                            if (haversine(myLatitude, myLongitude, storage.getLatitude(), storage.getLongitude()) <= 10000) {
+                            if (haversine(myLatitude, myLongitude, storage.getLatitude(), storage.getLongitude()) <= 5*100000000) {
                                 ArrayList<String> storedHelmetID = storage.getStoredHelmetID();
                                 if (storedHelmetID != null && helmetIndex >= 0 && helmetIndex < storedHelmetID.size()) {
                                     String helmetId = storedHelmetID.get(helmetIndex);
@@ -194,6 +194,7 @@ public class BarcodeStartFragment3 extends Fragment {
                                         ArrayList<String> rental_info = new ArrayList<>();
                                         rental_info.add(helmetId);
                                         rental_info.add(formattedStartTime);
+                                        rental_info.add(locationID);
                                         user.setNow_qr(1);
                                         user.setRental_info(rental_info);
                                         db.child("users").child(firebaseId).setValue(user);
