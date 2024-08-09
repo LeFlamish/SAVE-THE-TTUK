@@ -431,7 +431,11 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         super.onResume();
         mapView.onResume();
     }
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        mapView.onStart();
+    }
     @Override
     public void onPause() {
         super.onPause();
