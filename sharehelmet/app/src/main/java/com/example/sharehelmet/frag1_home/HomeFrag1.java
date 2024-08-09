@@ -12,6 +12,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -22,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -33,16 +35,21 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.sharehelmet.PopupActivity;
 import com.example.sharehelmet.R;
 import com.example.sharehelmet.frag5_profile.RidingGuideActivity;
 import com.example.sharehelmet.model.Storage;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.LocationTrackingMode;
@@ -489,16 +496,45 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    public void showDialog(String name,int stock,double length) {
+    public void showDialog(String name, int stock, double length) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog, null);
-        TextView t1=(TextView)dialogView.findViewById(R.id.station_name_text);
-        TextView t2=(TextView)dialogView.findViewById(R.id.stock);
-        TextView t3=(TextView)dialogView.findViewById(R.id.distance);
+
+        TextView t1 = dialogView.findViewById(R.id.station_name_text);
+        TextView t2 = dialogView.findViewById(R.id.stock);
+        TextView t3 = dialogView.findViewById(R.id.distance);
+        ImageView stationImage = dialogView.findViewById(R.id.station_image); // ImageView 추가
+
         t1.setText(name);
-        t2.setText(stock+"개");
+        t2.setText(stock + "개");
         t3.setText(String.format("%.2fkm", length));
+
+        // Firebase Storage에서 이미지 가져오기
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference().child("images/"+name+".jpg"); // 이미지 경로 예시
+
+
+
+
+        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                // Glide를 사용하여 이미지 로드
+                Glide.with(getActivity())
+                        .load(uri)
+                        .placeholder(R.drawable.camera_24) // 로딩 중일 때 표시할 이미지
+                        .error(R.drawable.camera_24) // 로딩 실패 시 표시할 이미지
+                        .into(stationImage);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+
+
         builder.setView(dialogView);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
@@ -509,4 +545,6 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+
 }
