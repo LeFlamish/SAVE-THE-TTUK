@@ -1,5 +1,7 @@
 package com.example.sharehelmet.frag3_QR;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -77,6 +79,9 @@ public class ResultFragment3 extends Fragment {
                         .commit();
             }
         });
+        TextView askButton = view.findViewById(R.id.ask_button);
+        askButton.setOnClickListener(askButtonClickListener);
+
         return view;
     }
     private void ReturnHelmet2() {
@@ -108,4 +113,18 @@ public class ResultFragment3 extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
+
+    // 클래스 내부에 클릭 리스너를 정의
+    private View.OnClickListener askButtonClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            // 여기에 고객센터 문의하기 동작을 추가하세요.
+            // 예를 들어, 고객센터로 전화 연결 또는 다른 액티비티로 이동 등을 추가할 수 있습니다.
+
+            String url = "http://pf.kakao.com/_KxnEyG/chat";
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(intent);
+        }
+    };
+
 }

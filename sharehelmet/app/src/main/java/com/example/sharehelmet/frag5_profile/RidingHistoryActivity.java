@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RidingHistoryActivity extends AppCompatActivity {
@@ -28,7 +29,7 @@ public class RidingHistoryActivity extends AppCompatActivity {
     private User user;
     String firebaseId;
     private DatabaseReference db;
-    Map<String, String> hashMap = new HashMap<>();
+    Map<String, List<String>> hashMap = new HashMap<>();
     ListView Riding_History;
 
     private void loadDataFromDatabase() {
@@ -74,6 +75,8 @@ public class RidingHistoryActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 빈 액티비티로 이동
                 Intent detailIntent = new Intent(RidingHistoryActivity.this, RidingDetailActivity.class);
+                detailIntent.putExtra("position",position);
+                detailIntent.putExtra("firebaseId",firebaseId);
                 startActivity(detailIntent);
             }
         });

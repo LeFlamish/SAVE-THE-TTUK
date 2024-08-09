@@ -180,9 +180,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="요금이 과다하게 청구되었나요?" />
+                    android:text="요금 또는 기기에 문제가 있나요?" />
 
                 <TextView
+                    android:id="@+id/ask_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"

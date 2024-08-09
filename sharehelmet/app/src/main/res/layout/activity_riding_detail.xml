@@ -259,6 +259,7 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/money1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="1,240원"
@@ -281,6 +282,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/money2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="1,240원"
@@ -357,6 +359,7 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/helmet"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="001-001"
