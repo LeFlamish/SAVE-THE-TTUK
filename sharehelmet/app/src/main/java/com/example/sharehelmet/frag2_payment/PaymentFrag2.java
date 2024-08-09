@@ -27,11 +27,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -113,7 +115,6 @@ public class PaymentFrag2 extends Fragment  {
                 if(snapshot.getValue(User.class) != null){
                     user = snapshot.getValue(User.class);
                     userCupon = user.getCupons();
-                    money_textview.setText(String.valueOf(user.getMoney()));
                     updateUI();
                 }
             }
@@ -145,6 +146,12 @@ public class PaymentFrag2 extends Fragment  {
 
         List<Cupon> cuponListData = new ArrayList<>();
 
+        //user money 갱신
+        NumberFormat numberFormat = NumberFormat.getInstance(Locale.getDefault());
+        String formattedMoney = numberFormat.format(user.getMoney());
+        money_textview.setText(formattedMoney);
+
+        //user cupon 등록
         for(String key : userCupon.keySet()){
             Map<String, Object> cuponData = (Map<String, Object>) userCupon.get(key);
             Cupon tempCupon = new Cupon(
