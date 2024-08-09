@@ -5,7 +5,7 @@
     <item android:id="@android:id/background">
         <shape>
             <corners
-                android:radius="3dp"/>
+                android:radius="4dp"/>
         </shape>
     </item>
 </ripple>

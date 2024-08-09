@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
         editMAIL = findViewById(R.id.editMAIL);
         editPW = findViewById(R.id.editPW);
         loginBtn = findViewById(R.id.loginbtn);
-        backBtn = findViewById(R.id.back_to_start);
+        backBtn = findViewById(R.id.back_button);
 
         loginClicked();
         backBtnClicked();

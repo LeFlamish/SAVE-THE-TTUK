@@ -70,7 +70,7 @@ public class RegisterActivity extends AppCompatActivity {
         pwnotcorrect=findViewById(R.id.pwnotcorrect);
 
         signUp = findViewById(R.id.signupbtn);
-        backBtn = findViewById(R.id.back_to_start);
+        backBtn = findViewById(R.id.back_button);
 
         loadDataFromDatabase();
         signupClicked();
