@@ -20,7 +20,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -35,7 +37,7 @@ public class ResultFragment3 extends Fragment {
     private TextView t23;
     private DatabaseReference db;
     private Button overButton;
-    Map<String, String> hashMap = new HashMap<>();
+    Map<String, List<String>> hashMap = new HashMap<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -103,11 +105,20 @@ public class ResultFragment3 extends Fragment {
 
                 //users 파베 수정
                 LocalDateTime rentalEndTime = LocalDateTime.now(); // 대여 시작 시간 저장
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss", Locale.getDefault());
                 String formattedEndTime = rentalEndTime.format(formatter);
-                hashMap.put(user.getRental_info().get(1),formattedEndTime);
+
+                ArrayList<String> result=new ArrayList<>();
+                result.add(user.getRental_info().get(1).split(" ")[1]);
+                result.add(formattedEndTime);
+                result.add(user.getReturn_info().get(0));
+                result.add(user.getReturn_info().get(1));
+                result.add(user.getReturn_info().get(2));
+
+                hashMap.put(user.getRental_info().get(1).split(" ")[0],result);
                 user.setRecord(hashMap);
                 db.child("users").child(firebaseId).setValue(user);
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
