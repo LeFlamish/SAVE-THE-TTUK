@@ -65,12 +65,13 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/round_border"
+                android:background="@drawable/custom_ripple_effect"
                 android:backgroundTint="@color/black"
                 android:padding="8dp"
                 android:text="결제완료"
                 android:textColor="@android:color/white"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:fontFamily="@font/font_thin"/>
 
             <!-- 킥보드 정보 -->
             <TextView
@@ -82,7 +83,8 @@
                 android:layout_marginBottom="4dp"
                 android:text="헬멧"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:fontFamily="@font/font_main"/>
 
             <TextView
                 android:id="@+id/riding_date_text_view"
@@ -92,7 +94,8 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:text="24.07.25 (목)"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:fontFamily="@font/font_main"/>
 
 
             <LinearLayout
@@ -128,7 +131,8 @@
                         android:layout_marginBottom="4dp"
                         android:text="출발"
                         android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:fontFamily="@font/font_main"/>
 
 
                     <RelativeLayout
@@ -142,7 +146,8 @@
                             android:layout_alignParentStart="true"
                             android:layout_marginBottom="8dp"
                             android:text="대구광역시 북구 복현동"
-                            android:textSize="14sp" />
+                            android:textSize="14sp"
+                            android:fontFamily="@font/font_main"/>
 
                         <TextView
                             android:id="@+id/start_time_tv"
@@ -151,7 +156,8 @@
                             android:layout_alignParentEnd="true"
                             android:layout_marginBottom="8dp"
                             android:text="오후 12:50"
-                            android:textSize="14sp" />
+                            android:textSize="14sp"
+                            android:fontFamily="@font/font_main"/>
 
                     </RelativeLayout>
 
@@ -163,7 +169,8 @@
                         android:layout_marginBottom="4dp"
                         android:text="도착"
                         android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:fontFamily="@font/font_main"/>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -176,7 +183,8 @@
                             android:layout_alignParentStart="true"
                             android:layout_marginBottom="16dp"
                             android:text="대구광역시 북구 산격동"
-                            android:textSize="14sp" />
+                            android:textSize="14sp"
+                            android:fontFamily="@font/font_main"/>
 
                         <TextView
                             android:id="@+id/end_time_tv"
@@ -200,11 +208,12 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="8dp"
-                    android:background="@drawable/round_border"
+                    android:background="@drawable/custom_ripple_effect"
                     android:backgroundTint="@color/black"
                     android:text="이 기기 고장신고"
                     android:textColor="@android:color/white"
-                    android:textSize="18sp" />
+                    android:textSize="20sp"
+                    android:fontFamily="@font/font_thin"/>
 
                 <!-- 고객 센터 문의 버튼 -->
                 <android.widget.Button
@@ -214,11 +223,12 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
-                    android:background="@drawable/round_border"
+                    android:background="@drawable/custom_ripple_effect"
                     android:backgroundTint="#F7F8FA"
                     android:text="고객 센터 문의"
                     android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:textSize="20sp"
+                    android:fontFamily="@font/font_thin"/>
 
             </LinearLayout>
 
@@ -242,7 +252,8 @@
                     android:layout_marginBottom="8dp"
                     android:text="결제 정보"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:fontFamily="@font/font_main"/>
 
                 <!-- 이용 금액 -->
                 <LinearLayout
@@ -256,7 +267,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="이용 금액"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:fontFamily="@font/font_main"/>
 
                     <TextView
                         android:id="@+id/money1"
@@ -264,7 +276,8 @@
                         android:layout_height="wrap_content"
                         android:text="1,240원"
                         android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:fontFamily="@font/font_main"/>
                 </LinearLayout>
 
                 <!-- 총 결제 금액 -->
@@ -279,7 +292,8 @@
                         android:layout_weight="1"
                         android:text="총 결제 금액"
                         android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:fontFamily="@font/font_main"/>
 
                     <TextView
                         android:id="@+id/money2"
@@ -287,18 +301,21 @@
                         android:layout_height="wrap_content"
                         android:text="1,240원"
                         android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:fontFamily="@font/font_main"/>
                 </LinearLayout>
 
                 <!-- 상세 내역 보기 -->
                 <TextView
+                    android:id="@+id/detail_money"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginTop="8dp"
                     android:text="상세 내역 보기"
                     android:textColor="@color/gray"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:fontFamily="@font/font_main"/>
             </LinearLayout>
 
             <!-- 기기 정보 섹션 -->
@@ -321,7 +338,8 @@
                     android:layout_marginBottom="8dp"
                     android:text="기기 정보"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:fontFamily="@font/font_main"/>
 
                 <!-- 기종 정보 -->
                 <LinearLayout
@@ -335,14 +353,16 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="기종"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:fontFamily="@font/font_main"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="헬멧"
                         android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:fontFamily="@font/font_main"/>
                 </LinearLayout>
 
                 <!-- 기기 코드 -->
@@ -356,7 +376,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="기기코드"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:fontFamily="@font/font_main"/>
 
                     <TextView
                         android:id="@+id/helmet"
@@ -364,7 +385,8 @@
                         android:layout_height="wrap_content"
                         android:text="001-001"
                         android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:fontFamily="@font/font_main"/>
                 </LinearLayout>
             </LinearLayout>
 
