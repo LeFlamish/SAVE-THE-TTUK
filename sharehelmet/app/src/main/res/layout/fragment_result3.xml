@@ -18,8 +18,7 @@
         android:layout_marginBottom="24dp"
         android:background="@drawable/white_border_20"
         android:elevation="8dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp">
+        android:paddingVertical="20dp">
 
 
         <TextView
@@ -28,8 +27,10 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="이용 결과"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textSize="35sp"
+            android:textColor="@color/black"
+            android:textStyle="normal"
+            android:fontFamily="@font/font_main"/>
     </RelativeLayout>
 
     <ScrollView
@@ -157,7 +158,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
-                    android:background="@drawable/round_border"
+                    android:background="@drawable/custom_ripple_effect"
                     android:backgroundTint="@color/red_orange"
                     android:padding="8dp"
                     android:text="돌아가기"
