@@ -518,9 +518,22 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         StorageReference storageRef = storage.getReference().child("images/"+name+".jpg"); // 이미지 경로 예시
 
 
+        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                // Glide를 사용하여 이미지 로드
+                Glide.with(getActivity())
+                        .load(uri)
+                        .placeholder(R.drawable.camera_24) // 로딩 중일 때 표시할 이미지
+                        .error(R.drawable.camera_24) // 로딩 실패 시 표시할 이미지
+                        .into(stationImage);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
 
-
-
+            }
+        });
 
 
         builder.setView(dialogView);
