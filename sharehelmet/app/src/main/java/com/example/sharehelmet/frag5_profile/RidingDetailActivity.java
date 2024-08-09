@@ -18,10 +18,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.naver.maps.geometry.LatLng;
+import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.UiSettings;
+import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.widget.LocationButtonView;
 
 import java.text.ParseException;
@@ -156,7 +159,16 @@ public class RidingDetailActivity extends AppCompatActivity implements OnMapRead
                             // snapshot.getKey()로 각 매칭되는 데이터의 키를 얻을 수 있음
                             String key = snapshot.getKey();
                             start_location_tv.setText(key);
-                            // 필요한 작업 수행
+                            double latitude = snapshot.child("latitude").getValue(Double.class);
+                            double longitude = snapshot.child("longitude").getValue(Double.class);
+                            startLatLng = new LatLng(latitude, longitude);
+                            Marker marker = new Marker();
+                            marker.setPosition(startLatLng);
+                            marker.setCaptionText("출발");
+                            marker.setMap(naverMap);
+                        }
+                        if (startLatLng != null && endLatLng != null) {
+                            moveCameraToMidpoint(startLatLng, endLatLng);
                         }
                     }
 
@@ -173,7 +185,16 @@ public class RidingDetailActivity extends AppCompatActivity implements OnMapRead
                             // snapshot.getKey()로 각 매칭되는 데이터의 키를 얻을 수 있음
                             String key = snapshot.getKey();
                             end_location_tv.setText(key);
-                            // 필요한 작업 수행
+                            double latitude = snapshot.child("latitude").getValue(Double.class);
+                            double longitude = snapshot.child("longitude").getValue(Double.class);
+                            endLatLng = new LatLng(latitude, longitude);
+                            Marker marker = new Marker();
+                            marker.setPosition(endLatLng);
+                            marker.setCaptionText("도착");
+                            marker.setMap(naverMap);
+                        }
+                        if (startLatLng != null && endLatLng != null) {
+                            moveCameraToMidpoint(startLatLng, endLatLng);
                         }
                     }
 
@@ -194,6 +215,16 @@ public class RidingDetailActivity extends AppCompatActivity implements OnMapRead
 
         backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(v -> onBackPressed());
+    }
+    LatLng startLatLng = null;
+    LatLng endLatLng = null;
+    private void moveCameraToMidpoint(LatLng startLatLng, LatLng endLatLng) {
+        double midLat = (startLatLng.latitude + endLatLng.latitude) / 2;
+        double midLng = (startLatLng.longitude + endLatLng.longitude) / 2;
+        LatLng midpoint = new LatLng(midLat, midLng);
+
+        CameraUpdate cameraUpdate = CameraUpdate.scrollTo(midpoint);
+        naverMap.moveCamera(cameraUpdate);
     }
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
