@@ -44,7 +44,6 @@
             android:paddingTop="0dp"
             android:paddingBottom="0dp">
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -73,7 +72,8 @@
                         android:paddingStart="30dp"
                         android:text="헬멧 ID"
                         android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:fontFamily="@font/font_main"/>
 
                     <TextView
                         android:id="@+id/overhelmetId"
@@ -84,7 +84,8 @@
                         android:paddingTop="8dp"
                         android:paddingEnd="30dp"
                         android:paddingBottom="8dp"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:fontFamily="@font/font_main"/>
 
                 </LinearLayout>
 
@@ -101,10 +102,10 @@
                         android:layout_height="wrap_content"
                         android:padding="8dp"
                         android:paddingStart="30dp"
-
                         android:text="사용 시간"
                         android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:fontFamily="@font/font_main"/>
 
                     <TextView
                         android:id="@+id/overtime"
@@ -115,7 +116,8 @@
                         android:paddingTop="8dp"
                         android:paddingEnd="30dp"
                         android:paddingBottom="8dp"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:fontFamily="@font/font_main"/>
 
                 </LinearLayout>
 
@@ -131,10 +133,10 @@
                         android:layout_height="wrap_content"
                         android:padding="16dp"
                         android:paddingStart="30dp"
-
-                        android:text="추가 요금"
+                        android:text="요금"
                         android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:fontFamily="@font/font_main"/>
 
                     <TextView
                         android:id="@+id/overcharge"
@@ -145,24 +147,24 @@
                         android:paddingTop="8dp"
                         android:paddingEnd="30dp"
                         android:paddingBottom="8dp"
-                        android:textSize="16sp" />
-
+                        android:textSize="16sp"
+                        android:fontFamily="@font/font_main"/>
                 </LinearLayout>
-
 
                 <android.widget.Button
                     android:id="@+id/returntostart"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="48dp"
+                    android:layout_marginEnd="14dp"
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/custom_ripple_effect"
                     android:backgroundTint="@color/red_orange"
-                    android:padding="8dp"
                     android:text="돌아가기"
-                    android:textSize="18sp" />
+                    android:textSize="20sp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/font_thin" />
 
 
                 <LinearLayout
@@ -179,7 +181,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
-                        android:text="요금 또는 기기에 문제가 있나요?" />
+                        android:text="요금 또는 기기에 문제가 있나요?"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/font_thin"/>
 
                     <TextView
                         android:id="@+id/ask_button"
@@ -187,7 +191,9 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
                         android:text="고객센터 문의하기"
-                        android:textColor="@color/red_orange" />
+                        android:textColor="@color/red_orange"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/font_main"/>
 
                 </LinearLayout>
 

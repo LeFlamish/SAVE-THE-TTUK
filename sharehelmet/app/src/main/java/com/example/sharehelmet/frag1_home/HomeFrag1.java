@@ -14,6 +14,7 @@ import android.graphics.Typeface;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,6 +43,7 @@ import com.example.sharehelmet.frag5_profile.RidingGuideActivity;
 import com.example.sharehelmet.model.Storage;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -100,7 +102,6 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
             });
 
 
-
             View bottomSheet = view.findViewById(R.id.persistent_bottom_sheet);
             bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 
@@ -124,7 +125,6 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
         }
 
-
         return view;
     }
 
@@ -134,27 +134,19 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
         try{
             mapView = view.findViewById(R.id.map);
-            Button btnModeToggle = view.findViewById(R.id.btn_mode_toggle);
-            Button btnModeLocation = view.findViewById(R.id.btn_current_location);
+            //Button btnModeToggle = view.findViewById(R.id.btn_mode_toggle);
+            //Button btnModeLocation = view.findViewById(R.id.btn_current_location);
 
             mapView.onCreate(savedInstanceState);
             mapView.getMapAsync(this);
 
             locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
-
-            btnModeToggle.setOnClickListener(v -> {
-                if (naverMap != null) {
-                    toggleLocationTrackingMode();
-                }
-            });
-
-            btnModeLocation.setOnClickListener(v -> {
-                setTrackingMode();
-            });
-
             db = FirebaseDatabase.getInstance().getReference();
-        }catch(Exception ignored){
 
+            toggleLocationTrackingMode();
+
+        }
+        catch(Exception ignored){
         }
 
         /*savePlace("001", "IT 1호관", 35.88748984889353, 128.61274302005768,20);
@@ -169,7 +161,6 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         savePlace("010", "일청담",35.8886304944912,128.61211539394523,20);*/
 
         try{
-            listView = view.findViewById(R.id.place_list_view);
             spinnerSort = view.findViewById(R.id.spinner_sort);
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                     R.array.sort_options, android.R.layout.simple_spinner_item);
@@ -263,9 +254,8 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
             LocationButtonView locationButtonView = getView().findViewById(R.id.location);
             locationButtonView.setMap(naverMap);
 
-            naverMap.addOnLocationChangeListener(location -> {
-                displayNearbyPlaces(location);
-            });
+            naverMap.addOnLocationChangeListener(location -> displayNearbyPlaces(location));
+
             int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
             if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
                 naverMap.setMapType(NaverMap.MapType.Navi); // 다크 모드
@@ -310,8 +300,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
                         double distance = calculateDistance(currentLatLng, placeLatLng);
                         Place place = new Place(id, placeLatLng, distance, stock, name);
                         allPlaces.add(place);
-                        if (distance <= 1.5*1000000000) {
-
+                        if (true || distance <= 1.5*1000000000) {
 
                             // 재고가 있는 마커 중에서 가장 가까운 마커를 찾기
                             if (stock > 0 && distance < closestDistanceWithStock) {
@@ -345,7 +334,6 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
                             }
                         }
                     }
-
                     sortAndDisplayPlaces();
                 }
 
@@ -356,6 +344,80 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
             });
         }catch (Exception ignored){
 
+        }
+    }
+
+    public void showPlaceInfo(String name, int stock, double length) {
+        View placeInfoLayout = getView().findViewById(R.id.place_info_layout);
+        if (placeInfoLayout != null) {
+            // 먼저 뷰의 가시성을 VISIBLE로 설정하고 투명도를 1로 설정하여 보이게 함
+            placeInfoLayout.setVisibility(View.VISIBLE);
+            placeInfoLayout.setAlpha(0f); // 초기 투명도 설정
+
+            // 애니메이션을 사용하여 투명도를 1로 변경
+            placeInfoLayout.animate()
+                    .alpha(1f)
+                    .setDuration(500) // 애니메이션 지속 시간 (예: 500ms)
+                    .start();
+        }
+
+        // 텍스트 뷰와 이미지 뷰를 찾아서 값을 설정
+        TextView title = getView().findViewById(R.id.title);
+        TextView rentalStatus = getView().findViewById(R.id.rental_status);
+        TextView stockTextView = getView().findViewById(R.id.stock);
+        TextView distance = getView().findViewById(R.id.distance);
+        ImageView thumbnail = getView().findViewById(R.id.thumbnail);
+
+        title.setText(name);
+        rentalStatus.setText(" 대여함");
+        stockTextView.setText(stock + "개");
+        distance.setText(String.format("%.2fkm", length));
+
+        // Firebase Storage에서 이미지 가져오기
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference().child("images/" + name + ".jpg"); // 이미지 경로 예시
+
+        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                // Glide를 사용하여 이미지 로드
+                Glide.with(getActivity())
+                        .load(uri)
+                        .placeholder(R.drawable.camera_24) // 로딩 중일 때 표시할 이미지
+                        .error(R.drawable.camera_24) // 로딩 실패 시 표시할 이미지
+                        .into(thumbnail);
+
+                //handler을 사용하여 자동으로 hine
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        hidePlaceInfo();
+                    }
+                }, 10000); // 2000 밀리초 = 2초
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // 로딩 실패 시 기본 이미지를 유지
+            }
+        });
+    }
+
+    private void hidePlaceInfo() {
+        View placeInfoLayout = getView().findViewById(R.id.place_info_layout); // RelativeLayout의 ID를 사용
+
+        if (placeInfoLayout != null) {
+            // 서서히 사라지게 하는 애니메이션
+            placeInfoLayout.animate()
+                    .alpha(0f) // 투명도 0으로 설정
+                    .setDuration(300) // 애니메이션 시간 (500ms = 0.5초)
+                    .withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 애니메이션이 끝난 후 GONE으로 설정
+                            placeInfoLayout.setVisibility(View.GONE);
+                        }
+                    });
         }
     }
 
@@ -535,7 +597,6 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
             }
         });
 
-
         builder.setView(dialogView);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
@@ -546,54 +607,4 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
-    public void showPlaceInfo(String name, int stock, double length) {
-        View placeInfoLayout = getView().findViewById(R.id.place_info_layout); // RelativeLayout의 ID를 사용
-        if (placeInfoLayout != null) {
-            placeInfoLayout.setVisibility(View.VISIBLE);
-        }
-
-        // 텍스트 뷰와 이미지 뷰를 찾아서 값을 설정
-        TextView title = getView().findViewById(R.id.title);
-        TextView rentalStatus = getView().findViewById(R.id.rental_status);
-        TextView stockTextView = getView().findViewById(R.id.stock);
-        TextView distance = getView().findViewById(R.id.distance);
-        ImageView thumbnail = getView().findViewById(R.id.thumbnail);
-
-        title.setText(name);
-        rentalStatus.setText(" 대여함");
-        stockTextView.setText(stock + "개");
-        distance.setText(String.format("%.2fkm", length));
-
-        // Firebase Storage에서 이미지 가져오기
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference().child("images/" + name + ".jpg"); // 이미지 경로 예시
-
-        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                // Glide를 사용하여 이미지 로드
-                Glide.with(getActivity())
-                        .load(uri)
-                        .placeholder(R.drawable.camera_24) // 로딩 중일 때 표시할 이미지
-                        .error(R.drawable.camera_24) // 로딩 실패 시 표시할 이미지
-                        .into(thumbnail);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                // 로딩 실패 시 기본 이미지를 유지
-            }
-        });
-    }
-
-
-
-    private void hidePlaceInfo() {
-        View placeInfoLayout = getView().findViewById(R.id.place_info_layout); // RelativeLayout의 ID를 사용
-        if (placeInfoLayout != null) {
-            placeInfoLayout.setVisibility(View.GONE);
-        }
-    }
-
 }

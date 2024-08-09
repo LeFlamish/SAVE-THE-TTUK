@@ -16,9 +16,13 @@
     <android.widget.Button
         android:id="@+id/back"
         android:text="뒤로"
+        android:fontFamily="@font/font_thin"
+        android:textColor="@color/black"
+        android:textSize="16sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="60dp"
+        android:backgroundTint="@color/gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
@@ -32,7 +36,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:text="바코드를 사각형 안에 비춰주세요."
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:fontFamily="@font/font_main"/>
 
     <TextView
         android:id="@+id/textView2"
@@ -41,6 +47,7 @@
         android:layout_marginBottom="12dp"
         android:text="QR 코드는 보관함에 있습니다"
         android:textColor="@color/white"
+        android:fontFamily="@font/font_main"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/qr_area"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,7 +60,9 @@
         android:layout_margin="16dp"
         android:text="QR 반납"
         android:textColor="@color/white"
+        android:fontFamily="@font/font_main"
         android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/barcode_scanner"
         app:layout_constraintStart_toStartOf="@+id/barcode_scanner"
         app:layout_constraintTop_toTopOf="@+id/barcode_scanner" />
@@ -96,6 +105,8 @@
             android:layout_marginTop="3dp"
             android:text="라이트 켜기"
             android:textColor="@color/white"
+            android:textSize="16sp"
+            android:fontFamily="@font/font_thin"
             android:gravity="center" />
     </LinearLayout>
 
@@ -129,6 +140,8 @@
             android:layout_marginTop="3dp"
             android:text="코드 직접 입력"
             android:textColor="@color/white"
+            android:textSize="16sp"
+            android:fontFamily="@font/font_thin"
             android:gravity="center" />
     </LinearLayout>
 
