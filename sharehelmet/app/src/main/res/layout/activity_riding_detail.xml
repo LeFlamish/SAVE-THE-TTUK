@@ -44,7 +44,6 @@
                 android:textStyle="bold" />
         </RelativeLayout>
 
-        <!-- 반납 사진 및 설명 -->
 
         <!-- 결제 상태 -->
         <TextView
@@ -146,7 +145,7 @@
             </LinearLayout>
 
             <!-- 고장 신고 버튼 -->
-            <Button
+            <android.widget.Button
                 android:id="@+id/report_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -154,19 +153,21 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
+                android:background="@drawable/round_border"
                 android:backgroundTint="@color/black"
                 android:text="이 기기 고장신고"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
 
             <!-- 고객 센터 문의 버튼 -->
-            <Button
+            <android.widget.Button
                 android:id="@+id/ask_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
+                android:background="@drawable/round_border"
                 android:backgroundTint="#F7F8FA"
                 android:text="고객 센터 문의"
                 android:textColor="@color/black"
