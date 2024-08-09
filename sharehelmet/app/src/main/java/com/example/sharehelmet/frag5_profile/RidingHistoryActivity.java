@@ -3,6 +3,8 @@ package com.example.sharehelmet.frag5_profile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -64,21 +66,35 @@ public class RidingHistoryActivity extends AppCompatActivity {
                 Log.e("MyActivity", "Invalid Firebase ID");
             }
         }
-        Riding_History=(ListView)findViewById(R.id.riding_history_listview);
+        Riding_History = findViewById(R.id.riding_history_listview);
+
+        // 리스트뷰 아이템 클릭 리스너 설정
+        Riding_History.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // 빈 액티비티로 이동
+                Intent detailIntent = new Intent(RidingHistoryActivity.this, RidingDetailActivity.class);
+                startActivity(detailIntent);
+            }
+        });
     }
+
     private boolean isValidFirebaseId(String firebaseId) {
         return !(firebaseId.contains(".") || firebaseId.contains("#") ||
                 firebaseId.contains("$") || firebaseId.contains("[") || firebaseId.contains("]"));
     }
-    protected void setBackButton(){
+
+    protected void setBackButton() {
         backButton = findViewById(R.id.back_button);
-        backButton.setOnClickListener(v->onBackPressed());
+        backButton.setOnClickListener(v -> onBackPressed());
     }
+
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(0, R.anim.horizontal_exit);
     }
+
     private void updateListView() {
         RidingHistoryDataProcessor ridingHistoryDataProcessor = new RidingHistoryDataProcessor(this, hashMap);
         Riding_History.setAdapter(ridingHistoryDataProcessor);

@@ -35,6 +35,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.sharehelmet.PopupActivity;
 import com.example.sharehelmet.R;
+import com.example.sharehelmet.frag5_profile.RidingGuideActivity;
 import com.example.sharehelmet.model.Storage;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.database.DataSnapshot;
@@ -86,9 +87,13 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         try{
             ImageButton helpButton = view.findViewById(R.id.help);
             helpButton.setOnClickListener(v -> {
-                Intent intent = new Intent(getActivity(), PopupActivity.class);
+                Intent intent = new Intent(getActivity(), RidingGuideActivity.class);
                 startActivity(intent);
+                requireActivity().overridePendingTransition(R.anim.horizontal_enter,R.anim.none);
             });
+
+
+
             View bottomSheet = view.findViewById(R.id.persistent_bottom_sheet);
             bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 

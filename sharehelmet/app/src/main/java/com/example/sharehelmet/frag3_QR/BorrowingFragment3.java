@@ -25,6 +25,7 @@ import com.example.sharehelmet.R;
 import com.example.sharehelmet.frag1_home.HomeFrag1;
 import com.example.sharehelmet.model.Helmet;
 import com.example.sharehelmet.model.User;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -85,6 +86,12 @@ public class BorrowingFragment3 extends Fragment implements OnMapReadyCallback {
         battery = view.findViewById(R.id.battery_num);
         usingTime = view.findViewById(R.id.using_time_num);
         startTime = view.findViewById(R.id.start_time_num);
+
+        View bottomSheet = view.findViewById(R.id.persistent_bottom_sheet);
+        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+
+        // BottomSheet를 처음부터 확장된 상태로 설정
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
