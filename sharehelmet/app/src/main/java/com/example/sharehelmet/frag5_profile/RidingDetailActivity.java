@@ -98,9 +98,9 @@ public class RidingDetailActivity extends AppCompatActivity implements OnMapRead
     }
     private void update(){
         sortedEntries = new ArrayList<>(hashMap.entrySet());
-        sortedEntries.sort((entry1, entry2) -> {
+        sortedEntries.sort((entry2, entry1) -> {
             // 키를 먼저 비교
-            int keyCompare = entry1.getKey().compareTo(entry2.getKey());
+            int keyCompare = entry1.getKey().split(" ")[0].compareTo(entry2.getKey().split(" ")[0]);
             if (keyCompare != 0) {
                 return keyCompare;
             }
@@ -124,7 +124,8 @@ public class RidingDetailActivity extends AppCompatActivity implements OnMapRead
         TextView money1=findViewById(R.id.money1);
         TextView money2=findViewById(R.id.money2);
         TextView helmet=findViewById(R.id.helmet);
-
+        TextView start_location_tv=findViewById(R.id.start_location_tv);
+        TextView end_location_tv=findViewById(R.id.end_location_tv);
 
         SimpleDateFormat timeFormat24 = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()); // 24시간 형식
         SimpleDateFormat timeFormat12 = new SimpleDateFormat("hh:mm a", Locale.ENGLISH); // 12시간 형식 AM/PM
@@ -147,9 +148,42 @@ public class RidingDetailActivity extends AppCompatActivity implements OnMapRead
 
         String startTimeFormatted = timeFormat12.format(startTime);
         String endTimeFormatted = timeFormat12.format(endTime);
+        db.child("places").orderByChild("locationID").equalTo(values.get(5))
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            // snapshot.getKey()로 각 매칭되는 데이터의 키를 얻을 수 있음
+                            String key = snapshot.getKey();
+                            start_location_tv.setText(key);
+                            // 필요한 작업 수행
+                        }
+                    }
 
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e("FirebaseError", "Error occurred: " + databaseError.getMessage());
+                    }
+                });
+        db.child("places").orderByChild("locationID").equalTo(values.get(6))
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            // snapshot.getKey()로 각 매칭되는 데이터의 키를 얻을 수 있음
+                            String key = snapshot.getKey();
+                            end_location_tv.setText(key);
+                            // 필요한 작업 수행
+                        }
+                    }
 
-        riding_date_text_view.setText(entry.getKey());
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e("FirebaseError", "Error occurred: " + databaseError.getMessage());
+                    }
+                });
+
+        riding_date_text_view.setText(entry.getKey().split(" ")[0]);
         start_time_tv.setText(startTimeFormatted);
         end_time_tv.setText(endTimeFormatted);
         money1.setText(String.valueOf(calculateMoney(values.get(3))));

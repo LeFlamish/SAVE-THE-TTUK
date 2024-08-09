@@ -28,9 +28,9 @@ public class RidingHistoryDataProcessor extends BaseAdapter {
 
         // 정렬된 맵을 리스트로 변환
         sortedEntries = new ArrayList<>(hashMap.entrySet());
-        sortedEntries.sort((entry1, entry2) -> {
+        sortedEntries.sort((entry2, entry1) -> {
             // 키를 먼저 비교
-            int keyCompare = entry1.getKey().compareTo(entry2.getKey());
+            int keyCompare = entry1.getKey().split(" ")[0].compareTo(entry2.getKey().split(" ")[0]);
             if (keyCompare != 0) {
                 return keyCompare;
             }
@@ -79,7 +79,7 @@ public class RidingHistoryDataProcessor extends BaseAdapter {
 
 
         try {
-            dateText.setText(entry.getKey());
+            dateText.setText(entry.getKey().split(" ")[0]);
 
             SimpleDateFormat timeFormat24 = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()); // 24시간 형식
             SimpleDateFormat timeFormat12 = new SimpleDateFormat("hh:mm a", Locale.ENGLISH); // 12시간 형식 AM/PM
