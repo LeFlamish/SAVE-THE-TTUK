@@ -15,7 +15,8 @@
         android:layout_marginBottom="8dp"
         android:text="대여 하기"
         android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:fontFamily="@font/font_main"/>
 
     <TextView
         android:id="@+id/textViewSubtitle"
@@ -25,7 +26,8 @@
         android:layout_centerHorizontal="true"
         android:text="보관소에서 간단하게 헬멧을 대여해요"
         android:textSize="16sp"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/font_main"/>
 
     <TextView
         android:id="@+id/textViewDate"
@@ -36,7 +38,8 @@
         android:text="QR Scan 기능"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/font_main"/>
 
     <LinearLayout
         android:id="@+id/inventoryContainer"
@@ -72,7 +75,8 @@
                 android:layout_marginStart="30dp"
                 android:text="Step 1. 카메라 준비!"
                 android:textSize="25sp"
-                android:layout_centerVertical="true" />
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/font_main"/>
 
         </RelativeLayout>
 
@@ -101,7 +105,8 @@
                 android:layout_marginStart="30dp"
                 android:text="Step 2. QR 스캔!"
                 android:textSize="25sp"
-                android:layout_centerVertical="true" />
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/font_main"/>
 
 
         </RelativeLayout>
