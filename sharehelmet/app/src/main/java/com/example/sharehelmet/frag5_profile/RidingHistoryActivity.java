@@ -78,6 +78,7 @@ public class RidingHistoryActivity extends AppCompatActivity {
                 detailIntent.putExtra("position",position);
                 detailIntent.putExtra("firebaseId",firebaseId);
                 startActivity(detailIntent);
+                overridePendingTransition(R.anim.horizontal_enter,R.anim.none);
             }
         });
     }

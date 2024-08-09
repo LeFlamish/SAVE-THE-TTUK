@@ -245,7 +245,7 @@ public class RidingDetailActivity extends AppCompatActivity implements OnMapRead
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
+        overridePendingTransition(0, R.anim.horizontal_exit);
     }
 
     @Override
