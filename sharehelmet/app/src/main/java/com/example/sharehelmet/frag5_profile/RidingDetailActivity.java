@@ -1,6 +1,8 @@
 package com.example.sharehelmet.frag5_profile;
 
 import android.os.Bundle;
+import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,6 +17,7 @@ public class RidingDetailActivity extends AppCompatActivity implements OnMapRead
 
     private MapView mapView;
     private NaverMap naverMap;
+    private ImageView backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +29,9 @@ public class RidingDetailActivity extends AppCompatActivity implements OnMapRead
 
         // NaverMap 객체를 비동기적으로 받아오기
         mapView.getMapAsync(this);
+
+        backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(v -> onBackPressed());
     }
 
     @Override
@@ -42,6 +48,11 @@ public class RidingDetailActivity extends AppCompatActivity implements OnMapRead
 //        // LocationButtonView 연결
 //        LocationButtonView locationButtonView = findViewById(R.id.location);
 //        locationButtonView.setMap(naverMap);
+    }
+
+    @Override
+    public void onBackPressed(){
+        finish();
     }
 
     @Override
