@@ -310,7 +310,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
                         double distance = calculateDistance(currentLatLng, placeLatLng);
                         Place place = new Place(id, placeLatLng, distance, stock, name);
                         allPlaces.add(place);
-                        if (distance <= 1.5) {
+                        if (distance <= 1.5*1000000000) {
 
 
                             // 재고가 있는 마커 중에서 가장 가까운 마커를 찾기
