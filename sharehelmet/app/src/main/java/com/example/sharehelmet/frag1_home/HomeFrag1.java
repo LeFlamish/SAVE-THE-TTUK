@@ -249,6 +249,9 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
                 naverMap.setLocationTrackingMode(getCurrentTrackingMode());
             }
 
+            // 지도 클릭 이벤트 처리
+            naverMap.setOnMapClickListener((point, coord) -> hidePlaceInfo());
+
             // 설정 코드 추가
             UiSettings uiSettings = naverMap.getUiSettings();
             uiSettings.setCompassEnabled(true);
@@ -321,7 +324,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
                             marker.setOnClickListener(new Overlay.OnClickListener() {
                                 @Override
                                 public boolean onClick(@NonNull Overlay overlay) {
-                                    showDialog(name,stock,distance);
+                                    showPlaceInfo(name, stock, distance);
                                     return true;
                                 }
                             });
@@ -517,22 +520,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
 
 
-        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                // Glide를 사용하여 이미지 로드
-                Glide.with(getActivity())
-                        .load(uri)
-                        .placeholder(R.drawable.camera_24) // 로딩 중일 때 표시할 이미지
-                        .error(R.drawable.camera_24) // 로딩 실패 시 표시할 이미지
-                        .into(stationImage);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
 
-            }
-        });
 
 
         builder.setView(dialogView);
@@ -546,5 +534,53 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         dialog.show();
     }
 
+    public void showPlaceInfo(String name, int stock, double length) {
+        View placeInfoLayout = getView().findViewById(R.id.place_info_layout); // RelativeLayout의 ID를 사용
+        if (placeInfoLayout != null) {
+            placeInfoLayout.setVisibility(View.VISIBLE);
+        }
+
+        // 텍스트 뷰와 이미지 뷰를 찾아서 값을 설정
+        TextView title = getView().findViewById(R.id.title);
+        TextView rentalStatus = getView().findViewById(R.id.rental_status);
+        TextView stockTextView = getView().findViewById(R.id.stock);
+        TextView distance = getView().findViewById(R.id.distance);
+        ImageView thumbnail = getView().findViewById(R.id.thumbnail);
+
+        title.setText(name);
+        rentalStatus.setText(" 대여함");
+        stockTextView.setText(stock + "개");
+        distance.setText(String.format("%.2fkm", length));
+
+        // Firebase Storage에서 이미지 가져오기
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference().child("images/" + name + ".jpg"); // 이미지 경로 예시
+
+        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                // Glide를 사용하여 이미지 로드
+                Glide.with(getActivity())
+                        .load(uri)
+                        .placeholder(R.drawable.camera_24) // 로딩 중일 때 표시할 이미지
+                        .error(R.drawable.camera_24) // 로딩 실패 시 표시할 이미지
+                        .into(thumbnail);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // 로딩 실패 시 기본 이미지를 유지
+            }
+        });
+    }
+
+
+
+    private void hidePlaceInfo() {
+        View placeInfoLayout = getView().findViewById(R.id.place_info_layout); // RelativeLayout의 ID를 사용
+        if (placeInfoLayout != null) {
+            placeInfoLayout.setVisibility(View.GONE);
+        }
+    }
 
 }

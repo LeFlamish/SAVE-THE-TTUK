@@ -163,34 +163,36 @@
                     android:text="돌아가기"
                     android:textSize="18sp" />
 
-            </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="250dp"
-                android:layout_marginBottom="4dp"
-                android:elevation="1dp"
-                android:orientation="vertical">
-
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="요금 또는 기기에 문제가 있나요?" />
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="20dp"
+                    android:elevation="1dp"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/ask_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="고객센터 문의하기"
-                    android:textColor="@color/red_orange" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="요금 또는 기기에 문제가 있나요?" />
+
+                    <TextView
+                        android:id="@+id/ask_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="고객센터 문의하기"
+                        android:textColor="@color/red_orange" />
+
+                </LinearLayout>
 
             </LinearLayout>
+
+
 
 
         </LinearLayout>
