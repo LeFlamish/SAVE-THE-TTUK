@@ -100,7 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="20dp"
-                    android:text="킥보드헬멧 "
+                    android:text="헬멧 ID"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:fontFamily="@font/font_main"/>
@@ -109,6 +109,7 @@
                     android:id="@+id/helmet_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
                     android:text="#0000"
                     android:textSize="16sp"
                     android:fontFamily="@font/font_main"/>
@@ -131,7 +132,7 @@
                     android:layout_height="wrap_content"
                     android:paddingStart="20dp"
                     android:text="요금 "
-                    android:textSize="30sp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     android:fontFamily="@font/font_main"/>
 
@@ -140,7 +141,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1000원"
-                    android:textSize="30sp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     android:fontFamily="@font/font_main" />
 
@@ -160,7 +161,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="20dp"
-                    android:text="시간 "
+                    android:text="대여시간 "
                     android:textSize="20sp"
                     android:textStyle="normal"
                     android:fontFamily="@font/font_main"/>
