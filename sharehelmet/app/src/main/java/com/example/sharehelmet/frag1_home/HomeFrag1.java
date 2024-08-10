@@ -360,62 +360,73 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     }
 
     public void showPlaceInfo(String name, int stock, double length) {
-        View placeInfoLayout = getView().findViewById(R.id.place_info_layout);
-        if (placeInfoLayout != null) {
-            // 먼저 뷰의 가시성을 VISIBLE로 설정하고 투명도를 1로 설정하여 보이게 함
-            placeInfoLayout.setVisibility(View.VISIBLE);
-            placeInfoLayout.setAlpha(0f); // 초기 투명도 설정
 
-            // 애니메이션을 사용하여 투명도를 1로 변경
-            placeInfoLayout.animate()
-                    .alpha(1f)
-                    .setDuration(500) // 애니메이션 지속 시간 (예: 500ms)
-                    .start();
-        }
+        try {
 
-        // 텍스트 뷰와 이미지 뷰를 찾아서 값을 설정
-        TextView title = getView().findViewById(R.id.title);
-        TextView rentalStatus = getView().findViewById(R.id.rental_status);
-        TextView stockTextView = getView().findViewById(R.id.stock);
-        TextView distance = getView().findViewById(R.id.distance);
-        thumbnail = getView().findViewById(R.id.thumbnail);
+            View placeInfoLayout = getView().findViewById(R.id.place_info_layout);
+            if (placeInfoLayout != null) {
+                // 먼저 뷰의 가시성을 VISIBLE로 설정하고 투명도를 1로 설정하여 보이게 함
+                placeInfoLayout.setVisibility(View.VISIBLE);
+                placeInfoLayout.setAlpha(0f); // 초기 투명도 설정
 
-        title.setText(name);
-        rentalStatus.setText(" 대여함");
-        stockTextView.setText(stock + "개");
-        distance.setText(String.format("%.2fkm", length));
+                // 애니메이션을 사용하여 투명도를 1로 변경
+                placeInfoLayout.animate()
+                        .alpha(1f)
+                        .setDuration(500) // 애니메이션 지속 시간 (예: 500ms)
+                        .start();
+            }
 
-        // Firebase Storage에서 이미지 가져오기
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference().child("images/" + name + ".jpg"); // 이미지 경로 예시
+            // 텍스트 뷰와 이미지 뷰를 찾아서 값을 설정
+            TextView title = getView().findViewById(R.id.title);
+            TextView rentalStatus = getView().findViewById(R.id.rental_status);
+            TextView stockTextView = getView().findViewById(R.id.stock);
+            TextView distance = getView().findViewById(R.id.distance);
+            thumbnail = getView().findViewById(R.id.thumbnail);
 
-        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
+            title.setText(name);
+            rentalStatus.setText(" 대여함");
+            stockTextView.setText(stock + "개");
+            distance.setText(String.format("%.2fkm", length));
 
-                
+            // Firebase Storage에서 이미지 가져오기
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReference().child("images/" + name + ".jpg"); // 이미지 경로 예시
 
-                // Glide를 사용하여 이미지 로드
-                Glide.with(getActivity())
-                        .load(uri)
-                        .placeholder(R.drawable.image_left_round_border) // 로딩 중일 때 표시할 이미지
-                        .error(R.drawable.error) // 로딩 실패 시 표시할 이미지
-                        .into(thumbnail);
+            storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
 
-                //handler을 사용하여 자동으로 hine
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        hidePlaceInfo();
+                    Activity activity = getActivity();
+                    if (activity == null || activity.isFinishing()) {
+                        return;
                     }
-                }, 10000); // 2000 밀리초 = 2초
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                // 로딩 실패 시 기본 이미지를 유지
-            }
-        });
+
+
+                    // Glide를 사용하여 이미지 로드
+                    Glide.with(getActivity())
+                            .load(uri)
+                            .placeholder(R.drawable.image_left_round_border) // 로딩 중일 때 표시할 이미지
+                            .error(R.drawable.error) // 로딩 실패 시 표시할 이미지
+                            .into(thumbnail);
+
+
+                    //handler을 사용하여 자동으로 hine
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            hidePlaceInfo();
+                        }
+                    }, 10000); // 2000 밀리초 = 2초
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    // 로딩 실패 시 기본 이미지를 유지
+                }
+            });
+
+        }
+        catch (Exception e){}
     }
 
     private void hidePlaceInfo() {
@@ -535,6 +546,11 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         mapView.onDestroy();
 
 
+        try {
+            // ImageView에 대한 Glide 요청을 취소하고 리소스 해제
+            Glide.with(this).clear(thumbnail);
+        }
+        catch (Exception e){}
     }
 
     @Override
@@ -547,6 +563,9 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+
+
 
     }
 
