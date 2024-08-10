@@ -199,27 +199,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
         }
 
-        CompassView compassView = view.findViewById(R.id.compass);
-        ImageButton helpButton = view.findViewById(R.id.help);
-        // View Tree Observer to get dimensions after layout pass
-        compassView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                int width = compassView.getWidth();
-                int height = compassView.getHeight();
-
-                Log.d("CompassView", "Width: " + width + ", Height: " + height);
-
-                // Set help button size to be the same as compass view
-//                ViewGroup.LayoutParams params = helpButton.getLayoutParams();
-//                params.width = width;
-//                params.height = height;
-//                helpButton.setLayoutParams(params);
-//
-//                // Remove listener to prevent repeated calls
-//                compassView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            }
-        });
+        
 
     }
 
