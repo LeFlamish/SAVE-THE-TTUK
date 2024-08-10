@@ -15,10 +15,12 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -62,6 +64,7 @@ import com.naver.maps.map.UiSettings;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.Overlay;
 import com.naver.maps.map.util.FusedLocationSource;
+import com.naver.maps.map.widget.CompassView;
 import com.naver.maps.map.widget.LocationButtonView;
 
 import java.util.ArrayList;
@@ -196,6 +199,28 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
         }
 
+        CompassView compassView = view.findViewById(R.id.compass);
+        ImageButton helpButton = view.findViewById(R.id.help);
+        // View Tree Observer to get dimensions after layout pass
+        compassView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int width = compassView.getWidth();
+                int height = compassView.getHeight();
+
+                Log.d("CompassView", "Width: " + width + ", Height: " + height);
+
+                // Set help button size to be the same as compass view
+//                ViewGroup.LayoutParams params = helpButton.getLayoutParams();
+//                params.width = width;
+//                params.height = height;
+//                helpButton.setLayoutParams(params);
+//
+//                // Remove listener to prevent repeated calls
+//                compassView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+
     }
 
     private void savePlace(String id, String name, double latitude, double longitude, int room_num) {
@@ -245,7 +270,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
             // 설정 코드 추가
             UiSettings uiSettings = naverMap.getUiSettings();
-            uiSettings.setCompassEnabled(true);
+            uiSettings.setCompassEnabled(false);    //기본 사용x. 커스텀 나침반 o
             uiSettings.setZoomControlEnabled(false);
             uiSettings.setLogoMargin(0, 0, 0, 0);
             uiSettings.setScaleBarEnabled(true);
@@ -253,6 +278,10 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
             // LocationButtonView 연결
             LocationButtonView locationButtonView = getView().findViewById(R.id.location);
             locationButtonView.setMap(naverMap);
+
+            // 나침반 뷰를 NaverMap에 연결
+            CompassView compassView = getView().findViewById(R.id.compass);
+            compassView.setMap(naverMap);
 
             naverMap.addOnLocationChangeListener(location -> displayNearbyPlaces(location));
 
@@ -383,8 +412,8 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
                 // Glide를 사용하여 이미지 로드
                 Glide.with(getActivity())
                         .load(uri)
-                        .placeholder(R.drawable.camera_24) // 로딩 중일 때 표시할 이미지
-                        .error(R.drawable.camera_24) // 로딩 실패 시 표시할 이미지
+                        .placeholder(R.drawable.image_left_round_border) // 로딩 중일 때 표시할 이미지
+                        .error(R.drawable.error) // 로딩 실패 시 표시할 이미지
                         .into(thumbnail);
 
                 //handler을 사용하여 자동으로 hine
