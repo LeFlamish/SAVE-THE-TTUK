@@ -3,6 +3,7 @@ package com.example.sharehelmet.frag1_home;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -77,6 +78,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     private static final String SORT_KEY = "which_to_sort";
     private MapView mapView;
     private NaverMap naverMap;
+    private ImageView thumbnail;
     private FusedLocationSource locationSource;
     private Spinner spinnerSort;
     private int locationTrackingMode = 0;
@@ -199,7 +201,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
         }
 
-        
+
 
     }
 
@@ -322,6 +324,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
                             marker.setOnClickListener(new Overlay.OnClickListener() {
                                 @Override
                                 public boolean onClick(@NonNull Overlay overlay) {
+
                                     showPlaceInfo(name, stock, distance);
                                     return true;
                                 }
@@ -375,7 +378,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         TextView rentalStatus = getView().findViewById(R.id.rental_status);
         TextView stockTextView = getView().findViewById(R.id.stock);
         TextView distance = getView().findViewById(R.id.distance);
-        ImageView thumbnail = getView().findViewById(R.id.thumbnail);
+        thumbnail = getView().findViewById(R.id.thumbnail);
 
         title.setText(name);
         rentalStatus.setText(" 대여함");
@@ -389,6 +392,9 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
         storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
+
+                
+
                 // Glide를 사용하여 이미지 로드
                 Glide.with(getActivity())
                         .load(uri)
@@ -527,7 +533,25 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     public void onDestroyView() {
         super.onDestroyView();
         mapView.onDestroy();
+
+
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+    }
+
+
+
 
     @Override
     public void onLowMemory() {
