@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -37,6 +38,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.example.sharehelmet.PopupActivity;
 import com.example.sharehelmet.R;
 import com.example.sharehelmet.frag5_profile.RidingGuideActivity;
@@ -64,8 +67,11 @@ import com.naver.maps.map.overlay.Overlay;
 import com.naver.maps.map.util.FusedLocationSource;
 import com.naver.maps.map.widget.LocationButtonView;
 
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.sql.DataSource;
 
 public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
@@ -87,6 +93,9 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     private List<Place> allPlaces = new ArrayList<>(); // 모든 장소를 저장하는 리스트
     private int listViewIndex = -1;
     private int listViewTop = 0;
+    private static final long HIDE_DELAY_MS = 4000; // 2초 지연 시간
+    private Handler handler = new Handler();
+    private Runnable hideRunnable;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -350,14 +359,19 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     public void showPlaceInfo(String name, int stock, double length) {
         View placeInfoLayout = getView().findViewById(R.id.place_info_layout);
         if (placeInfoLayout != null) {
-            // 먼저 뷰의 가시성을 VISIBLE로 설정하고 투명도를 1로 설정하여 보이게 함
-            placeInfoLayout.setVisibility(View.VISIBLE);
-            placeInfoLayout.setAlpha(0f); // 초기 투명도 설정
+            //GONE 상태라면 투명도를 0으로 설정
+            if(placeInfoLayout.getVisibility() == View.GONE) placeInfoLayout.setAlpha(0f);
 
-            // 애니메이션을 사용하여 투명도를 1로 변경
+            if (hideRunnable != null) {
+                handler.removeCallbacks(hideRunnable);
+            }
+
+            // 기존 애니메이션을 취소
+            placeInfoLayout.animate().cancel();
+            placeInfoLayout.setVisibility(View.VISIBLE);
             placeInfoLayout.animate()
                     .alpha(1f)
-                    .setDuration(500) // 애니메이션 지속 시간 (예: 500ms)
+                    .setDuration(500) // 애니메이션 지속 시간
                     .start();
         }
 
@@ -385,15 +399,20 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
                         .load(uri)
                         .placeholder(R.drawable.camera_24) // 로딩 중일 때 표시할 이미지
                         .error(R.drawable.camera_24) // 로딩 실패 시 표시할 이미지
-                        .into(thumbnail);
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, @Nullable Object model, @NonNull com.bumptech.glide.request.target.Target<Drawable> target, boolean isFirstResource) {
+                                startHideDelay();
+                                return false;
+                            }
 
-                //handler을 사용하여 자동으로 hine
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        hidePlaceInfo();
-                    }
-                }, 10000); // 2000 밀리초 = 2초
+                            @Override
+                            public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, com.bumptech.glide.request.target.Target<Drawable> target, @NonNull com.bumptech.glide.load.DataSource dataSource, boolean isFirstResource) {
+                                startHideDelay();
+                                return false;
+                            }
+                        })
+                        .into(thumbnail);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -402,6 +421,17 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
             }
         });
     }
+
+    private void startHideDelay() {
+        hideRunnable = new Runnable() {
+            @Override
+            public void run() {
+                hidePlaceInfo();
+            }
+        };
+        handler.postDelayed(hideRunnable, HIDE_DELAY_MS);
+    }
+
 
     private void hidePlaceInfo() {
         View placeInfoLayout = getView().findViewById(R.id.place_info_layout); // RelativeLayout의 ID를 사용
