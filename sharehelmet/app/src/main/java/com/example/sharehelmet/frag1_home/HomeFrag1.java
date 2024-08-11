@@ -3,6 +3,7 @@ package com.example.sharehelmet.frag1_home;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,7 +11,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
@@ -22,8 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -40,13 +38,11 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
-import com.example.sharehelmet.PopupActivity;
 import com.example.sharehelmet.R;
 import com.example.sharehelmet.frag5_profile.RidingGuideActivity;
 import com.example.sharehelmet.model.Storage;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -65,13 +61,11 @@ import com.naver.maps.map.UiSettings;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.Overlay;
 import com.naver.maps.map.util.FusedLocationSource;
+import com.naver.maps.map.widget.CompassView;
 import com.naver.maps.map.widget.LocationButtonView;
 
-import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.sql.DataSource;
 
 public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
@@ -80,6 +74,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     private static final String SORT_KEY = "which_to_sort";
     private MapView mapView;
     private NaverMap naverMap;
+    private ImageView thumbnail;
     private FusedLocationSource locationSource;
     private Spinner spinnerSort;
     private int locationTrackingMode = 0;
@@ -96,6 +91,23 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     private static final long HIDE_DELAY_MS = 4000; // 2초 지연 시간
     private Handler handler = new Handler();
     private Runnable hideRunnable;
+    private Activity mActivity;
+    private Context mContext;
+
+    @Override
+    public void onAttach(Context context) {
+        mContext = context;
+        if (context instanceof Activity) {
+            mActivity = (Activity)context;
+        }
+        super.onAttach(context);
+    }
+    @Override
+    public void onDetach() {
+        mActivity = null;
+        mContext = null;
+        super.onDetach();
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -143,8 +155,6 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
         try{
             mapView = view.findViewById(R.id.map);
-            //Button btnModeToggle = view.findViewById(R.id.btn_mode_toggle);
-            //Button btnModeLocation = view.findViewById(R.id.btn_current_location);
 
             mapView.onCreate(savedInstanceState);
             mapView.getMapAsync(this);
@@ -205,6 +215,8 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
         }
 
+
+
     }
 
     private void savePlace(String id, String name, double latitude, double longitude, int room_num) {
@@ -254,7 +266,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
             // 설정 코드 추가
             UiSettings uiSettings = naverMap.getUiSettings();
-            uiSettings.setCompassEnabled(true);
+            uiSettings.setCompassEnabled(false);    //기본 사용x. 커스텀 나침반 o
             uiSettings.setZoomControlEnabled(false);
             uiSettings.setLogoMargin(0, 0, 0, 0);
             uiSettings.setScaleBarEnabled(true);
@@ -262,6 +274,10 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
             // LocationButtonView 연결
             LocationButtonView locationButtonView = getView().findViewById(R.id.location);
             locationButtonView.setMap(naverMap);
+
+            // 나침반 뷰를 NaverMap에 연결
+            CompassView compassView = getView().findViewById(R.id.compass);
+            compassView.setMap(naverMap);
 
             naverMap.addOnLocationChangeListener(location -> displayNearbyPlaces(location));
 
@@ -322,6 +338,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
                             marker.setOnClickListener(new Overlay.OnClickListener() {
                                 @Override
                                 public boolean onClick(@NonNull Overlay overlay) {
+
                                     showPlaceInfo(name, stock, distance);
                                     return true;
                                 }
@@ -357,69 +374,72 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     }
 
     public void showPlaceInfo(String name, int stock, double length) {
-        View placeInfoLayout = getView().findViewById(R.id.place_info_layout);
-        if (placeInfoLayout != null) {
-            //GONE 상태라면 투명도를 0으로 설정
-            if(placeInfoLayout.getVisibility() == View.GONE) placeInfoLayout.setAlpha(0f);
+        try {
 
-            if (hideRunnable != null) {
-                handler.removeCallbacks(hideRunnable);
+            View placeInfoLayout = getView().findViewById(R.id.place_info_layout);
+            if (placeInfoLayout != null) {
+                // 먼저 뷰의 가시성을 VISIBLE로 설정하고 투명도를 1로 설정하여 보이게 함
+                placeInfoLayout.setVisibility(View.VISIBLE);
+                placeInfoLayout.setAlpha(0f); // 초기 투명도 설정
+
+                // 애니메이션을 사용하여 투명도를 1로 변경
+                placeInfoLayout.animate()
+                        .alpha(1f)
+                        .setDuration(500) // 애니메이션 지속 시간 (예: 500ms)
+                        .start();
             }
+            else return;
 
-            // 기존 애니메이션을 취소
-            placeInfoLayout.animate().cancel();
-            placeInfoLayout.setVisibility(View.VISIBLE);
-            placeInfoLayout.animate()
-                    .alpha(1f)
-                    .setDuration(500) // 애니메이션 지속 시간
-                    .start();
+            // 텍스트 뷰와 이미지 뷰를 찾아서 값을 설정
+            TextView title = placeInfoLayout.findViewById(R.id.title);
+            TextView rentalStatus = placeInfoLayout.findViewById(R.id.rental_status);
+            TextView stockTextView = placeInfoLayout.findViewById(R.id.stock);
+            TextView distance = placeInfoLayout.findViewById(R.id.distance);
+            thumbnail = placeInfoLayout.findViewById(R.id.thumbnail);
+
+            // Firebase Storage에서 이미지 가져오기
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReference().child("images/"+name+".jpg"); // 이미지 경로 예시
+            storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    title.setText(name);
+                    rentalStatus.setText(" 대여함");
+                    stockTextView.setText(stock + "개");
+                    distance.setText(String.format("%.2fkm", length));
+                    Activity activity = getActivity();
+
+
+                    // Glide를 사용하여 이미지 로드
+                    Glide.with(activity)
+                            .load(uri)
+                            .placeholder(R.drawable.camera_24) // 로딩 중일 때 표시할 이미지
+                            .error(R.drawable.camera_24) // 로딩 실패 시 표시할 이미지
+                            .listener(new RequestListener<Drawable>() {
+                                @Override
+                                public boolean onLoadFailed(@Nullable GlideException e, @Nullable Object model, @NonNull com.bumptech.glide.request.target.Target<Drawable> target, boolean isFirstResource) {
+                                    startHideDelay();
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, com.bumptech.glide.request.target.Target<Drawable> target, @NonNull com.bumptech.glide.load.DataSource dataSource, boolean isFirstResource) {
+                                    startHideDelay();
+                                    return false;
+                                }
+                            })
+                            .into(thumbnail);
+
+                     }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // 로딩 실패 시 기본 이미지를 유지
+                        }
+                     });
+
         }
-
-        // 텍스트 뷰와 이미지 뷰를 찾아서 값을 설정
-        TextView title = getView().findViewById(R.id.title);
-        TextView rentalStatus = getView().findViewById(R.id.rental_status);
-        TextView stockTextView = getView().findViewById(R.id.stock);
-        TextView distance = getView().findViewById(R.id.distance);
-        ImageView thumbnail = getView().findViewById(R.id.thumbnail);
-
-        title.setText(name);
-        rentalStatus.setText(" 대여함");
-        stockTextView.setText(stock + "개");
-        distance.setText(String.format("%.2fkm", length));
-
-        // Firebase Storage에서 이미지 가져오기
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference().child("images/" + name + ".jpg"); // 이미지 경로 예시
-
-        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                // Glide를 사용하여 이미지 로드
-                Glide.with(getActivity())
-                        .load(uri)
-                        .placeholder(R.drawable.camera_24) // 로딩 중일 때 표시할 이미지
-                        .error(R.drawable.camera_24) // 로딩 실패 시 표시할 이미지
-                        .listener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, @Nullable Object model, @NonNull com.bumptech.glide.request.target.Target<Drawable> target, boolean isFirstResource) {
-                                startHideDelay();
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, com.bumptech.glide.request.target.Target<Drawable> target, @NonNull com.bumptech.glide.load.DataSource dataSource, boolean isFirstResource) {
-                                startHideDelay();
-                                return false;
-                            }
-                        })
-                        .into(thumbnail);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                // 로딩 실패 시 기본 이미지를 유지
-            }
-        });
+        catch (Exception ignored){}
     }
 
     private void startHideDelay() {
@@ -548,6 +568,21 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
     public void onDestroyView() {
         super.onDestroyView();
         mapView.onDestroy();
+        try {
+            // ImageView에 대한 Glide 요청을 취소하고 리소스 해제
+            Glide.with(this).clear(thumbnail);
+        }
+        catch (Exception e){}
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     @Override

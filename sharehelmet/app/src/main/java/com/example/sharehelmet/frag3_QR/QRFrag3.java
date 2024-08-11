@@ -30,6 +30,8 @@ public class QRFrag3 extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+
         View view = inflater.inflate(R.layout.frag3_qr, container, false);
         if (getArguments() != null) {
             firebaseId = getArguments().getString("firebaseId");
@@ -62,31 +64,46 @@ public class QRFrag3 extends Fragment {
         return view;
     }
     private void loadDataFromDatabase(View rootView) {
-        db = FirebaseDatabase.getInstance().getReference();
-        db.child("users").child(firebaseId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                user = snapshot.getValue(User.class);
-                if (user != null) {
-                    initializeUI();
+        try {
+            db = FirebaseDatabase.getInstance().getReference();
+            db.child("users").child(firebaseId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    user = snapshot.getValue(User.class);
+                    if (user != null) {
+                        initializeUI();
+                    }
                 }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
-        });
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+
+        }
+        catch (Exception e){}
     }
     private void initializeUI() {
-        Fragment fragment;
-        Bundle bundle = new Bundle();
-        bundle.putString("firebaseId",firebaseId);
-        if (user.getNow_qr() == 0) {fragment=new BarcodeStartFragment3();}
-        else if (user.getNow_qr() == 1) {fragment=new BorrowingFragment3();}
-        else if (user.getNow_qr() == 2) {fragment=new BarcodeEndFragment3();}
-        else{fragment=new ResultFragment3();}
-        fragment.setArguments(bundle);
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .commit();
+
+        try {
+            Fragment fragment;
+            Bundle bundle = new Bundle();
+            bundle.putString("firebaseId", firebaseId);
+            if (user.getNow_qr() == 0) {
+                fragment = new BarcodeStartFragment3();
+            } else if (user.getNow_qr() == 1) {
+                fragment = new BorrowingFragment3();
+            } else if (user.getNow_qr() == 2) {
+                fragment = new BarcodeEndFragment3();
+            } else {
+                fragment = new ResultFragment3();
+            }
+            fragment.setArguments(bundle);
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit();
+        }
+        catch (Exception e){}
     }
     private boolean isValidFirebaseId(String firebaseId) {
         return !(firebaseId.contains(".") || firebaseId.contains("#") ||
