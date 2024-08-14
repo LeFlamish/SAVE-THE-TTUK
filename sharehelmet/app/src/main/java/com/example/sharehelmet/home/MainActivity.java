@@ -17,10 +17,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -72,11 +74,28 @@ public class MainActivity extends AppCompatActivity {
         mDatabaseRef.child("users").child(firebaseId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                user = snapshot.getValue(User.class);
-                showCustomToast(user.getNickname());
+                try {
+                    if (snapshot.exists()) {
+                        User user = snapshot.getValue(User.class);
+                        if (user != null) {
+                            showCustomToast(user.getNickname());
+                        } else {
+                            showCustomToast("User data is null.");
+                        }
+                    } else {
+                        showCustomToast("User data not found.");
+                    }
+                } catch (DatabaseException e) {
+                    // Log detailed error
+                    Log.e("Firebase", "Error parsing User data", e);
+                    showCustomToast("Failed to parse user data.");
+                }
+
             }
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
+            public void onCancelled(@NonNull DatabaseError error) {
+                showCustomToast("Failed to load user data");
+            }
         });
     }
 
@@ -141,7 +160,9 @@ public class MainActivity extends AppCompatActivity {
         bundle.putString("firebaseId",firebaseId);
         selectedFragment.setArguments(bundle);
         if (selectedFragment != null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, selectedFragment)
+                    .commit();
         }
     }
 
