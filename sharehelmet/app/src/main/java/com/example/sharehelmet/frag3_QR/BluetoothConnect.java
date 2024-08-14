@@ -8,7 +8,10 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -50,11 +53,29 @@ public class BluetoothConnect {
 
     public static void reconnectBluetooth(BorrowingFragment3 fragment, Context context, Activity activity) {
         if (fragment.getBluetoothAdapter() != null && fragment.getHelmetId() != null) {
-            // 블루투스 장치 검색 및 연결 시도
+            /*Log.d("Bluetooth", "Attempting to reconnect to Bluetooth device...");*/
             connectToHelmetDevice(fragment, context, activity);
+            /*fragment.getBluetoothAdapter().startDiscovery();
+            Handler reconnectionHandler = new Handler(Looper.getMainLooper());
+            reconnectionHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (!fragment.isBluetoothConnected()) {
+                        Log.e("Bluetooth", "Failed to reconnect within 1 minute. Marking helmet as lost.");
+                        markHelmetAsLost(fragment,context);
+                    }
+                }
+            }, 60000);  // 1분 동안 재연결 시도*/
+
         }
     }
-
+    /*public static void markHelmetAsLost(BorrowingFragment3 fragment, Context context) {
+        // Firebase에서 헬멧 상태를 'lost'로 설정
+        DatabaseReference db;
+        db = FirebaseDatabase.getInstance().getReference();
+        db.child("helmet").child(fragment.getHelmetId()).child("lost").setValue(true);
+        Toast.makeText(context, "Failed to reconnect. Helmet marked as lost.", Toast.LENGTH_LONG).show();
+    }*/
     public static void connectToDevice(BluetoothDevice device, BorrowingFragment3 fragment, Context context, Activity activity, UUID MY_UUID) throws IOException {
         fragment.setBluetoothSocket(device.createRfcommSocketToServiceRecord(MY_UUID));
         try {
