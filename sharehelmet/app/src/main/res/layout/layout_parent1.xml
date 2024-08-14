@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="@color/white"
+  android:foreground="?attr/selectableItemBackground"
+  android:paddingTop="20dp"
+  android:paddingBottom="16dp"
+  android:paddingLeft="16dp"
+  android:paddingRight="16dp"
+    >
+
+
+  <TextView
+      android:id="@+id/virtual_money_select_title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="가상 충전금액 선택 (테스트용)"
+      android:textSize="18sp"
+      android:textStyle="bold"
+      android:fontFamily="@font/font_main"
+      />
+
+  <View
+      android:layout_toEndOf="@id/virtual_money_select_title"
+    android:layout_centerVertical="true"
+      android:layout_width="match_parent"
+      android:layout_height="0.5dp"
+
+      android:background="#FFCFCFCF"
+
+      android:layout_marginTop="25dp"
+      android:layout_marginLeft="5dp"
+      android:layout_marginRight="15dp"
+
+
+      />
+
+
+</RelativeLayout>

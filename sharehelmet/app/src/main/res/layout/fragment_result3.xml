@@ -167,6 +167,23 @@
                     android:fontFamily="@font/font_thin" />
 
 
+                <android.widget.Button
+                    android:id="@+id/returntocharge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="14dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/custom_ripple_effect"
+                    android:backgroundTint="@color/red_orange"
+                    android:text="충전하기"
+                    android:textSize="20sp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/font_thin"
+                    android:visibility="gone"/>
+
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

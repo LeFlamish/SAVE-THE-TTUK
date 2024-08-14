@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.skydoves.expandablelayout.ExpandableLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +48,10 @@ public class TotalPaymentActivity extends AppCompatActivity {
     ImageView backButton;
     int userMoney;
     int chargeMoney;
+    ExpandableLayout expandable;
+
+    private TextInputEditText virtualMoneyEdit;
+    private Button virtualStartPaymentButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,8 +71,62 @@ public class TotalPaymentActivity extends AppCompatActivity {
         moneySelect = findViewById(R.id.money_select_edit);
         startPayment = findViewById(R.id.start_payment);
         backButton = findViewById(R.id.back_button);
+        expandable=findViewById(R.id.expandable1);
+
+        expandable.getParentLayout().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                expandable.toggleLayout();
+            }
+        });
+
+
+
+
+
+        // layout_second1을 inflate하고 findViewById를 사용
+        LayoutInflater inflater = LayoutInflater.from(this);
+//        View secondLayoutView = inflater.inflate(R.layout.layout_second1, null);
+        View secondLayoutView = expandable.getSecondLayout();
+
+        virtualMoneyEdit = secondLayoutView.findViewById(R.id.virtual_money_select_edit);
+        virtualStartPaymentButton = secondLayoutView.findViewById(R.id.virtual_start_payment);
+
+        virtualStartPaymentButton.setOnClickListener(v -> processVirtualPayment());
+        Log.d("ch","gharg2");
+
+
         setViews();
     }
+
+    private void processVirtualPayment() {
+        Log.d("ch","gharg");
+        try {
+            // 입력된 금액 가져오기
+            String inputMoneyStr = virtualMoneyEdit.getText().toString();
+            int inputMoney = Integer.parseInt(inputMoneyStr);
+
+            // 사용자의 기존 금액에 입력된 금액 더하기
+            int updatedMoney = user.getMoney() + inputMoney;
+
+            // Firebase에 업데이트
+            mDatabaseRef.child("users").child(firebaseId).child("money").setValue(updatedMoney)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(TotalPaymentActivity.this, "금액이 성공적으로 추가되었습니다.", Toast.LENGTH_SHORT).show();
+                            // 사용자 객체의 money 필드 업데이트
+                            user.setMoney(updatedMoney);
+                        } else {
+                            Toast.makeText(TotalPaymentActivity.this, "금액 추가에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+        } catch (NumberFormatException e) {
+            Toast.makeText(TotalPaymentActivity.this, "유효한 숫자를 입력하세요.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
     @Override
     public void onBackPressed(){
         super.onBackPressed();
@@ -184,6 +243,7 @@ public class TotalPaymentActivity extends AppCompatActivity {
     }
 
     protected void showCustomToast(String message) {
+
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_toast, null);
 
@@ -194,5 +254,6 @@ public class TotalPaymentActivity extends AppCompatActivity {
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layout);
         toast.show();
+
     }
 }

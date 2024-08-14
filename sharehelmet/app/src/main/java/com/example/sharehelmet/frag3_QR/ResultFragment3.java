@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import com.example.sharehelmet.R;
+import com.example.sharehelmet.frag2_payment.TotalPaymentActivity;
 import com.example.sharehelmet.model.Helmet;
 import com.example.sharehelmet.model.User;
 import com.google.firebase.database.DataSnapshot;
@@ -44,47 +45,77 @@ public class ResultFragment3 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_result3, container, false);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            firebaseId=bundle.getString("firebaseId");
+            firebaseId = bundle.getString("firebaseId");
         }
         db = FirebaseDatabase.getInstance().getReference();
+
+        t21 = view.findViewById(R.id.overhelmetId);
+        t22 = view.findViewById(R.id.overtime);
+        t23 = view.findViewById(R.id.overcharge);
+        overButton = view.findViewById(R.id.returntostart);
+        TextView askButton = view.findViewById(R.id.ask_button);
+        Button returnToChargeButton = view.findViewById(R.id.returntocharge);  // 추가된 버튼
+
+        // 고객센터 문의하기 버튼 클릭 리스너 설정
+        askButton.setOnClickListener(askButtonClickListener);
+
+        // Firebase에서 사용자 정보를 가져옴
         db.child("users").child(firebaseId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 user = snapshot.getValue(User.class);
                 if (user != null) {
-                    helmetId=user.getReturn_info().get(0);
-                    storageId=user.getReturn_info().get(3);
+                    // 만약 user.getMoney()가 음수이면 overButton을 비활성화하고 returnToChargeButton을 visible로 설정
+                    if (user.getMoney() < 0) {
+
+                        overButton.setEnabled(false);  // 버튼 비활성화
+                        overButton.setBackground(getResources().getDrawable(R.drawable.custom_ripple_effect3));
+
+                        returnToChargeButton.setVisibility(View.VISIBLE);  // 충전하기 버튼 표시
+                    } else {
+                        overButton.setEnabled(true);  // 버튼 활성화
+                        returnToChargeButton.setVisibility(View.GONE);  // 충전하기 버튼 숨김
+                    }
+
+                    helmetId = user.getReturn_info().get(0);
+                    storageId = user.getReturn_info().get(3);
                     ReturnHelmet2();
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
-        t21 = view.findViewById(R.id.overhelmetId);
-        t22 = view.findViewById(R.id.overtime);
-        t23 = view.findViewById(R.id.overcharge);
-        overButton = view.findViewById(R.id.returntostart);
+
         overButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 user.setNow_qr(0);
                 db.child("users").child(firebaseId).setValue(user);
 
-                //프래그먼트 이동
-                BarcodeStartFragment3 barcodeStartFragment3=new BarcodeStartFragment3();
+                // 프래그먼트 이동
+                BarcodeStartFragment3 barcodeStartFragment3 = new BarcodeStartFragment3();
                 Bundle bundle = new Bundle();
-                bundle.putString("firebaseId",firebaseId);
+                bundle.putString("firebaseId", firebaseId);
                 barcodeStartFragment3.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, barcodeStartFragment3)
                         .commit();
             }
         });
-        TextView askButton = view.findViewById(R.id.ask_button);
-        askButton.setOnClickListener(askButtonClickListener);
+
+        // 충전하기 버튼 클릭 리스너 설정
+        returnToChargeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), TotalPaymentActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return view;
     }
+
     private void ReturnHelmet2() {
         db.child("helmets").child(helmetId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

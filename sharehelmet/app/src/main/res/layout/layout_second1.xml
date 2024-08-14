@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="@color/white"
+  android:foreground="?attr/selectableItemBackground"
+  android:orientation="vertical"
+    android:layout_marginTop="0dp"
+  android:paddingTop="4dp"
+  android:paddingBottom="4dp"
+  android:paddingLeft="0dp"
+  android:paddingRight="0dp"
+  tools:ignore="UnusedAttribute">
+
+
+    <!--<TextView
+        android:id="@+id/virtual_money_select_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/font_main"
+        android:text="가상 충전금액 선택"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/virtual_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:suffixText="  원"
+        android:gravity="end|center_vertical"
+        android:textSize="18sp"
+        android:fontFamily="@font/font_main"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="8dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="6"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" >
+      <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/virtual_money_select_edit"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginHorizontal="16dp"
+          android:inputType="number"
+          android:gravity="end|center_horizontal"
+          android:maxLength="6"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <android.widget.Button
+        android:id="@+id/virtual_start_payment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="24dp"
+        android:background="@drawable/custom_ripple_effect"
+        android:backgroundTint="@color/red_orange"
+        android:elevation="8dp"
+        android:fontFamily="@font/font_thin"
+        android:text="가상 결제하기"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/virtual_input" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
