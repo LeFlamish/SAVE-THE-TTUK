@@ -271,6 +271,7 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
             uiSettings.setLogoMargin(0, 0, 0, 0);
             uiSettings.setScaleBarEnabled(true);
 
+
             // LocationButtonView 연결
             LocationButtonView locationButtonView = getView().findViewById(R.id.location);
             locationButtonView.setMap(naverMap);
@@ -409,6 +410,9 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
                     distance.setText(String.format("%.2fkm", length));
                     Activity activity = getActivity();
 
+                    if (activity == null || activity.isFinishing()) {
+                        return;
+                    }
 
                     // Glide를 사용하여 이미지 로드
                     Glide.with(activity)
@@ -454,21 +458,25 @@ public class HomeFrag1 extends Fragment implements OnMapReadyCallback {
 
 
     private void hidePlaceInfo() {
-        View placeInfoLayout = getView().findViewById(R.id.place_info_layout); // RelativeLayout의 ID를 사용
 
-        if (placeInfoLayout != null) {
-            // 서서히 사라지게 하는 애니메이션
-            placeInfoLayout.animate()
-                    .alpha(0f) // 투명도 0으로 설정
-                    .setDuration(300) // 애니메이션 시간 (500ms = 0.5초)
-                    .withEndAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            // 애니메이션이 끝난 후 GONE으로 설정
-                            placeInfoLayout.setVisibility(View.GONE);
-                        }
-                    });
+        try {
+            View placeInfoLayout = getView().findViewById(R.id.place_info_layout); // RelativeLayout의 ID를 사용
+
+            if (placeInfoLayout != null) {
+                // 서서히 사라지게 하는 애니메이션
+                placeInfoLayout.animate()
+                        .alpha(0f) // 투명도 0으로 설정
+                        .setDuration(300) // 애니메이션 시간 (500ms = 0.5초)
+                        .withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                // 애니메이션이 끝난 후 GONE으로 설정
+                                placeInfoLayout.setVisibility(View.GONE);
+                            }
+                        });
+            }
         }
+        catch (Exception e){}
     }
 
     private void sortAndDisplayPlaces() {
