@@ -115,6 +115,8 @@ public class PaymentFrag2 extends Fragment  {
                 if(snapshot.getValue(User.class) != null){
                     user = snapshot.getValue(User.class);
                     userCupon = user.getCupons();
+                    money_textview.setText(String.valueOf(user.getMoney()+"원"));
+
                     updateUI();
                 }
             }
@@ -146,10 +148,10 @@ public class PaymentFrag2 extends Fragment  {
 
         List<Cupon> cuponListData = new ArrayList<>();
 
-        //user money 갱신
-        NumberFormat numberFormat = NumberFormat.getInstance(Locale.getDefault());
-        String formattedMoney = numberFormat.format(user.getMoney());
-        money_textview.setText(formattedMoney);
+        //user money 갱신 //이거 작동 안되는듯?
+//        NumberFormat numberFormat = NumberFormat.getInstance(Locale.getDefault());
+//        String formattedMoney = numberFormat.format(user.getMoney());
+//        money_textview.setText(formattedMoney);
 
         //user cupon 등록
         for(String key : userCupon.keySet()){
