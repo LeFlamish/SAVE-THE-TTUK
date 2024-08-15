@@ -48,10 +48,10 @@ public class TotalPaymentActivity extends AppCompatActivity {
     ImageView backButton;
     int userMoney;
     int chargeMoney;
-    ExpandableLayout expandable;
+//    ExpandableLayout expandable;
 
-    private TextInputEditText virtualMoneyEdit;
-    private Button virtualStartPaymentButton;
+//    private TextInputEditText virtualMoneyEdit;
+//    private Button virtualStartPaymentButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,21 +71,22 @@ public class TotalPaymentActivity extends AppCompatActivity {
         moneySelect = findViewById(R.id.money_select_edit);
         startPayment = findViewById(R.id.start_payment);
         backButton = findViewById(R.id.back_button);
-        expandable=findViewById(R.id.expandable1);
+
+/*        expandable=findViewById(R.id.expandable1);
 
         expandable.getParentLayout().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 expandable.toggleLayout();
             }
-        });
+        });*/
 
 
 
 
 
         // layout_second1을 inflate하고 findViewById를 사용
-        LayoutInflater inflater = LayoutInflater.from(this);
+       /* LayoutInflater inflater = LayoutInflater.from(this);
 //        View secondLayoutView = inflater.inflate(R.layout.layout_second1, null);
         View secondLayoutView = expandable.getSecondLayout();
 
@@ -93,14 +94,14 @@ public class TotalPaymentActivity extends AppCompatActivity {
         virtualStartPaymentButton = secondLayoutView.findViewById(R.id.virtual_start_payment);
 
         virtualStartPaymentButton.setOnClickListener(v -> processVirtualPayment());
-        Log.d("ch","gharg2");
+        Log.d("ch","gharg2");*/
 
 
         setViews();
     }
 
     private void processVirtualPayment() {
-        Log.d("ch","gharg");
+        /*Log.d("ch","gharg");
         try {
             // 입력된 금액 가져오기
             String inputMoneyStr = virtualMoneyEdit.getText().toString();
@@ -123,7 +124,7 @@ public class TotalPaymentActivity extends AppCompatActivity {
 
         } catch (NumberFormatException e) {
             Toast.makeText(TotalPaymentActivity.this, "유효한 숫자를 입력하세요.", Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 
 
