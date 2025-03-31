@@ -249,6 +249,7 @@ public class BorrowingFragment3 extends Fragment implements OnMapReadyCallback {
                     });
         }
     }
+
     private void startLocationUpdates() {
         if (ContextCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
@@ -401,4 +402,36 @@ public class BorrowingFragment3 extends Fragment implements OnMapReadyCallback {
     public void setInputStream(InputStream inputStream) {this.inputStream = inputStream;}
     public void setOutputStream(OutputStream outputStream) {this.outputStream = outputStream;}
     public String getHelmetId() {return helmetId;}
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mapView != null) mapView.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mapView != null) mapView.onResume();
+        startLocationUpdates();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mapView != null) mapView.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mapView != null) mapView.onStop();
+        getActivity().unregisterReceiver(receiver);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mapView != null) mapView.onDestroy();
+    }
+
 }
